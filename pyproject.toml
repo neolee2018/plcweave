@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "plcweave"
+version = "0.0.0"
+description = "Test-driven PLC engineering toolkit (project scaffold)"
+readme = "README.md"
+requires-python = ">=3.13"
+license = "Apache-2.0"
+
+[tool.setuptools.packages.find]
+where = ["src"]
