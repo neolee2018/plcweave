@@ -1,0 +1,833 @@
+{
+  "source": "F:\\000-HBDTECH-Neo\\102-plc-s2-engine\\vendor\\gxwlib",
+  "local_commit": "7928b4de2b2a9d07f10e17568c62e981c5b50d55",
+  "upstream_commit": "1e9a8d7542665e5015041d361e4bb86d7650714f",
+  "license": "MIT; nested Apache-2.0 and third-party notices retained",
+  "planned_modifications": [
+    "FX3U comparison contacts",
+    "SUB/MUL/DIV",
+    "L01S external word image"
+  ],
+  "files_before_modification": [
+    {
+      "path": ".gitattributes",
+      "sha256": "16f7b60eb8bf4f6a9b0f1814d79aa1e841ba0f606019181b5316701adec0b22c"
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "4e72db394711d7eff901894238d28d484b40a7e3ccf8d7341ab29daae8ba1ca3"
+    },
+    {
+      "path": "Cargo.lock",
+      "sha256": "1d31fc9d56117357aeeed7b6c80aa2e3b46e572b02844133cd02245bef8c7d6d"
+    },
+    {
+      "path": "Cargo.toml",
+      "sha256": "de46b8c5f184c889989a305b7d0ed0a4cfb397d7249ff2a71a510587eb39112d"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "1e87a2777d71f018841a9afc871aa7c7b6f4236381c38c8a25924b107486e504"
+    },
+    {
+      "path": "pyproject.toml",
+      "sha256": "6a1f289646c652e3d6a83ce9088508b308129ccd1a8e7e2afe5033e961449d9a"
+    },
+    {
+      "path": "README.md",
+      "sha256": "a2d491037a56e840336c4919d181b0257f936c2d701a5bc2e7201c8896c41cd2"
+    },
+    {
+      "path": "rust-toolchain.toml",
+      "sha256": "258b3f8bf8b12925c1f6be8569bc7b9557ce9fa356474e433ca8e4526be2ab24"
+    },
+    {
+      "path": "uv.lock",
+      "sha256": "672bd10534528bcefdca6c22dbd392816327eea5aa0875284ead29653ba5b602"
+    },
+    {
+      "path": "docs/analysis.md",
+      "sha256": "557778b965cb94cf6b1ed13912cd4411547a794cfde49f215316ffe5dd4cf02b"
+    },
+    {
+      "path": "docs/inspection.md",
+      "sha256": "99a0640ec825e6574832096cdce9f329687fa795f3fb875973b0070b54bafcf0"
+    },
+    {
+      "path": "docs/instructions.md",
+      "sha256": "83b8bf27f9fa2dbe8320dd64979fcc81966cec4bb7f745d5cae71d7eebd6befa"
+    },
+    {
+      "path": "docs/raw-parsing.md",
+      "sha256": "db7399b65b58f6ad4b4c962ffd87473af560ae97c57af20d6ba8c4813fe42ee2"
+    },
+    {
+      "path": "docs/README.md",
+      "sha256": "1ba944c8a63880c33f245b11fa53713833e6d2d71a953f952309785c5570646d"
+    },
+    {
+      "path": "docs/simulation.md",
+      "sha256": "ccd9bf95485a59f1c6f6db8fc96d2f614280a0c01c733eb29bb3d764444d12a5"
+    },
+    {
+      "path": "docs/structured.md",
+      "sha256": "5817afa151def38702c053f1d29f81d2f23e64c086ba7e6d442bf2b622a2bc5b"
+    },
+    {
+      "path": "docs/timing.md",
+      "sha256": "371b02b0918cbee1ad41883bad4749bc727834ad24128af987eddbd6bc1490b3"
+    },
+    {
+      "path": "LICENSES/block-buffer-0.10.4.txt",
+      "sha256": "8118676aa4ee3901bb02bfd1b77b1fde9d4a95f8539978352bed313ddf445d1b"
+    },
+    {
+      "path": "LICENSES/bumpalo-3.20.3.txt",
+      "sha256": "4bfb7afc58d203a9c8f6e62f145a6489bc6001afb98cf8a32c6b325a87cd9ad7"
+    },
+    {
+      "path": "LICENSES/cfb-0.14.0.txt",
+      "sha256": "18796c03a8e646d1faa0287630bf4c654b001aacc7c8465b58a1e75d9a723005"
+    },
+    {
+      "path": "LICENSES/cfg-if-1.0.4.txt",
+      "sha256": "f2770c68296d696f030002db30d8efb863488b986c3491e4a7df56f26d52aa4e"
+    },
+    {
+      "path": "LICENSES/cpufeatures-0.2.17.txt",
+      "sha256": "67605f91c252ee5566e077d4dbea58aef2fac0d9a44ae5fb6b829def12938cec"
+    },
+    {
+      "path": "LICENSES/crypto-common-0.1.7.txt",
+      "sha256": "f8ca4bb837975abb4acab8c0f29adb5a514a6c9b61bb06004bbe1d3641397f42"
+    },
+    {
+      "path": "LICENSES/digest-0.10.7.txt",
+      "sha256": "967c6c8e548bb1556934cbbf9e61a85f9607b70fc72d5b78d216d198868c8f74"
+    },
+    {
+      "path": "LICENSES/fnv-1.0.7.txt",
+      "sha256": "cc2571a9c2023734aa7289eccf73f90a8bbc552be4ae368803f159d15debb9de"
+    },
+    {
+      "path": "LICENSES/futures-core-0.3.34.txt",
+      "sha256": "0f61cba448ac549dc3cd9e5b3b4cbe2402f7fa1935426e13dfcf3e013952a690"
+    },
+    {
+      "path": "LICENSES/futures-task-0.3.34.txt",
+      "sha256": "50888f7e2b8fe46bc1a92f7604c8a86d82f6f8a389dbeac141509df575a2f598"
+    },
+    {
+      "path": "LICENSES/futures-util-0.3.34.txt",
+      "sha256": "9a01307e3c1838a9767803ec27a0527b423b4bfb1840b6307b8175ae921b03c6"
+    },
+    {
+      "path": "LICENSES/generic-array-0.14.7.txt",
+      "sha256": "6ff2ff92f12dfef07bd67d989233e6f425356f826af071fbf85bf17dfeff78ff"
+    },
+    {
+      "path": "LICENSES/gxworks-agent.txt",
+      "sha256": "535989cd8503c81225c74014ee32230cb5af8385b76913f604b9874ae009ae82"
+    },
+    {
+      "path": "LICENSES/heck-0.5.0.txt",
+      "sha256": "6b73e8e1b2bea85b6a0c9fccc10448cca0584fb227f6c3af1c5198c2a785ec91"
+    },
+    {
+      "path": "LICENSES/inventory.json",
+      "sha256": "1f5bc208714d221170a1d51b336874ef690a307c9cd93b203d6396f90638b819"
+    },
+    {
+      "path": "LICENSES/itoa-1.0.18.txt",
+      "sha256": "6c577220a63f3ceb9c60518ffe267a9d11014b5d3f9481e300a0684431cc6469"
+    },
+    {
+      "path": "LICENSES/js-sys-0.3.105.txt",
+      "sha256": "4a6cbcf6812af6ad5748590b650ff42a3cadecaf16982c97f66ee3c07d134720"
+    },
+    {
+      "path": "LICENSES/libc-0.2.189.txt",
+      "sha256": "b3045dc56222572dfdf4b585d898402552ff0185fe7f7a6ac71452e8676ad8cf"
+    },
+    {
+      "path": "LICENSES/memchr-2.8.3.txt",
+      "sha256": "ebfb262abfe0626d0aeabb461e8f1ed01cf8a572ece727926a846cec573bee7c"
+    },
+    {
+      "path": "LICENSES/once_cell-1.21.4.txt",
+      "sha256": "35cf7f0c2c96da028a56e373ea8db4f37d10064bea7896cffc8edae56097f79b"
+    },
+    {
+      "path": "LICENSES/pin-project-lite-0.2.17.txt",
+      "sha256": "41b2b4d60683cab75e83a9cd9973ddbd244d13e738c9b922011242d08ea147cd"
+    },
+    {
+      "path": "LICENSES/portable-atomic-1.15.0.txt",
+      "sha256": "c50335eac967f8d78357ec03d1739e9d6b3bcf6a967d42b838aa9762e97eb14b"
+    },
+    {
+      "path": "LICENSES/proc-macro2-1.0.107.txt",
+      "sha256": "012c0398ad533c44abf87cd10a01d3e8f349ccac716a74334b14cf6258b63105"
+    },
+    {
+      "path": "LICENSES/pyo3-0.29.2.txt",
+      "sha256": "3f3e3deb154d4269d3f48160419a764ac2fc76a676b9322efe30c1fa20ebcdbe"
+    },
+    {
+      "path": "LICENSES/pyo3-build-config-0.29.2.txt",
+      "sha256": "e3ef7197902a9ee6a32b0df89af7b76efacaf8714743d8ae46baeb6287307cd3"
+    },
+    {
+      "path": "LICENSES/pyo3-ffi-0.29.2.txt",
+      "sha256": "5ee99b400771a4144441dd15e5e6cdeeabdb0158484b21ed002dd5c37ce9661a"
+    },
+    {
+      "path": "LICENSES/pyo3-macros-0.29.2.txt",
+      "sha256": "bc2d827b2eb5036473e3ee72f897a7ebbdce51cb2738b92298029258cd65f7c8"
+    },
+    {
+      "path": "LICENSES/pyo3-macros-backend-0.29.2.txt",
+      "sha256": "a4c085beb36fddfddd7ffa60c68b17d9e9572089d41c997bcf009701eeeeb335"
+    },
+    {
+      "path": "LICENSES/quick-xml-0.42.0.txt",
+      "sha256": "1f03ccf948dcfcfdb6e974e1d5c344ee5baad41d57de21622aaf2eebe80ced7b"
+    },
+    {
+      "path": "LICENSES/quote-1.0.47.txt",
+      "sha256": "7c1c5df67c0a132eaf3dbc8141f1f7a9852f80b7351b7afb95939fae886e81fb"
+    },
+    {
+      "path": "LICENSES/rustversion-1.0.23.txt",
+      "sha256": "982cd6ddf831ececabe058567eb914b673951919f3a468fbb3446d944fc583cb"
+    },
+    {
+      "path": "LICENSES/serde-1.0.229.txt",
+      "sha256": "2bcdeb9cf0ed976dde5628c5eb55e5e8fe818f65dc03eeac2865a2d3e7bc017c"
+    },
+    {
+      "path": "LICENSES/serde_core-1.0.229.txt",
+      "sha256": "52d6b3587f7d4e55ca95f2789bb8ebab2eacae6c3eacf29c76481ccb813d8076"
+    },
+    {
+      "path": "LICENSES/serde_derive-1.0.229.txt",
+      "sha256": "ecb95ac26dcad11ae96b87ada2115f423b56355d021d936d8b8cde2131adcb8a"
+    },
+    {
+      "path": "LICENSES/serde_json-1.0.151.txt",
+      "sha256": "713bbd6ebd99340688bf6c57058e3ac7c7023b5d1dd0f3f4e9e459b9c7b8dac9"
+    },
+    {
+      "path": "LICENSES/sha2-0.10.9.txt",
+      "sha256": "a562acf6d4b59091016491b3cd0e0f7d277e0b9ca1e119d62ab2bc14ea644c47"
+    },
+    {
+      "path": "LICENSES/slab-0.4.12.txt",
+      "sha256": "d75fe756971a6e497f05be6f296904cb7d2ba203738485a18178aef690cb8632"
+    },
+    {
+      "path": "LICENSES/syn-2.0.119.txt",
+      "sha256": "b4cf6fd05ad31ce1d0050e2aecf4f28cb9896014703fe90eda51a3b0979c24d4"
+    },
+    {
+      "path": "LICENSES/syn-3.0.5.txt",
+      "sha256": "0c1e07fa62b7775d4310d73c9cd7d0d1fb3d6e9d502e54f02cf3175c3e589e70"
+    },
+    {
+      "path": "LICENSES/target-lexicon-0.13.5.txt",
+      "sha256": "f6a896d0f3165544392f13bfd509846bfeaf1382eaeacac38b96188cd92ee7a0"
+    },
+    {
+      "path": "LICENSES/thiserror-2.0.20.txt",
+      "sha256": "456c4bc34e87f74c5277057fd7f716e08b568e4aa7e4933a812d3e8638bd8dd7"
+    },
+    {
+      "path": "LICENSES/thiserror-impl-2.0.20.txt",
+      "sha256": "16c3b4016cf6f0e19b2d7340c636b97bf9becca503b25125e5b8983909ac0895"
+    },
+    {
+      "path": "LICENSES/typenum-1.20.1.txt",
+      "sha256": "0feff2aae55ab7e93cc186894b07b8283597a2714da199052d32bd925e55540f"
+    },
+    {
+      "path": "LICENSES/unicode-ident-1.0.24.txt",
+      "sha256": "9f048cc47555300c38b9abb99831d9fd4d31ef3f7bfcb1382dee02b6a74fed7e"
+    },
+    {
+      "path": "LICENSES/uuid-1.26.1.txt",
+      "sha256": "13b27109001d6358a3f52053263a5b3438feb5a58e469e2924a97824de63d4b4"
+    },
+    {
+      "path": "LICENSES/version_check-0.9.5.txt",
+      "sha256": "d8114661f6a9842e51bf7efbd76e61de50591139bb21599abe45a317dd5e3cc1"
+    },
+    {
+      "path": "LICENSES/wasm-bindgen-0.2.128.txt",
+      "sha256": "2f19378a07cf059057860c47476c43c51159213bcb59da2416d7ee781be1bd77"
+    },
+    {
+      "path": "LICENSES/wasm-bindgen-macro-0.2.128.txt",
+      "sha256": "5c20d8a239f58e9ac1ba19b79f939cccd467ef96b81a72aaa85af32b5103090a"
+    },
+    {
+      "path": "LICENSES/wasm-bindgen-macro-support-0.2.128.txt",
+      "sha256": "4ec42dafebc151dda0f592f520393c09bdaa02e97bbbb95dfd5ec2681251a12c"
+    },
+    {
+      "path": "LICENSES/wasm-bindgen-shared-0.2.128.txt",
+      "sha256": "8967acaee8f1cf1873f3707d2a94550b8af70325e4cbcb0e220cf419148172eb"
+    },
+    {
+      "path": "LICENSES/web-time-1.1.0.txt",
+      "sha256": "afe31be67d57a0f8bdffd3c1c34e23eab2534df4bd2af9cc6e2c98caa5364255"
+    },
+    {
+      "path": "LICENSES/zmij-1.0.23.txt",
+      "sha256": "3969958a091253e4603285bf05daade93e40f9730df91bfb312cbea7df138a72"
+    },
+    {
+      "path": "scripts/check_analysis_parity.py",
+      "sha256": "0de7faf93b865e536644f3ce7b77c51db5c4063d643852397dd3a046dcb494ad"
+    },
+    {
+      "path": "scripts/check_binding_parity.py",
+      "sha256": "07f0dd12cdb62ab327f307af1a35e3bd969c6bec38b8bff93d5b2cc982c20c5c"
+    },
+    {
+      "path": "scripts/check_cold_install.py",
+      "sha256": "937d7fe85fe5370446d8c95cdc11554e659f70e029dcf906c8141896970d870d"
+    },
+    {
+      "path": "scripts/check_distribution.py",
+      "sha256": "33a045e5769fb44f36122563e3d4b1a41c3e345cd927a62f6ba406602668d949"
+    },
+    {
+      "path": "scripts/check_instruction_parity.py",
+      "sha256": "7b7bc905d8e0eb3a21f3bd2023eda18374874d4985aa3651dbe314d1824f35f8"
+    },
+    {
+      "path": "scripts/check_ladder_browser.mjs",
+      "sha256": "8bdc384083baca0a40b826e516df778ff30646646b6f9d15060ddac5a55beadd"
+    },
+    {
+      "path": "scripts/check_public_docs.py",
+      "sha256": "e93b22e010c5fbee7ce250cd35574121b5ffffa0641a48eaa747566189169420"
+    },
+    {
+      "path": "scripts/check_release.py",
+      "sha256": "30bd4dbe6e136549c037fd3fe146bd02b01178d316ba9816eb8a204850c39f78"
+    },
+    {
+      "path": "scripts/check_sdist_build.py",
+      "sha256": "4de940d147b100bcbbdd70504bb37ea00f042def5989a4b4fa3736ae8ec856f0"
+    },
+    {
+      "path": "scripts/check_simulation_parity.py",
+      "sha256": "483bc12a27c0561160bb623e110ea82d84bb4459fde4fb61189aa68f6ec5b05c"
+    },
+    {
+      "path": "scripts/check_structured_browser.mjs",
+      "sha256": "b99091aa2d0b474c1598cd0809c827b061cf422219424de977abd6c10bd3c71b"
+    },
+    {
+      "path": "scripts/check_structured_parity.py",
+      "sha256": "f55dd021cad7f85c0a698f544e324b5c730f66ed325428f1bd24f8ccd7aa36e4"
+    },
+    {
+      "path": "scripts/check_timing_parity.py",
+      "sha256": "195a309cbb9f2c26adc6c2547b3a8f4c81a310bb29f1c7ca98df9682d4511fb6"
+    },
+    {
+      "path": "scripts/collect_licenses.py",
+      "sha256": "90de3318f9061f57c62124ca342729095e8de5b6ad15f1d11ae5b0e60c1e3713"
+    },
+    {
+      "path": "scripts/create_ladder_review.py",
+      "sha256": "94f7b702a1250f9b2f85f4c2acccd2de2f8c975f6be59be25ae2b7267519d24d"
+    },
+    {
+      "path": "scripts/create_structured_review.py",
+      "sha256": "1be171a3495e41debfa0fea62b04aca838e4457084567b61e2365ab64d169005"
+    },
+    {
+      "path": "scripts/README.md",
+      "sha256": "04b7e79b1363babd8bedd7ffbe9ab4f53af2548dbbeae74e41bf75acb27a0c69"
+    },
+    {
+      "path": "scripts/smoke_installed.py",
+      "sha256": "519589c52a0b49839dac600757e3965f45df15abe10f2cc80dbf0982d4e22c71"
+    },
+    {
+      "path": "tests/fixtures/minimal.gxw",
+      "sha256": "20c649f55717f673f44b3743bd21b0accd401d8496dc4820ce7ad1b485bc6a5f"
+    },
+    {
+      "path": "tests/fixtures/raw.gxw",
+      "sha256": "6d307b8aaa4ebc13b05d8a44943ab4da40a95684fdcd6641e03983e207d9f69e"
+    },
+    {
+      "path": "tests/fixtures/README.md",
+      "sha256": "a5c7d9ddcb8f4793ed05d035ed0436b774f4634692dc2ed841a8aeee9e5b92fe"
+    },
+    {
+      "path": "tests/fixtures/structured.gxw",
+      "sha256": "1088f2871778a4bf21830fb2e36b6fa5f247e00d09540c5aef555a57079a7efa"
+    },
+    {
+      "path": "tests/python/test_analysis.py",
+      "sha256": "2024c041eabf339ef46fd98f876b138f956ddefd6d73a2c2930b1c960268d6ba"
+    },
+    {
+      "path": "tests/python/test_inspect.py",
+      "sha256": "3e4f5fbe1ab46c14062b73bf47575ade34a6bd01f8f7ef4fa66331c7d28ddeb6"
+    },
+    {
+      "path": "tests/python/test_instructions.py",
+      "sha256": "6fef3b17d78d512e54adbf4c2ee505720d8330804a5e8317ba3071c1f2936f9a"
+    },
+    {
+      "path": "tests/python/test_raw.py",
+      "sha256": "7121dcd77b565d210ec9f8fbc92d114d75720ecefbf3c8ae25b9950c6edb9c73"
+    },
+    {
+      "path": "tests/python/test_simulation.py",
+      "sha256": "6831539d28434cb82259e5e59dfbf8a3da0fb4f7e5226c7259c60d07a512cc24"
+    },
+    {
+      "path": "tests/python/test_simulation_timing.py",
+      "sha256": "be64adc98af6af7cd952503cd5caffbd5753aaf1648a7b3f9fe56111fe4a4110"
+    },
+    {
+      "path": "tests/python/test_structured.py",
+      "sha256": "740fcb458afb1fad5eacf8f4f77a73482fee4fb3cc8b241a35dd14e611c8c1b1"
+    },
+    {
+      "path": "tests/python/test_viewer.py",
+      "sha256": "a9470909dbbe0767f493a893225a316eed0046490929304d9b7696f977837e77"
+    },
+    {
+      "path": "tests/scripts/test_release.py",
+      "sha256": "aac4b074fbffb3a01a4f5e16915981125d0968f42c051bf568cbedd809620c32"
+    },
+    {
+      "path": "tests/fixtures/ladder/and_blocks.csv",
+      "sha256": "4c04986ffe7aa66dd6525ae8956806eda3a0ba79e88f1adc7cf98c32c805c9ad"
+    },
+    {
+      "path": "tests/fixtures/ladder/and_blocks.json",
+      "sha256": "785be6bb42e42e4f1f7cca1e1e1ef36e791d456dbde01d0d1e44518df0e2fd5f"
+    },
+    {
+      "path": "tests/fixtures/ladder/cascade_blocks.csv",
+      "sha256": "048ee0bc965ea0f73a39150308823183670c750d63f44604caeae49e9e4e7a92"
+    },
+    {
+      "path": "tests/fixtures/ladder/cascade_blocks.json",
+      "sha256": "9366769be12ae6b438ffb191bebe2b081a8dd3ea9fb90d9c3498758cac451750"
+    },
+    {
+      "path": "tests/fixtures/ladder/or_blocks.csv",
+      "sha256": "ea41d8806380fd0976188dc8e749c88a18fefe6ed140662669a2342905b46193"
+    },
+    {
+      "path": "tests/fixtures/ladder/or_blocks.json",
+      "sha256": "2450c9a81ded2c27129b11ca5326b8201ca369bdf710f50382ce9f43db910c11"
+    },
+    {
+      "path": "tests/fixtures/ladder/saved_results.csv",
+      "sha256": "7334f8db878368f569a8dc6c7a3792b7dac66fa1e6f96f662eac74f9336a8bcd"
+    },
+    {
+      "path": "tests/fixtures/ladder/saved_results.json",
+      "sha256": "9d0e25763ffd3968a754064ccaf9a32cc0faabfbbce3f0afbb46f78b9ac8b392"
+    },
+    {
+      "path": "tests/fixtures/simulation/cascade_after_write.csv",
+      "sha256": "e121a0cada539098146b52f3b87188de4600cbf262644fc0ce9581bd67c5060f"
+    },
+    {
+      "path": "tests/fixtures/simulation/double_coil.csv",
+      "sha256": "7a1d85527d2a12cbc3f656f647450bba120d7ace3e30c8e49106b5b73c8b548c"
+    },
+    {
+      "path": "tests/fixtures/simulation/reset_set.csv",
+      "sha256": "6ffd43015844424f95100674894f080788757978310d8ba44c8ba2572b64cb87"
+    },
+    {
+      "path": "tests/fixtures/simulation/saved_read.csv",
+      "sha256": "6f6d1a2f7a2f7de2edaf6e30c450ab55ae607a6c2df9f129be36b3a69ba7df25"
+    },
+    {
+      "path": "tests/fixtures/simulation/scenarios.json",
+      "sha256": "8677af674568ad1d3fbb560d63063aeda3cf5e7ae0eb2b337ce0b1a5901fbca8"
+    },
+    {
+      "path": "tests/fixtures/simulation/self_hold.csv",
+      "sha256": "df23b6a3a492e7ac230405c86049ec490192deb9b1e619f26e31d4147a748ef2"
+    },
+    {
+      "path": "tests/fixtures/simulation/set_reset.csv",
+      "sha256": "8b0f7e16c761e42a90ff0a7ccf72921ac36aa216a62ce28883e3029a4d70087f"
+    },
+    {
+      "path": "tests/fixtures/timing/bases.csv",
+      "sha256": "96f5337ecc4a93d073175cd45897eb31d9512380af44b7c9521568001d5382d9"
+    },
+    {
+      "path": "tests/fixtures/timing/counter.csv",
+      "sha256": "646a33f0eb55b7d6501483f5109c956e79215de1cbbf605a6a53992ecdca84d0"
+    },
+    {
+      "path": "tests/fixtures/timing/counter_zero.csv",
+      "sha256": "becd8622f00ffb2c73317aed51a9b04d8973da573e60fd5b56816d076a653632"
+    },
+    {
+      "path": "tests/fixtures/timing/general.csv",
+      "sha256": "505ab775763bef3174c7cf2d4b9d621caa2e297f27587eaa63519d389879520d"
+    },
+    {
+      "path": "tests/fixtures/timing/retention.csv",
+      "sha256": "166fe8479b8bf69805a42e606f6f15ad68d416bc3d2c492d7aee641a8c75bf34"
+    },
+    {
+      "path": "tests/fixtures/timing/retentive.csv",
+      "sha256": "62da73d28d344edcb8c60601a54f987b8e2c0484443ad749f9b0d89267cbfd0b"
+    },
+    {
+      "path": "tests/fixtures/timing/scenarios.json",
+      "sha256": "53d60ead7d2b06852d8e219319426fd0d158455dbdaa9f637b800fbc32cafabc"
+    },
+    {
+      "path": "tests/fixtures/timing/timer_zero.csv",
+      "sha256": "5b6a583be353a6348a0509ba5851dc9d7391d42fc119147178e850ec79d2f27e"
+    },
+    {
+      "path": "tests/fixtures/third_party/ladder_converter/alignment.json",
+      "sha256": "4559b2cf41015d83e2c6a42e0f2c28978b77be48f98e686d93ecbfe33cbd3b49"
+    },
+    {
+      "path": "tests/fixtures/third_party/ladder_converter/FX2N.gxw",
+      "sha256": "466ea0789934a878d07121810e7360403bc48abf1b97fb56c5509bdc7362b93e"
+    },
+    {
+      "path": "tests/fixtures/third_party/ladder_converter/LICENSE.txt",
+      "sha256": "4468324088e32710c49ed1f2d36eb8bcf862138979c1d5f5b98c04f96d319035"
+    },
+    {
+      "path": "tests/fixtures/third_party/ladder_converter/MAIN.csv",
+      "sha256": "61841e2ed000a94daa1ba279a707561ea8e517f5c361b34e069efaf17bdb16a3"
+    },
+    {
+      "path": "tests/fixtures/third_party/ladder_converter/provenance.json",
+      "sha256": "431aee842fbe2b4a10f701dba784fce42efc3a4fd3285595d8ec716a34e2b369"
+    },
+    {
+      "path": "src/gxwlib/analysis_cli.py",
+      "sha256": "63ea6d48d8a804fa77aba024f3eafaacb0fc7fcf9ff41588db34082cd711e353"
+    },
+    {
+      "path": "src/gxwlib/api.py",
+      "sha256": "64ae9f8b8f13b9fef74a992006e3a53e091be5199acb85de7507f9c5b397c753"
+    },
+    {
+      "path": "src/gxwlib/cli.py",
+      "sha256": "1e86bb52d7d4baf650cf10bde943d4694ac50f03bae8634908fd2dcf2b5f263d"
+    },
+    {
+      "path": "src/gxwlib/py.typed",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "src/gxwlib/simulation_cli.py",
+      "sha256": "12bc40f239335bc697a4541f18450c6208ea77cb6601dee1ec2022b5630a51ce"
+    },
+    {
+      "path": "src/gxwlib/structured_cli.py",
+      "sha256": "61c5017ef28471fa97f557a441a7f37869f53b468ee85e3ec9b1143fa11a3054"
+    },
+    {
+      "path": "src/gxwlib/viewer.py",
+      "sha256": "d65fa9718c5cd97bfa0f080db60ecf6bbcca149438705933399db854263e6c4e"
+    },
+    {
+      "path": "src/gxwlib/_core.pyi",
+      "sha256": "9054d5a7c5730659e0cf4d017550d8bb886eac3ef5503766155a20684528536a"
+    },
+    {
+      "path": "src/gxwlib/__init__.py",
+      "sha256": "77758bfe8856603c3f8d0c09d5027648beae6421cb15d3e11e355de1a520f310"
+    },
+    {
+      "path": "src/gxwlib/__main__.py",
+      "sha256": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d"
+    },
+    {
+      "path": "crates/gxw-core/Cargo.toml",
+      "sha256": "d2f195c5a6b8e30055607e1788c268859c2331c2411dced0a987d4983a1f1034"
+    },
+    {
+      "path": "crates/gxw-core/LICENSE",
+      "sha256": "1e87a2777d71f018841a9afc871aa7c7b6f4236381c38c8a25924b107486e504"
+    },
+    {
+      "path": "crates/gxw-python/Cargo.toml",
+      "sha256": "f60a2cb33fd0f6bdf837a64d2837c02e90e17057b65c6093a28b2aaf57782440"
+    },
+    {
+      "path": "crates/gxw-python/LICENSE",
+      "sha256": "1e87a2777d71f018841a9afc871aa7c7b6f4236381c38c8a25924b107486e504"
+    },
+    {
+      "path": "crates/gxw-python/src/analysis.rs",
+      "sha256": "4fb20f97e7325e9153f482eef95a1ca3c251e8621f9feb8eeb61dff1b91ea0ad"
+    },
+    {
+      "path": "crates/gxw-python/src/instructions.rs",
+      "sha256": "d5a6d33fc2aec3005a6e4cfdf10449542f6a55e636baf6c1b3fc104ab8e5807f"
+    },
+    {
+      "path": "crates/gxw-python/src/lib.rs",
+      "sha256": "406f01362f047c8edd410d35dd83039c17031eb4672eadb42a07ab76d5a74f80"
+    },
+    {
+      "path": "crates/gxw-python/src/raw.rs",
+      "sha256": "d760068022d665ab3aeb1ce72baa65ee7d3530be3e6c8f2b46b489dfba65e5b1"
+    },
+    {
+      "path": "crates/gxw-python/src/simulation.rs",
+      "sha256": "fe44364937ba82865cd9154a2efad42b8e387368f90807292887b4e99a0b18cc"
+    },
+    {
+      "path": "crates/gxw-python/src/structured.rs",
+      "sha256": "6807b924fbd91bfbe055268cd31ee0d15c522b00e9a8bafb1d67217a6e97eced"
+    },
+    {
+      "path": "crates/gxw-core/examples/analysis.rs",
+      "sha256": "79842ce6ef22ff932f1aed9939accf90bddbbc167550d64a8e1bba3daa8b1a84"
+    },
+    {
+      "path": "crates/gxw-core/examples/inspect.rs",
+      "sha256": "d90119c4ebd5dcb0010a9f694f08a48be61349b685508b3f05b09af1889031b3"
+    },
+    {
+      "path": "crates/gxw-core/examples/instructions.rs",
+      "sha256": "f495b0d88b3bff177bd7453bd96a09c24e16192db81109f43985885371ceb823"
+    },
+    {
+      "path": "crates/gxw-core/examples/make_fixture.rs",
+      "sha256": "8b6df8fb9aa13b60d218cafd43cbfda0dfe2e733fd6a87612f779cc4dd6ac2b7"
+    },
+    {
+      "path": "crates/gxw-core/examples/parse.rs",
+      "sha256": "0f4ce81451bfae0718824785c7066f1e477bc1153041188240f379410fb869cd"
+    },
+    {
+      "path": "crates/gxw-core/examples/simulation.rs",
+      "sha256": "8ba3d9103a3dc69e441fd3a5c5efb08bddb07c86b38358dd7ddb250fcf1f7d79"
+    },
+    {
+      "path": "crates/gxw-core/examples/structured.rs",
+      "sha256": "90a1dafe332e52d6eaea18752b89892be919f690d5b15395a95088d1c868a9ca"
+    },
+    {
+      "path": "crates/gxw-core/examples/structured_fixture.rs",
+      "sha256": "582ecf50bb2584c1daacc5f8581cf06eb8ea5aca3393f3cf40295abc5f19273a"
+    },
+    {
+      "path": "crates/gxw-core/src/container.rs",
+      "sha256": "b38b8c95be3541e4afbc1d70c593fc07923cabead0d731f0fefd18fe6a2968a6"
+    },
+    {
+      "path": "crates/gxw-core/src/error.rs",
+      "sha256": "5620b1ebd66f845326dd050edc67915f18e3dadd01e5489a61626ffbf5b14932"
+    },
+    {
+      "path": "crates/gxw-core/src/ir.rs",
+      "sha256": "272278bae1ee063c5ceec9b0eb3d10ff58534b6ea678264616974d930bc9ee24"
+    },
+    {
+      "path": "crates/gxw-core/src/lib.rs",
+      "sha256": "9e605bc33f467f809dceaad45870625e6e679cba3fbe67294d973a0e059e6135"
+    },
+    {
+      "path": "crates/gxw-core/src/metadata.rs",
+      "sha256": "57c6b429204b1601924563791b345c26510eb3bf9fd5331915d0a35983f35e14"
+    },
+    {
+      "path": "crates/gxw-core/src/model.rs",
+      "sha256": "4f33cf793d04a1927be3b6bd1850849a1ebb512e749ef566ae56fdc154bd0909"
+    },
+    {
+      "path": "crates/gxw-core/src/project.rs",
+      "sha256": "e6699e7d356a691089954dd5c0bafd39edd05891417c92f4eb1135779fe3bb3f"
+    },
+    {
+      "path": "crates/gxw-core/src/source.rs",
+      "sha256": "d9b8041a82508b098cba9fd348b4c2011755becd6d5cdb94e0b3072d6d25bf96"
+    },
+    {
+      "path": "crates/gxw-core/tests/analysis.rs",
+      "sha256": "d7b8b8478f18186510ed3ab143b734f5eecf64397bbb7a25638d53c490dd40ae"
+    },
+    {
+      "path": "crates/gxw-core/tests/inspect.rs",
+      "sha256": "a8d2a3e4453ac0a5ee361d619ecac33000fe9524ef23549064db160db8c147d0"
+    },
+    {
+      "path": "crates/gxw-core/tests/instructions.rs",
+      "sha256": "20c03c0dbdfec306db90cbc170b8ebbfbad783c70b32aad770a7d674029b1092"
+    },
+    {
+      "path": "crates/gxw-core/tests/raw.rs",
+      "sha256": "542485667a2bd50c6331efed1ab25ddd1a79f7b33d9cee0e17a8601c6f400d6b"
+    },
+    {
+      "path": "crates/gxw-core/tests/simulation.rs",
+      "sha256": "a0466ac916bc37bfe973349c84c2265a46d74957d51af86d5047b080d72e9136"
+    },
+    {
+      "path": "crates/gxw-core/tests/simulation_timing.rs",
+      "sha256": "641ad0896ff6c62784a187c4d56dc90712b984ac3ef0b4b6d544fdda720241e1"
+    },
+    {
+      "path": "crates/gxw-core/tests/structured.rs",
+      "sha256": "24fcb4b6a4f8271b34a797c19e0c6e7dcf6d4baf2579dd877a1cc66ec1c18555"
+    },
+    {
+      "path": "crates/gxw-core/tests/support/mod.rs",
+      "sha256": "c6c437b7cd904249bf0baad57a4bf1c3b86fa1f26d2f16ad67c01475d6e23373"
+    },
+    {
+      "path": "crates/gxw-core/tests/support/structured.rs",
+      "sha256": "8d493223339c785ff7af4bc9f10db352a2e8ecc1c6a72d1732896a6f2257ef5d"
+    },
+    {
+      "path": "crates/gxw-core/src/analysis/diff.rs",
+      "sha256": "bbc8d11d67d299ceef70739749f674771f801601d9c7f115712b270883e72452"
+    },
+    {
+      "path": "crates/gxw-core/src/analysis/mod.rs",
+      "sha256": "1585e94f1093dc9b28b3c0d7ddedfe63ef5686510faadff0b090200593c39f40"
+    },
+    {
+      "path": "crates/gxw-core/src/formats/csv.rs",
+      "sha256": "0f3829359c32843cb089c19ca8dbad92d2154d3abe60fd693f4a8e12cd7474be"
+    },
+    {
+      "path": "crates/gxw-core/src/formats/mod.rs",
+      "sha256": "8a79ce57604fbedec52d44c508177c9cfa17463996cf30e04b41a65e6f5ba29f"
+    },
+    {
+      "path": "crates/gxw-core/src/formats/simple.rs",
+      "sha256": "e66d705ca753e19288481ed02f649f6d925d1f2454ca67a7d896c76838a9da3c"
+    },
+    {
+      "path": "crates/gxw-core/src/ladder/mod.rs",
+      "sha256": "05ff4de564753c18fda50474e7568570f99e3d71ed231c3063792ce8ad4b35c4"
+    },
+    {
+      "path": "crates/gxw-core/src/ladder/render.rs",
+      "sha256": "1419e6b5abcebe2312187f9b53b238fc3d96d08aa36ed1173bd162aef2faf546"
+    },
+    {
+      "path": "crates/gxw-core/src/ladder/viewer.html",
+      "sha256": "20db75ad5c8a086220c15aebfb5b0dac06bda2b68888f3e0a57fedc714195703"
+    },
+    {
+      "path": "crates/gxw-core/src/simulation/compile.rs",
+      "sha256": "36b952048d626c7e4bee2499329e59495a383ebbe4040d442f41f2ff8e883f37"
+    },
+    {
+      "path": "crates/gxw-core/src/simulation/counters.rs",
+      "sha256": "330435a301b2f365e7f5ab6de90b30bbad5a90a01c0d3c4431400d6bbd083b6f"
+    },
+    {
+      "path": "crates/gxw-core/src/simulation/memory.rs",
+      "sha256": "da5dc04fb005a8d0a6f8645775d469bfb0241b9be2fa0d598ddf86adcdb7945f"
+    },
+    {
+      "path": "crates/gxw-core/src/simulation/mod.rs",
+      "sha256": "b8631da517ebf69979483066ecf108cdd3f3f94ebd4aaa8472c25bffee8fae7d"
+    },
+    {
+      "path": "crates/gxw-core/src/simulation/scan.rs",
+      "sha256": "6aaccd17f95041a89173e22b95e18dcb4d49717a7f9db8a6fa622908940e60eb"
+    },
+    {
+      "path": "crates/gxw-core/src/simulation/timers.rs",
+      "sha256": "2bafccb3330c9f137426b76892a93f683419ee2e5e67b9061a8fb6433d7c23cd"
+    },
+    {
+      "path": "crates/gxw-core/src/simulation/trace.rs",
+      "sha256": "52486ae753272dc491760a060c5c23cd98cf1e9eba7ce8fe52bc43ab948e9657"
+    },
+    {
+      "path": "crates/gxw-core/src/structured/connectivity.rs",
+      "sha256": "cce4e1537106259c8a2d0c06db86b598977af44b83f6a9e9f83958025bee5301"
+    },
+    {
+      "path": "crates/gxw-core/src/structured/declarations.rs",
+      "sha256": "e4312578fc5e9d1839070c6a62f42bc8889922150aa3960b75af754c7979ebb8"
+    },
+    {
+      "path": "crates/gxw-core/src/structured/devices.rs",
+      "sha256": "31ff00cc117742bb8e9efa0829fd92e1f81d559dadf7da459fd2fa46f0edaf65"
+    },
+    {
+      "path": "crates/gxw-core/src/structured/mod.rs",
+      "sha256": "badcca6fa4d2cbbda11165d8d2197eb44eec28709da307580607120a21c96785"
+    },
+    {
+      "path": "crates/gxw-core/src/structured/parser.rs",
+      "sha256": "f93dbfb2b7bc33e366202b2aab485e846bee7d27fcfa52c696c3b330da938ee4"
+    },
+    {
+      "path": "crates/gxw-core/src/structured/render.rs",
+      "sha256": "3d724941202897fdb1de9eaecd6cabc469f17bedd61ccaf95592885e1261d37e"
+    },
+    {
+      "path": "crates/gxw-core/src/structured/viewer.html",
+      "sha256": "e4252c35fcf33d4789c810bae6c784db5861eff2cf68fe4f835e9ccee80addfa"
+    },
+    {
+      "path": "crates/gxw-core/src/simulation/profiles/fx3g.rs",
+      "sha256": "12c4a01238e0b6e5462fc721954c94253be719f57ad73e11e82643a7759c4f68"
+    },
+    {
+      "path": "crates/gxw-core/src/simulation/profiles/mod.rs",
+      "sha256": "93c2066996e8cb1ae4ad069c8fecb62acabfb6ee896f6336099decb66550b77d"
+    },
+    {
+      "path": "crates/gxw-core/src/formats/simple/catalog.rs",
+      "sha256": "ba2c4eb8811378573c615a28964da34fc1966916e0d73dceb5f53bd60a234cc9"
+    },
+    {
+      "path": "crates/gxw-core/src/formats/simple/decoder.rs",
+      "sha256": "713730aea156b8bca8e0db481ea456ae1552a415e7fe82cd3ac02a1b869bccf7"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "2a45752697f68c3176c6ed51f9de0e007f6fefab78e3cb33dadb2c8e156cc1fc"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "sha256": "178521074267a1c1ee641e121a37929df8affec4c555f671a9e1c831f99caa65"
+    }
+  ],
+  "additional_attribution_sources": [
+    {
+      "path": "F:\\000-HBDTECH-Neo\\102-plc-s2-engine\\LICENSE",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "commit": "7928b4de2b2a9d07f10e17568c62e981c5b50d55",
+      "license": "Apache-2.0 / notice inventory",
+      "scope": "S2 attribution, no executable code"
+    },
+    {
+      "path": "F:\\000-HBDTECH-Neo\\102-plc-s2-engine\\THIRD_PARTY_NOTICES.md",
+      "sha256": "423fc1dc2f2a8a4478b1a5d568ee4e1bbef3c554e0dddd012f0fd6ecfda5c743",
+      "commit": "7928b4de2b2a9d07f10e17568c62e981c5b50d55",
+      "license": "Apache-2.0 / notice inventory",
+      "scope": "S2 attribution, no executable code"
+    }
+  ]
+}

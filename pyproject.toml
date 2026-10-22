@@ -4,11 +4,21 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "plcweave"
-version = "0.0.0"
-description = "Test-driven PLC engineering toolkit (project scaffold)"
+version = "0.1.0"
+description = "Test-driven PLC engineering toolkit (initial FX subset)"
 readme = "README.md"
 requires-python = ">=3.13"
 license = "Apache-2.0"
 
+[project.scripts]
+plcweave = "plcweave.__main__:main"
+
+[project.optional-dependencies]
+hil = ["pyserial==3.5", "pymodbus==3.11.1"]
+test = ["pytest>=8,<10"]
+
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

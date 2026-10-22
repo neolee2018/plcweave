@@ -1,0 +1,9 @@
+{
+  "name": "plcweave",
+  "title": "PLCWeave task orchestration",
+  "version": "0.1.0",
+  "description": "PLC validation and explicit manual-download gate. No MCU firmware flashing.",
+  "license": "Apache-2.0",
+  "engines": {"platformio": "^6"},
+  "packages": {}
+}

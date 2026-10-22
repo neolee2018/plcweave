@@ -15,5 +15,7 @@ build/
 *.egg-info/
 logs/
 private/
+project/*
+!project/README.md
 local/
 *.log

@@ -1,3 +1,3 @@
-"""PLCWeave project namespace. Execution modules are not integrated yet."""
+"""PLCWeave: bounded FX validation and isolated-bench observation tools."""
 
-__version__ = "0.0.0"
+__version__ = "0.1.0"
