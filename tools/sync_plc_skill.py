@@ -18,7 +18,7 @@ def main():
     for name in paths:
         src=target/name;dest=backup/name
         if src.exists() and not dest.exists():dest.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(src,dest)
-    source=repo/'skills/plc-program-development'
+    source=repo/'.agents/skills/plc-program-development'
     body=(source/'SKILL.md').read_text(encoding='utf-8').split('---',2)[2].lstrip()
     ref=target/'resources/sop/PLC-MD-First-Workflow.md'
     ref.write_text(body,encoding='utf-8')

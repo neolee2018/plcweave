@@ -47,6 +47,7 @@ py -3.13 -m venv .venv
 
 ./.venv/Scripts/python.exe -c "import gxwlib; from gxwlib import _core; print(_core.__file__)"
 ./.venv/Scripts/python.exe -m plcweave --help
+New-Item -ItemType Directory -Force local | Out-Null
 ./.venv/Scripts/python.exe -m pytest -q tests --basetemp=local/pytest-readme
 ```
 
@@ -69,10 +70,11 @@ rustup toolchain install 1.93.0 --profile minimal --component rustfmt --componen
 .venv/bin/python -m pip install -e '.[test]'
 .venv/bin/python -c 'import gxwlib; from gxwlib import _core; print(_core.__file__)'
 .venv/bin/python -m plcweave --help
+mkdir -p local
 .venv/bin/python -m pytest -q tests --basetemp=local/pytest-readme
 ```
 
-这是源码安装路径，不代表这些平台已经验证。现有本地验证在Windows完成。POSIX下将后文Windows入口替换成 `.venv/bin/python -m plcweave`，用编辑器或Agent文件工具写入示例UTF-8文件。当前PlatformIO适配器和离线开发助手为Windows专用。
+2026-10-24已在Debian 13（Linux aarch64）、CPython 3.13、Rust 1.93.0验证：vendor编译、全量测试和无硬件示例通过。Debian/Ubuntu需先安装C工具链（`sudo apt install build-essential`，否则cargo报 ``linker `cc` not found``）；若 `python3.13 -m venv` 提示缺ensurepip，安装 `python3.13-venv`，或用 `--without-pip` 建venv后以 `get-pip.py` 安装pip。macOS尚未验证。POSIX下将后文Windows入口替换成 `.venv/bin/python -m plcweave`，用编辑器或Agent文件工具写入示例UTF-8文件。当前PlatformIO适配器和离线开发助手为Windows专用。
 
 公开工具测试使用合成夹具，不依赖客户project内容。客户专用集成测试保留在各自私有项目目录。记录实际通过/失败/跳过数量，不套用私有工作区数量。
 
@@ -125,7 +127,7 @@ R02: M0 stays within 0..1. No physical I/O is used.
 ./tools/plcweave.ps1 freeze project/quickstart
 ```
 
-s1-freeze.md绑定两份MD的原始字节。草稿/空用例、未知字段、双重作者源、创建源程序后才首次冻结都会被拒绝。[MD用例格式](skills/plc-program-development/references/markdown-cases.md)定义可执行表格，执行时内存解析，不另存测试JSON/YAML作者文件。
+s1-freeze.md绑定两份MD的原始字节。草稿/空用例、未知字段、双重作者源、创建源程序后才首次冻结都会被拒绝。[MD用例格式](.agents/skills/plc-program-development/references/markdown-cases.md)定义可执行表格，执行时内存解析，不另存测试JSON/YAML作者文件。
 
 ### B. 实现，再执行冻结测试
 
@@ -187,13 +189,24 @@ project/
 
 每客户独立文件夹，支持明确指定的外部目录；客户内容不能放进工具代码、测试、说明或技能中。新草稿仅MD，历史冻结JSON可兼容读取但不改写；真实执行报告/轨迹可用JSON/CSV。交付只选定项目成果，不打包环境、凭据、其他客户或整个仓库。
 
+### 已支持指令子集（FX3U profile）
+
+| 类别 | 仿真可执行 | 不支持（编译即阻断） |
+| --- | --- | --- |
+| 位逻辑 | LD、LDI、AND、ANI、OR、ORI、OUT、SET、RST、ANB、ORB、MPS、MRD、MPP、END | 脉冲触点/输出、STL/SFC、跳转、子程序、中断 |
+| 定时器/计数器 | T、C触点，常数设定值OUT，RST | 变量设定值、32位及高速计数器 |
+| 字运算 | MOV、ADD、SUB、MUL、DIV（非零常数除数），有符号16位 AND=/</<=/>/>= | 32位运算、运算标志、PID、变址/间接寻址 |
+| 软元件 | X/Y0–177（八进制）、M0–7679、M8000–8511、T、C、D0–7999（D8000–8511仅作普通字映像） | 特殊寄存器背后的外设行为（UART、ADC、DAC）、掉电保持 |
+
+表外指令一律拒绝，不会静默变成NOP。详见[执行核边界](docs/RUNTIME-CHANGES.md)。
+
 ## 4. AI Agent执行指令
 
 将本仓库和以下任务交给Agent：
 
-> 先读AGENTS.md、skills/plc-program-development/SKILL.md及MD参考。识别系统、Python ABI/版本、Rust和原生编译器，在主机权限内安装缺失前提；创建/使用专用.venv，先安装./vendor/gxwlib，再安装.[test]。实际执行导入、CLI帮助、测试和无硬件示例，记录命令、版本、错误与结果；依赖错误先修依赖，不改PLC逻辑。公开安装不需要公司服务、兄弟仓库、客户案例或全局技能。未指定位置时新建project子目录；指定外部位置则遵从。需求/测试只MD，规定节点组织四位独立新上下文复核，先冻结后源程序，再真实执行和比较轨迹，不改预期迎合实现。仿真/协议/硬件/未验证分开记录；没有现场授权和已知映射不访问设备或切RUN/STOP。保留旧证据，最终项目内交付目录+ZIP、核对哈希，仅清理本任务资源。复核者、前提、权限、指令或采集能力缺失时说明确切阻塞，不得伪造完成。
+> 先读AGENTS.md、.agents/skills/plc-program-development/SKILL.md及MD参考。识别系统、Python ABI/版本、Rust和原生编译器，在主机权限内安装缺失前提；创建/使用专用.venv，先安装./vendor/gxwlib，再安装.[test]。实际执行导入、CLI帮助、测试和无硬件示例，记录命令、版本、错误与结果；依赖错误先修依赖，不改PLC逻辑。公开安装不需要公司服务、兄弟仓库、客户案例或全局技能。未指定位置时新建project子目录；指定外部位置则遵从。需求/测试只MD，规定节点组织四位独立新上下文复核，先冻结后源程序，再真实执行和比较轨迹，不改预期迎合实现。仿真/协议/硬件/未验证分开记录；没有现场授权和已知映射不访问设备或切RUN/STOP。保留旧证据，最终项目内交付目录+ZIP、核对哈希，仅清理本任务资源。复核者、前提、权限、指令或采集能力缺失时说明确切阻塞，不得伪造完成。
 
-可以直接阅读仓库技能，全局安装可选。tools/sync_plc_skill.py仅更新**已有旧技能**，不是通用新技能安装器。Hindsight/ZERO仅适用于已配置的公司工作区，开源用户不需要这些服务或凭据。
+工作流技能位于标准项目技能目录 `.agents/skills/plc-program-development/`：在本仓内启动Codex会自动发现（也可输入 `$plc-program-development` 显式调用），AGENTS.md/CLAUDE.md也要求其他Agent在任何PLC任务前先读取。无需全局安装。tools/sync_plc_skill.py仅更新**已有旧技能**，不是通用新技能安装器。Hindsight/ZERO仅适用于已配置的公司工作区，开源用户不需要这些服务或凭据。
 
 ## 5. 可选PlatformIO与硬件
 

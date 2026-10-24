@@ -1,6 +1,8 @@
 ---
 name: plc-program-development
-description: 用PLCWeave进行FX3U/HBDTECH L01S的测试驱动开发、仿真与交付。需求和测试以Markdown为唯一作者源，客户项目独立存放，复核使用4个独立Agent。
+description: >-
+  必须使用：凡是编写、修改、调试、仿真、测试或交付PLC程序（三菱FX3U/FX系列、HBDTECH L01S、梯形图/指令表、GX Works2 CSV）的任务，开始前先加载本技能并按S0–S7执行。
+  Use for ANY task that writes, modifies, debugs, simulates, tests or delivers a PLC program (Mitsubishi FX3U/FX, HBDTECH L01S, ladder or instruction list, GX Works2 CSV) with PLCWeave: Markdown requirements and test cases first, freeze before source, real simulation, independent review, project-local delivery ZIP.
 ---
 
 # PLC 开发与交付
