@@ -47,6 +47,7 @@ py -3.13 -m venv .venv
 
 ./.venv/Scripts/python.exe -c "import gxwlib; from gxwlib import _core; print(_core.__file__)"
 ./.venv/Scripts/python.exe -m plcweave --help
+New-Item -ItemType Directory -Force local | Out-Null
 ./.venv/Scripts/python.exe -m pytest -q tests --basetemp=local/pytest-readme
 ```
 
@@ -69,6 +70,7 @@ rustup toolchain install 1.93.0 --profile minimal --component rustfmt --componen
 .venv/bin/python -m pip install -e '.[test]'
 .venv/bin/python -c 'import gxwlib; from gxwlib import _core; print(_core.__file__)'
 .venv/bin/python -m plcweave --help
+mkdir -p local
 .venv/bin/python -m pytest -q tests --basetemp=local/pytest-readme
 ```
 

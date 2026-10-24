@@ -41,7 +41,9 @@ jobs:
 
       - name: Run tests
         shell: bash
-        run: python -m pytest -q tests --basetemp=local/pytest-ci
+        run: |
+          mkdir -p local
+          python -m pytest -q tests --basetemp=local/pytest-ci
 
       - name: No-hardware quickstart
         shell: bash
