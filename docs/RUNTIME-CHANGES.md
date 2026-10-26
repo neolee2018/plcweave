@@ -30,6 +30,16 @@ requirements/expected outputs were not changed.
 Vendor/GX and physical-device conformance remain UNVERIFIED. No native PID, pulse
 execution, variable divisor, power-cycle retention or full PLC model is claimed.
 
+Two oracle generalizations were added on 2026-10-24 (no expectation was relaxed):
+
+- The `diagnostics` relation now reads D196/D197/D202 from the suite's
+  `global_invariants` instead of hardcoding one project's version words. Projects
+  without those entries keep the previous 2/31/2 fallback.
+- `D1070`/`D1071` were added to the input image, and `scaling_settings` computes
+  the effective AI0 source as `D1056` (mode 1), `D1070` (mode 0 with `D1071=1`)
+  or `D8030` (mode 0). This models an optional parallel bench input; it does not
+  make hardware ADC registers writable.
+
 Rebuild the development binding on Windows after a Rust change:
 
 ```powershell

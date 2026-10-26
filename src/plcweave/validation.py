@@ -9,7 +9,7 @@ from pathlib import Path
 
 SCHEMA = "plcweave-case-v1-with-independent-oracles"
 INPUTS = ("D102", "D190", "D191", "D192", "D193", "D194", "D261", "D1056",
-          "D8030", "D8031", "D8032", "D8033")
+          "D8030", "D8031", "D8032", "D8033", "D1070", "D1071")
 KINDS = {
     "state_output_consistency", "physical_routing", "scaling_settings",
     "independent_pi_recurrence", "continuous_timers", "first_crossing_and_monotonicity",
@@ -171,6 +171,7 @@ class TraceOracle:
     """
     def __init__(self, suite, case, *, capabilities=None, context=None):
         self.scan_ms = suite["scan_ms"]
+        self.suite = suite
         self.case = case
         self.context = context or {}
         self.capabilities = capabilities or {}
@@ -242,7 +243,8 @@ class TraceOracle:
             elif i["D191"] == 1 and not self.inhibit:
                 self.run = True
         valid = i["D190"] in (0, 1)
-        pv = (clamp(signed16(i["D1056"] if i["D190"] == 1 else i["D8030"]), 0, 4000) + 12) // 25
+        raw = i["D1056"] if i["D190"] == 1 else (i["D1070"] if i.get("D1071") == 1 else i["D8030"])
+        pv = (clamp(signed16(raw), 0, 4000) + 12) // 25
         sv = i["D102"]
         if "command_state_oracle" in ready:
             self._expect("command_state_oracle", t, o, {"M0": int(self.run)})
@@ -346,7 +348,9 @@ class TraceOracle:
                     self._expect(k, t, o, {"D120": 30000, "D154": 5000})
         if "diagnostics" in ready:
             k = "diagnostics"
-            self._expect(k, t, o, {"D195": i["D194"], "D196": 2, "D197": 31, "D202": 2})
+            identity = {d: v for d in ("D196", "D197", "D202")
+                        if isinstance((v := self.suite.get("global_invariants", {}).get(d)), int)}
+            self._expect(k, t, o, {"D195": i["D194"], **(identity or {"D196": 2, "D197": 31, "D202": 2})})
             if self.previous and all(self.previous.get(d) is not None for d in ("D199", "D198", "D200", "D201")):
                 self._expect(k, t, o, {"D199": signed16(self.previous["D199"]+1), "D200": self.previous["D200"], "D201": self.previous["D201"]})
                 if self.previous["D199"] == 32767 and o["D199"] == -32768:

@@ -1,33 +1,74 @@
 """Opt-in isolated-bench Modbus runner; never downloads or changes RUN/STOP."""
 import json
+import re
 import time
 from datetime import datetime, timezone
 from pathlib import Path
 from .testing import compare, digest, frozen_suite, suite_path
 
 ALLOWED_WRITES={102,190,191,192,193,194,261,1056}
+DEFAULT_BENCH={"port":"COM7","baud":9600,"parity":"N","bytesize":8,"stopbits":1,"station":1}
+BAUD_RATES={600,1200,2400,4800,9600,19200,38400,57600,115200}
+PARITIES={"N","E","O"}
+
+def validate_bench_settings(values):
+    """Validate reviewer-supplied serial settings before any port is opened."""
+    data={**DEFAULT_BENCH,**dict(values)}
+    unknown=set(data)-set(DEFAULT_BENCH)
+    if unknown:raise ValueError(f"Unsupported bench settings: {sorted(unknown)}")
+    port=data["port"]
+    if not isinstance(port,str) or not re.fullmatch(r"(?i:COM(?:[1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-6]))|/dev/tty[A-Za-z0-9._-]+",port):
+        raise ValueError("Bench port must be COM1..COM256 or /dev/tty*")
+    baud=data["baud"];parity=data["parity"]
+    if type(baud) is not int or baud not in BAUD_RATES:raise ValueError(f"Unsupported baud rate: {baud}")
+    if not isinstance(parity,str) or parity.upper() not in PARITIES:raise ValueError("Parity must be N, E or O")
+    if type(data["bytesize"]) is not int or data["bytesize"] not in {7,8}:raise ValueError("Data bits must be 7 or 8")
+    if type(data["stopbits"]) is not int or data["stopbits"] not in {1,2}:raise ValueError("Stop bits must be 1 or 2")
+    if type(data["station"]) is not int or not 1<=data["station"]<=247:raise ValueError("Station must be 1..247")
+    return {"port":port,"baud":baud,"parity":parity.upper(),"bytesize":data["bytesize"],
+            "stopbits":data["stopbits"],"station":data["station"]}
+
+def load_bench_settings(directory):
+    path=Path(directory)/"bench_config.json"
+    if not path.exists():return dict(DEFAULT_BENCH)
+    try:data=json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:raise ValueError(f"Invalid bench_config.json: {exc}") from exc
+    if not isinstance(data,dict):raise ValueError("bench_config.json must be an object")
+    missing=set(DEFAULT_BENCH)-set(data)
+    if missing:raise ValueError(f"bench_config.json is missing: {sorted(missing)}")
+    return validate_bench_settings(data)
 
 class Bench:
-    def __init__(self,port="COM7",client=None,*,expected_identity=(1,31),expected_fingerprint=None,expected_suite=None):
+    def __init__(self,port=None,client=None,*,settings=None,expected_identity=(1,31),expected_fingerprint=None,expected_suite=None,allowed_writes=None):
+        if settings is None:
+            settings={**DEFAULT_BENCH,**({"port":port} if port else {})}
+        self.settings=validate_bench_settings(settings)
+        self.station=self.settings["station"]
         if client is None:
-            from pymodbus.client import ModbusSerialClient
-            client=ModbusSerialClient(port=port,baudrate=9600,bytesize=8,parity="N",stopbits=1,timeout=0.5,retries=0)
+            try:
+                from pymodbus.client import ModbusSerialClient
+            except ModuleNotFoundError as exc:
+                raise RuntimeError("HIL dependencies are missing; install with: pip install -e \".[hil]\"") from exc
+            client=ModbusSerialClient(port=self.settings["port"],baudrate=self.settings["baud"],
+                bytesize=self.settings["bytesize"],parity=self.settings["parity"],
+                stopbits=self.settings["stopbits"],timeout=0.5,retries=0)
         self.client=client
         self.verified=False
         self.expected_identity=tuple(expected_identity)
         self.expected_fingerprint=None if expected_fingerprint is None else tuple(expected_fingerprint)
         self.expected_suite=expected_suite
+        self.allowed_writes=set(ALLOWED_WRITES if allowed_writes is None else allowed_writes)
 
     def read_words(self,first,count):
-        response=self.client.read_holding_registers(first,count=count,device_id=1)
+        response=self.client.read_holding_registers(first,count=count,device_id=self.station)
         if response.isError() or len(getattr(response,"registers",[]))!=count:
-            raise ConnectionError(f"FC03 D{first} count={count}: {response}")
+            raise ConnectionError(f"FC03 D{first} count={count} station={self.station}: {response}")
         return [v-65536 if v>=32768 else v for v in response.registers]
 
     def verify(self):
         self.verified=False
         if not self.client.connect():
-            raise ConnectionError("Cannot open COM7")
+            raise ConnectionError(f"Cannot open {self.settings['port']}")
         version,edition=self.read_words(196,2)
         if (version,edition)!=self.expected_identity:
             raise ValueError(f"Unexpected program identity: {version}/{edition}; no write allowed")
@@ -51,9 +92,9 @@ class Bench:
 
     def write(self,device,value):
         address=int(device.removeprefix("D"))
-        if not device.startswith("D") or address not in ALLOWED_WRITES or not self.verified:
+        if not device.startswith("D") or address not in self.allowed_writes or not self.verified:
             raise ValueError(f"Unverified or forbidden write: {device}")
-        response=self.client.write_register(address,int(value)&65535,device_id=1)
+        response=self.client.write_register(address,int(value)&65535,device_id=self.station)
         if response.isError():
             raise ConnectionError(f"FC06 {device}: {response}")
 
@@ -91,7 +132,7 @@ class Bench:
         for group in groups:
             first=group[0][0]
             count=group[-1][0]-first+1
-            response=self.client.read_coils(first,count=count,device_id=1)
+            response=self.client.read_coils(first,count=count,device_id=self.station)
             if response.isError() or len(getattr(response,"bits",[]))<count:
                 raise ConnectionError(f"FC01 {first} count={count}: {response}")
             values.update({name:int(response.bits[address-first]) for address,name in group})
@@ -103,25 +144,28 @@ class Bench:
 def candidate_bench(directory):
     """Bind new candidates to their source manifest before opening a serial port."""
     directory=Path(directory)
+    settings=load_bench_settings(directory)
     path=directory/"build_identity.json"
     if not path.exists():
         # Backwards compatibility is limited to the explicitly numbered legacy suite.
         suite=frozen_suite(directory)
         if suite_path(directory).suffix=='.md' or suite.get("suite_version")!="V001":
             raise ValueError("New candidate requires build_identity.json; no serial access")
-        return Bench()
+        return Bench(settings=settings)
     identity=json.loads(path.read_text(encoding="utf-8"))
     if identity.get("source_sha256")!=digest(directory/"source.fxil"):
         raise ValueError("Build identity is stale for current source; no serial access")
     words=identity.get("fingerprint_words")
     if not isinstance(words,list) or len(words)!=2 or any(type(w) is not int or not -32768<=w<=32767 for w in words):
         raise ValueError("Invalid candidate fingerprint words; no serial access")
-    return Bench(expected_identity=(identity["program_version"],identity["edition"]),expected_fingerprint=words,expected_suite=identity["suite_version_word"])
+    return Bench(settings=settings,expected_identity=(identity["program_version"],identity["edition"]),
+                 expected_fingerprint=words,expected_suite=identity["suite_version_word"])
 
 def preflight(directory):
     path=Path(directory)/"evidence/modbus-preflight.json"
     bench=None
-    report={"environment":"hardware_protocol_preflight","port":"COM7","writes":0}
+    settings=load_bench_settings(directory)
+    report={"environment":"hardware_protocol_preflight","port":settings["port"],"bench":settings,"writes":0}
     try:
         bench=candidate_bench(directory)
         report.update(bench.verify(),status="PROTOCOL_READ_PASS")
@@ -139,13 +183,37 @@ def run(directory, isolated_bench=False):
     suite=frozen_suite(directory)
     if suite.get("relationship_invariants"):
         raise ValueError("UNVERIFIED: this full-trace suite requires a qualified sampled replay adapter; the legacy endpoint runner cannot validate it. No serial access attempted.")
-    record=json.loads((directory/"manual_download.json").read_text(encoding="utf-8"))
-    if record.get("source_sha256")!=digest(directory/"source.fxil") or record.get("test_sha256")!=digest(suite_path(directory)) or not record.get("confirmed_by") or not record.get("downloaded_at"):
-        raise ValueError("Manual download record must bind current source/test hashes, operator and time")
+    manual_path=directory/"manual_download.json"
+    if not manual_path.is_file():
+        raise ValueError("Missing manual_download.json; run `demo confirm-flash` or record the download first")
+    demo_build=False
+    identity_path=directory/"build_identity.json"
+    if identity_path.is_file():
+        try:demo_build=bool(json.loads(identity_path.read_text(encoding="utf-8")).get("demo"))
+        except json.JSONDecodeError:demo_build=False
+    record=json.loads(manual_path.read_text(encoding="utf-8"))
+    binds=(record.get("source_sha256")==digest(directory/"source.fxil")
+           and record.get("test_sha256")==digest(suite_path(directory))
+           and bool(record.get("confirmed_by")) and bool(record.get("downloaded_at")))
+    if demo_build:
+        binds=binds and bool(record.get("compile_status")) and bool(record.get("run_state"))
+    if not binds:
+        raise ValueError("Manual download record must bind current source/test hashes, operator, time"
+                         + (" and compile/RUN status" if demo_build else ""))
     if not isolated_bench:
         raise ValueError("Controlled writes require explicit isolated-bench authorization")
+    if demo_build:
+        ready_path=directory/"bench_ready.json"
+        if not ready_path.is_file():
+            raise ValueError("Demo S6 requires bench_ready.json; run `demo confirm-bench` after wiring")
+        ready=json.loads(ready_path.read_text(encoding="utf-8"))
+        if ready.get("source_sha256")!=record["source_sha256"] or ready.get("test_sha256")!=record["test_sha256"] or not ready.get("isolated_bench") or not ready.get("rs485_connected") or not ready.get("plc_running"):
+            raise ValueError("Bench readiness is stale or incomplete; confirm isolated bench, RS485 and RUN again")
     bench=candidate_bench(directory)
-    report={"environment":"hardware_sampled","timestamp":datetime.now(timezone.utc).isoformat(),"source_sha256":record["source_sha256"],"test_sha256":record["test_sha256"],"cases":[],"status":"UNVERIFIED"}
+    (directory/"evidence").mkdir(parents=True,exist_ok=True)
+    report={"environment":"hardware_sampled","timestamp":datetime.now(timezone.utc).isoformat(),
+            "bench":load_bench_settings(directory),"source_sha256":record["source_sha256"],
+            "test_sha256":record["test_sha256"],"cases":[],"status":"UNVERIFIED"}
     batch_deadline=time.monotonic()+600
     try:
         report["identity"]=bench.verify()

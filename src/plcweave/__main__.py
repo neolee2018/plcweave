@@ -1,9 +1,17 @@
 import argparse
 import json
+import sys
 from .testing import simulate
 
 def main():
-    parser=argparse.ArgumentParser(description="PLCWeave deterministic case runner")
+    if sys.argv[1:2]==["workflow"]:
+        from .workflow import main as workflow_main
+        return workflow_main(sys.argv[2:])
+    if sys.argv[1:2]==["demo"]:
+        from .demo import main as demo_main
+        return demo_main(sys.argv[2:])
+    parser=argparse.ArgumentParser(description="PLCWeave deterministic case runner",
+        epilog="Guided first-run demo: `plcweave demo --help` (see demo/START-HERE.md)")
     parser.add_argument("command",choices=["init","freeze","package","simulate","preflight","hil"])
     parser.add_argument("case_directory")
     parser.add_argument("--isolated-bench",action="store_true")

@@ -4,7 +4,7 @@
 
 English | [简体中文](README.zh-CN.md)
 
-Markdown requirements and tests → supported FX instruction execution → independent verification → controlled hardware sampling → traceable delivery. The first execution subset targets FX3U/HBDTECH L01S. This is an engineering toolkit under development, not a complete PLC simulator or certified production controller.
+Markdown requirements and tests → supported FX instruction execution → independent verification → controlled hardware sampling → traceable delivery. The first execution subset targets FX3U/HBDTECH L01S. Start with the [quick demo](#2-quick-demo-one-prompt) if you just want to see it run. This is an engineering toolkit under development, not a complete PLC simulator or certified production controller.
 
 ## 1. Install
 
@@ -26,6 +26,12 @@ cd plcweave
 
 Run commands from the directory containing `pyproject.toml`. Do not fetch missing files from a private sibling project.
 
+### Install the workflow skill (recommended for AI agents)
+
+The workflow is the repository skill **`plc-program-development`** (`skills/plc-program-development/SKILL.md`) together with its `references/` folder. Reading it from this checkout is enough; a global install is optional, but install it when the agent should follow the workflow from project folders outside this repository.
+
+To install, copy or link the **whole** `skills/plc-program-development/` directory into your agent platform's skills directory and keep the directory name exactly `plc-program-development` (it must match the `name:` field in `SKILL.md`). Keep `SKILL.md` and `references/` together, and restore the directory after updating the checkout so the repository skill stays the single source. `tools/sync_plc_skill.py` only updates an existing legacy company skill; it is not a general-purpose installer.
+
 Install missing system prerequisites using the official [Python](https://www.python.org/downloads/), [Rust/rustup](https://www.rust-lang.org/tools/install/), and [Windows Rust/MSVC](https://learn.microsoft.com/en-us/windows/dev-environment/rust/setup) instructions. Windows package-manager options include `winget install --exact --id Python.Python.3.13` and `winget install --exact --id Rustlang.Rustup`; the C++ workload/SDK must also be installed. Reopen the terminal afterward. Agents must respect host installation/elevation permissions.
 
 ### Windows / PowerShell
@@ -44,6 +50,8 @@ py -3.13 -m venv .venv
 ./.venv/Scripts/python.exe -m pip install --upgrade pip
 ./.venv/Scripts/python.exe -m pip install ./vendor/gxwlib
 ./.venv/Scripts/python.exe -m pip install -e ".[test]"
+# Optional S6/USB-RS485 extras (pymodbus, pyserial):
+./.venv/Scripts/python.exe -m pip install -e ".[hil]"
 
 ./.venv/Scripts/python.exe -c "import gxwlib; from gxwlib import _core; print(_core.__file__)"
 ./.venv/Scripts/python.exe -m plcweave --help
@@ -67,6 +75,8 @@ python3.13 -m venv .venv
 rustup toolchain install 1.93.0 --profile minimal --component rustfmt --component clippy
 .venv/bin/python -m pip install ./vendor/gxwlib
 .venv/bin/python -m pip install -e '.[test]'
+# Optional S6/USB-RS485 extras:
+.venv/bin/python -m pip install -e '.[hil]'
 .venv/bin/python -c 'import gxwlib; from gxwlib import _core; print(_core.__file__)'
 .venv/bin/python -m plcweave --help
 .venv/bin/python -m pytest -q tests --basetemp=local/pytest-readme
@@ -76,7 +86,39 @@ This is a source-install route, not a claim that these hosts were validated. Loc
 
 Public toolkit tests use synthetic fixtures and do not require customer `project/` contents. Customer-specific integration tests remain in their private project directories. Record actual passed/failed/skipped counts; do not copy a private workspace's counts.
 
-## 2. First run: no hardware
+## 2. Quick demo (one prompt)
+
+Clone the repository, paste one prompt, and your agent does the rest: it installs the prerequisites
+and the toolkit, runs the test suite, executes a **fixed** L01S demo scenario (start/stop + 3 s
+delayed output + runtime counter) and hands you a checked delivery ZIP. Copy the prompt from
+[`PROMPT.md`](PROMPT.md) at the repository root and give it to any agent that can run terminal
+commands in this checkout (Codex CLI, Claude Code, Cursor, ZCode, ...). A plain chat window without
+local execution cannot run the flow.
+
+The default is the **no-hardware autonomous mode**: the agent asks no questions, never opens a
+serial port, and the S6 report honestly stays "not executed" (completion 60%). Already installed
+and want it shorter? Use [`demo/PROMPT.md`](demo/PROMPT.md). With an isolated L01S bench connected,
+say so when you send the prompt; the agent switches to the hardware flow in
+[`demo/START-HERE.md`](demo/START-HERE.md) and pauses for your GX Works2 download and explicit
+flash/bench confirmations before S6 sampling.
+
+The same flow manually:
+
+```powershell
+./tools/plcweave.ps1 demo start demo-run --not-connected
+./tools/plcweave.ps1 simulate project/demo-run
+./tools/plcweave.ps1 demo status project/demo-run
+./tools/plcweave.ps1 demo deliver project/demo-run --version V001
+```
+
+Expected: `SIM_PASS` with 8/8 cases, then `project/demo-run/delivery/V001/` and
+`project/demo-run/delivery/demo-run-V001.zip`. The ZIP contains the demo scenario requirement
+document, test cases, `MAIN.csv`, `COMMENT.csv`, an S6 report that separates completed and untested
+items, and a summary with the completion score (60% without hardware) and a demo-vs-formal
+acceptance verdict. The demo is a workflow proof, not a production control program; polling limits
+and electrical/load gaps stay `UNVERIFIED`.
+
+## 3. First run: no hardware
 
 This example checks installation and the CLI. It does not contact a PLC, certify a customer program, or replace independent reviews. If `project/quickstart` exists, choose another name and update every path; do not delete existing evidence.
 
@@ -154,9 +196,9 @@ Expected: `TC-001 PASS`, final `SIM_PASS`, exit 0. This basic suite produces `ca
 
 Expected: `project/quickstart/delivery/smoke-V001/` and `project/quickstart/delivery/quickstart-smoke-V001.zip`. The folder contains the selected files plus `MANIFEST.md` with SHA-256 hashes; the ZIP contains the same contents. Existing versions are rejected.
 
-This is a **smoke evidence package**, not a formal customer delivery. Formal FX/L01S delivery requires reviewed `MAIN.csv`, `COMMENT.csv`, a test/setup/full-register-map PDF, and a same-source annotated instruction-list PDF, explicitly selected for packaging. The six-command CLI does not automatically generate complete manuals or download device programs.
+This is a **smoke evidence package**, not a formal customer delivery. Formal FX/L01S delivery requires reviewed `MAIN.csv`, `COMMENT.csv`, a test/setup/full-register-map PDF, and a same-source annotated instruction-list PDF, explicitly selected for packaging. The core CLI does not automatically generate complete manuals or download device programs.
 
-## 3. Development workflow
+## 4. Development workflow
 
 | Stage | Work and evidence |
 | --- | --- |
@@ -165,7 +207,7 @@ This is a **smoke evidence package**, not a formal customer delivery. Formal FX/
 | S2 | Write `source.fxil`, export formats and execute supported instructions. Unknown instructions/forms/addresses must block, never become silent NOPs. |
 | S3 | Compare actual execution traces/assertions; reviewers inspect evidence. Fix program defects or tooling defects separately. S2 cannot change frozen expectations. |
 | S4 | Prepare a reviewable candidate with its actual validation level. Keep drafts in MD; generate formal presentation documents when delivery is needed. |
-| S5/S6 | Follow the applicable authorized vendor/manual-download and bench route. Record what was actually tested; insufficient capture precision remains UNVERIFIED. |
+| S5/S6 | Follow the applicable authorized vendor/manual-download and bench route. Record what was actually tested; insufficient capture precision remains UNVERIFIED. S6 HIL method: [S6-HIL-V2](skills/plc-program-development/references/s6-hil-v2.md). |
 | S7 | Run affected regressions/dependencies, complete reviews, create a project-local delivery folder plus ZIP, verify hashes, and release task-owned resources. |
 
 **Four independent reviewers:** at S1 freeze, S3/major changes, S6 conclusions, and final-delivery review gates, use four distinct agents with fresh contexts. The main agent coordinates/fixes and does not count. Give each only relevant original artifacts, versions/hashes, acceptance criteria and resource boundaries—not the whole main conversation or a desired verdict.
@@ -187,15 +229,15 @@ project/
 
 Every customer gets an independent folder; explicit external directories are supported. Customer artifacts never belong in toolkit code, tests, docs, or skills. New drafts are MD-only; legacy frozen JSON evidence can be read without rewriting it. Actual execution reports/traces may use JSON/CSV. Package only selected project deliverables—not environments, secrets, other customers, or the whole repository.
 
-## 4. AI-agent execution instructions
+## 5. AI-agent execution instructions
 
 Give an agent this repository and the following task:
 
 > Read AGENTS.md, skills/plc-program-development/SKILL.md and its MD reference first. Identify OS, Python ABI/version, Rust and native compiler. Install missing prerequisites within host permissions; create/use a dedicated .venv; install ./vendor/gxwlib before .[test]. Actually run imports, CLI help, tests and the no-hardware example. Record commands, versions, failures and results; dependency errors do not justify PLC logic changes. Public installation requires no company services, sibling repository, customer case or globally installed skill. Create a fresh project/ subfolder unless the user specifies an external folder. Author MD requirements/tests, arrange four independent fresh-context reviewers at required gates, freeze before source, then execute and compare real traces. Never change expectations to fit implementation. Separate simulation/protocol/hardware/unverified results. Do not access devices or change RUN/STOP without field authorization and known mappings. Preserve previous evidence. Build the final project-local delivery directory and ZIP, verify hashes, and clean only owned resources. If a reviewer, prerequisite, permission, instruction or capture capability is unavailable, report the exact blocked step; do not fabricate completion.
 
-Read the repository skill directly; global installation is optional. `tools/sync_plc_skill.py` updates an **existing legacy skill**, not a fresh general-purpose skill install. Hindsight/ZERO references apply only in configured company workspaces; public users need neither those services nor credentials.
+Read the repository skill directly; global installation is optional (see [Install the workflow skill](#install-the-workflow-skill-recommended-for-ai-agents)). `tools/sync_plc_skill.py` updates an **existing legacy skill**, not a fresh general-purpose skill install. Hindsight/ZERO references apply only in configured company workspaces; public users need neither those services nor credentials. For an automated install-plus-demo bootstrap, give the agent the one-prompt in [`PROMPT.md`](PROMPT.md) instead (section 2).
 
-## 5. Optional PlatformIO and hardware
+## 6. Optional PlatformIO and hardware
 
 ### PlatformIO: current adapter is Windows-specific
 
@@ -236,11 +278,11 @@ Default task: simulate. Preflight: read-only. Explicit bench: requires a project
 ./tools/plcweave.ps1 hil project/my-project --isolated-bench
 ```
 
-These are gated commands, not a generic device tutorial. Configure a supported adapter and reviewed model/register map first. The current built-in L01S path uses COM7, station 1, 9600/8/N/1; there is no automatic port/model discovery. New MD cases need matching `build_identity.json`; HIL also needs a current `manual_download.json` binding source/test hashes and actual operator confirmation/time. No CLI generates these automatically. The legacy endpoint HIL rejects full-scan relationship suites; use a qualified sampled adapter.
+These are gated commands, not a generic device tutorial. Configure a supported adapter and reviewed model/register map first. The built-in L01S default is COM7, station 1, 9600/8/N/1; `bench_config.json` can override it, and there is no automatic port/model discovery. New MD cases need matching `build_identity.json`; HIL also needs a current `manual_download.json` binding source/test hashes and actual operator confirmation/time. Demo projects additionally need `bench_ready.json` from `demo confirm-bench`. The core CLI does not generate these automatically; the demo commands do. The legacy endpoint HIL rejects full-scan relationship suites; use a qualified sampled adapter.
 
 SIM_PASS is not hardware acceptance. Polling cannot establish every-scan safety, terminal voltage/current, power-loss retention or a connected plant's performance. Boundaries: [runtime](docs/RUNTIME-CHANGES.md), [blueprint](docs/BLUEPRINT.md), [roadmap](docs/ROADMAP.md).
 
-## 6. Troubleshooting
+## 7. Troubleshooting
 
 | Symptom | Action |
 | --- | --- |

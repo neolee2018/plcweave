@@ -12,6 +12,15 @@ description: 用PLCWeave进行FX3U/HBDTECH L01S的测试驱动开发、仿真与
 - 用户指定项目目录时遵从该位置；若位于本工具仓库内，仍必须在 `project/` 下。不得把客户文件放进 `src/`、`tests/`、`docs/`、技能目录或历史 `private/`。
 - `project/` 中的客户内容默认被公共Git忽略；可按项目另行建立私有版本库。公共仓库不分发客户程序、厂商资料或凭据。
 
+## 演示入口（克隆后首次）
+
+- 用户粘贴 `demo/PROMPT.md` 的提示词时，按仓库 `demo/START-HERE.md` 的 D0–D6 执行；先读该文件，不凭记忆发挥。演示是固定场景（启停+3秒延时），不冒充客户定制需求；真实项目另建目录走 S0。
+- 建项目前后必须询问项目名和 **PLC 是否已连接**。已连接则收集 RS485 的端口号、波特率、校验位、从站地址；未连接则用默认值继续，并在交付中写“S6 未执行”。
+- 串口参数要同时写入程序（L01S 的 `D8120/D8121`）和 `bench_config.json`，不能让程序与台架各一套。`MAIN.csv`/`COMMENT.csv` 按 GX Works2 列表导出方言（引号制表符、CRLF）生成，但厂商导入/编译仍由现场确认，工具不提供验证过的下载器。
+- 客户明确确认“已烧录并 RUN”，且记录操作者、GX Works2 版本、编译结果和 RUN 状态之前，不运行 `hil`、不写设备、不生成 `manual_download.json`。
+- S6 前还要确认 **PLC 已 RUN、USB-RS485 已接、现场为隔离空机**，用 `demo confirm-bench` 记录；演示项目缺少 `bench_ready.json` 时 `hil` 拒绝执行。未接 PLC/485 时保持 UNVERIFIED。
+- 交付用 `plcweave demo deliver`：ZIP 至少含需求、用例、`MAIN.csv`、`COMMENT.csv`、HIL 报告、总结报告，另附 MANIFEST 和源文件；完成度与验收结论由工具按证据生成，不手工拔高。正式验收只依据导入的 S6 报告字段，不独立证明电气/带载。
+
 ## Markdown 优先
 
 - 第一版只写 `requirements.md` 和 `test_cases.md`：用Markdown描述需求、初态、输入、预期、时序/容差、清理和验证层级。
@@ -27,7 +36,7 @@ description: 用PLCWeave进行FX3U/HBDTECH L01S的测试驱动开发、仿真与
 3. **S2**：依据冻结需求/测试编写 `source.fxil`，生成所需CSV并运行真实指令解释器。未知指令或地址明确阻断，不能NOP化。
 4. **S3**：实际执行并比较轨迹；复核按下节的4 Agent执行。数据不全不判PASS；主Agent不能凭读源码代替独立复核。
 5. **S4**：形成可检查的候选；草稿阶段保持MD和机器执行证据，正式排版只在需要交付时生成。
-6. **S5/S6**：按用户选定的厂家通路/人工烧录/PlatformIO编排执行。没有经过验证的下载器就明确保留人工下载，不改写原厂固件。写入、RUN/STOP和设备动作须有现场授权与已知映射。
+6. **S5/S6**：按用户选定的厂家通路/人工烧录/PlatformIO编排执行。没有经过验证的下载器就明确保留人工下载，不改写原厂固件。写入、RUN/STOP和设备动作须有现场授权与已知映射。S6 硬件在环方法见 [S6-HIL-V2](references/s6-hil-v2.md)：默认 L01S 档案，先绑定镜像身份再写入，只写程序只读的注入寄存器，轮询只证明稳态标量。
 7. **S7**：归因、必要回归、独立复核、最终交付与资源清理。程序、测试基础设施失败和证据不足分别处理。
 
 ## 需要复核的节点：4个独立Agent
@@ -50,6 +59,7 @@ description: 用PLCWeave进行FX3U/HBDTECH L01S的测试驱动开发、仿真与
 - 必须先在客户项目内建立 `delivery/<版本>/`，再把该交付目录打成ZIP，放在项目的 `delivery/` 下。不能只返回分散文件或只给仓库路径。
 - FX/L01S正式四件套：`MAIN.csv`、`COMMENT.csv`、测试/接线/完整寄存器表PDF、同源指令表详解PDF；适用限制和未验证项应明确。HTML/MD编辑源留在项目文档目录，不塞进四件套目录。
 - 交付附文件哈希清单（工具生成的MANIFEST.md可随包，属于清单而非编辑源），核验ZIP可读且内容一致；不覆盖既有版本。客户另有明确格式时优先遵从。
+- 演示交付可用 `plcweave demo deliver`：至少含 `requirements.md`、`test_cases.md`、`MAIN.csv`、`COMMENT.csv`、`HIL-REPORT.md`、`SUMMARY.md`，另附 `MANIFEST.md`。总结报告必须写清完成度、演示验收/正式验收的区别及未测试项。
 - 交付只收纳本项目明确选定的成果，禁止自动打包整个工具仓库、环境、凭据或其他客户目录。
 
 ## 当前CLI
@@ -62,6 +72,11 @@ description: 用PLCWeave进行FX3U/HBDTECH L01S的测试驱动开发、仿真与
 ./tools/plcweave.ps1 freeze project/客户项目名
 ./tools/plcweave.ps1 simulate project/客户项目名
 ./tools/plcweave.ps1 package project/客户项目名 --version V001 --file 实验室测试/MAIN.csv --file 实验室测试/COMMENT.csv --file Doc/Blackbox-Test-Cases_EN.pdf --file Doc/项目-il-annotated_EN.pdf
+./tools/plcweave.ps1 demo start 演示项目 --port COM7 --baud 9600 --parity N --station 1
+./tools/plcweave.ps1 demo status project/演示项目
+./tools/plcweave.ps1 demo confirm-flash project/演示项目 --operator 姓名 --software "GX Works2 1.77F" --compile-status "客户报告零错误" --run-state RUN
+./tools/plcweave.ps1 demo confirm-bench project/演示项目 --operator 姓名 --isolated-bench --rs485-connected --plc-running
+./tools/plcweave.ps1 demo deliver project/演示项目 --version V001
 ```
 
 新建目录只有MD草稿，没有PLC程序或测试JSON。用例尚未完整、尚未冻结时执行应阻断。运行报告/轨迹可以使用JSON/CSV等机器格式；“初版只存MD”约束作者源，不禁止必要的真实执行证据。

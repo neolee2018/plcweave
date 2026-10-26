@@ -1,0 +1,130 @@
+#meta
+project: {{PROJECT_NAME}}
+plc: FXCPU FX3U/FX3UC
+comment_project: {{PROJECT_NAME}}
+version: DEMO-V001
+#instructions
+// N01 First scan: stopped, physical output disabled, Modbus RTU parameters.
+LD M8002
+MOV K0 D191
+MOV K0 D192
+MOV K0 D193
+MOV K0 D194
+MOV K0 D100
+MOV K0 D101
+MOV K0 D8050
+MOV K0 D8051
+SET M8196
+SET M8125
+MOV {{D8120_HEX}} D8120
+MOV K{{STATION}} D8121
+MOV K20 D8129
+RST M0
+RST M41
+// BEGIN_IDENTITY
+LD M8002
+MOV K1 D196
+MOV K41 D197
+MOV K0 D200
+MOV K0 D201
+MOV K1 D202
+// END_IDENTITY
+// N02 100 ms heartbeat, scan counter and host-write echo.
+LD M8012
+ANI M20
+OUT M21
+LD M8012
+OUT M20
+LD M21
+ADD D198 K1 D198
+LD M8000
+ADD D199 K1 D199
+// Demo counter reset command: D194=-1234 clears D100/D101 for a repeatable case.
+LD M8000
+AND= D194 K-1234
+MOV K0 D100
+MOV K0 D101
+LD M8000
+MOV D194 D195
+// N03 Remote start/stop mirrors; stop has priority over start.
+LD M8000
+AND= D191 K1
+OUT M30
+LD M8000
+AND= D192 K1
+OUT M31
+LD X000
+OR M30
+OR M0
+ANI X001
+ANI M31
+OUT M0
+// N04 New-start pulse and start count.
+LD M0
+ANI M41
+OUT M42
+LD M0
+OUT M41
+LD M42
+ADD D101 K1 D101
+// N05 One-second runtime counter while running.
+LD M8013
+ANI M45
+OUT M46
+LD M8013
+OUT M45
+LD M0
+AND M46
+ADD D100 K1 D100
+// N06 Three-second start delay; the timer resets whenever M0 drops.
+LD M0
+OUT T0 K30
+// N07 Output only when running, delay elapsed and output explicitly enabled.
+LD T0
+AND M0
+AND= D193 K1
+OUT Y000
+// N08 Mirror the output state for the bench reset check.
+LD Y000
+MOV K1000 D154
+LDI Y000
+MOV K0 D154
+END
+#comments
+X000 Start button (bench: not driven)
+X001 Stop button priority (bench: not driven)
+Y000 Run output; isolated in this demo
+M0 Run latch
+M20 Previous 100ms clock state
+M21 100ms rising edge
+M30 Remote start mirror
+M31 Remote stop mirror
+M41 Previous run state for start counting
+M42 New-start one-scan pulse
+M45 Previous 1s clock state
+M46 1s rising edge
+M8012 100ms clock
+M8013 1s clock
+M8125 Modbus enable
+M8196 Serial2 protocol selector
+T0 3s start delay
+D100 Runtime seconds
+D101 Start count
+D154 Output mirror 0 or 1000
+D191 Remote start request
+D192 Remote stop request
+D193 Output enable default0
+D194 Write echo input; -1234 resets D100/D101
+D195 Write echo output
+D196 Program version 1
+D197 Edition 41
+D198 Heartbeat 100ms edges
+D199 Scan counter
+D200 Fingerprint word 1
+D201 Fingerprint word 2
+D202 Suite identity 1
+D8120 Serial format {{D8120_HEX}} ({{BAUD}}/{{DATA_BITS}}/{{PARITY}}/{{STOP_BITS}} Modbus RTU)
+D8121 Slave station {{STATION}}
+D8129 Communication timeout 20ms
+D8050 AO0 raw zeroed on first scan
+D8051 AO1 raw zeroed on first scan

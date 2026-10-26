@@ -4,7 +4,7 @@
 
 [English](README.md) | 简体中文
 
-Markdown需求与测试 → 受支持FX指令执行 → 独立验证 → 受控硬件采样 → 可追溯交付。首个执行子集面向FX3U/HBDTECH L01S。目前仍在开发，不是完整PLC仿真器，也不是经过认证的生产控制器。
+Markdown需求与测试 → 受支持FX指令执行 → 独立验证 → 受控硬件采样 → 可追溯交付。首个执行子集面向FX3U/HBDTECH L01S。只想先看它跑起来，直接走[快速演示](#2-快速演示一条提示词)。目前仍在开发，不是完整PLC仿真器，也不是经过认证的生产控制器。
 
 ## 1. 安装
 
@@ -26,6 +26,12 @@ cd plcweave
 
 下面命令都在包含pyproject.toml的仓库根目录执行。不能从其他私有兄弟项目补文件。
 
+### 安装工作流技能（AI Agent建议安装）
+
+工作流就是本仓技能 **`plc-program-development`**（`skills/plc-program-development/SKILL.md`）及其 `references/` 目录。直接阅读本仓技能即可，全局安装可选；若要让Agent在本仓库之外的项目目录中也能按该工作流执行，建议安装。
+
+安装时把**整个** `skills/plc-program-development/` 目录复制或链接到所用Agent平台的技能目录，目录名必须保持 `plc-program-development`（与 `SKILL.md` 的 `name:` 字段一致）；`SKILL.md` 与 `references/` 不能拆开。更新仓库后重新同步该目录，保持仓库技能为唯一来源。`tools/sync_plc_skill.py` 仅更新**已有旧技能**，不是通用安装器。
+
 缺少系统前提时，遵循官方[Python](https://www.python.org/downloads/)、[Rust/rustup](https://www.rust-lang.org/tools/install/)、[Windows Rust/MSVC](https://learn.microsoft.com/en-us/windows/dev-environment/rust/setup)安装说明。Windows可使用 `winget install --exact --id Python.Python.3.13` 和 `winget install --exact --id Rustlang.Rustup`，仍需安装C++工作负载/SDK。安装后重新打开终端。AI安装系统软件须遵守主机安装/提权权限。
 
 ### Windows / PowerShell
@@ -44,6 +50,8 @@ py -3.13 -m venv .venv
 ./.venv/Scripts/python.exe -m pip install --upgrade pip
 ./.venv/Scripts/python.exe -m pip install ./vendor/gxwlib
 ./.venv/Scripts/python.exe -m pip install -e ".[test]"
+# 可选：S6/USB-RS485 依赖（pymodbus、pyserial）
+./.venv/Scripts/python.exe -m pip install -e ".[hil]"
 
 ./.venv/Scripts/python.exe -c "import gxwlib; from gxwlib import _core; print(_core.__file__)"
 ./.venv/Scripts/python.exe -m plcweave --help
@@ -67,6 +75,8 @@ python3.13 -m venv .venv
 rustup toolchain install 1.93.0 --profile minimal --component rustfmt --component clippy
 .venv/bin/python -m pip install ./vendor/gxwlib
 .venv/bin/python -m pip install -e '.[test]'
+# 可选：S6/USB-RS485 依赖
+.venv/bin/python -m pip install -e '.[hil]'
 .venv/bin/python -c 'import gxwlib; from gxwlib import _core; print(_core.__file__)'
 .venv/bin/python -m plcweave --help
 .venv/bin/python -m pytest -q tests --basetemp=local/pytest-readme
@@ -76,7 +86,32 @@ rustup toolchain install 1.93.0 --profile minimal --component rustfmt --componen
 
 公开工具测试使用合成夹具，不依赖客户project内容。客户专用集成测试保留在各自私有项目目录。记录实际通过/失败/跳过数量，不套用私有工作区数量。
 
-## 2. 首次运行：不连接硬件
+## 2. 快速演示（一条提示词）
+
+克隆仓库后，把仓库根目录 [`PROMPT.md`](PROMPT.md) 里的提示词复制给你的 AI Agent，剩下的它全
+做：安装前置条件与工具链、跑测试套件、执行**固定**的 L01S 场景（启停 + 3 秒延时输出 + 运行
+计时）、打出带核验清单的交付 ZIP 并向你汇报。要求 Agent 能在本仓库目录执行终端命令（Codex
+CLI、Claude Code、Cursor、ZCode 等）；没有本机执行能力的纯聊天窗口跑不了本流程。
+
+默认是**无硬件全自动**模式：Agent 不提问、不打开串口，S6 在交付报告里如实写“未执行”（完成度
+60%）。环境已装好想要更短的提示词，用 [`demo/PROMPT.md`](demo/PROMPT.md)。接了隔离 L01S 台架
+就发提示词时说明，Agent 会切换到 [`demo/START-HERE.md`](demo/START-HERE.md) 的硬件流程：采集
+串口参数，等你本人用 GX Works2 烧录并明确确认烧录/台架状态后，才做 S6 抽样。
+
+```powershell
+./tools/plcweave.ps1 demo start demo-run --not-connected
+./tools/plcweave.ps1 simulate project/demo-run
+./tools/plcweave.ps1 demo status project/demo-run
+./tools/plcweave.ps1 demo deliver project/demo-run --version V001
+```
+
+预期：`SIM_PASS`（8/8 用例通过），得到 `project/demo-run/delivery/V001/` 和
+`project/demo-run/delivery/demo-run-V001.zip`。压缩包内含演示场景需求、测试用例、`MAIN.csv`、
+`COMMENT.csv`、区分“已完成/未测试”的 S6 报告，以及带完成度（无硬件 60%）和“演示验收/正式验收”
+结论的总结报告。演示只证明工作流，不是生产控制程序；轮询限制
+和电气/带载缺口保留为 UNVERIFIED。
+
+## 3. 首次运行：不连接硬件
 
 本示例只检查安装和CLI，不访问PLC，不代表客户程序验收，也不代替独立复核。若project/quickstart已存在，请换名称并替换全部路径，不能删除旧证据。
 
@@ -154,9 +189,9 @@ M0 Virtual RUN indication
 
 预期生成project/quickstart/delivery/smoke-V001文件夹和project/quickstart/delivery/quickstart-smoke-V001.zip。文件夹含选定文件和带SHA-256的MANIFEST.md，ZIP包含相同内容；已有版本拒绝覆盖。
 
-这是**安装自检证据包**，不是正式客户交付。FX/L01S正式交付仍需复核MAIN.csv、COMMENT.csv、测试/接线/完整寄存器表PDF、同源指令表详解PDF，再显式打包这四个文件。六命令CLI不会自动生成完整说明书或下载设备程序。
+这是**安装自检证据包**，不是正式客户交付。FX/L01S正式交付仍需复核MAIN.csv、COMMENT.csv、测试/接线/完整寄存器表PDF、同源指令表详解PDF，再显式打包这四个文件。核心CLI不会自动生成完整说明书或下载设备程序。
 
-## 3. 开发工作流
+## 4. 开发工作流
 
 | 阶段 | 工作与证据 |
 | --- | --- |
@@ -165,7 +200,7 @@ M0 Virtual RUN indication
 | S2 | 编写source.fxil，生成导入格式并实际执行受支持指令；未知指令/形式/地址阻断，不能静默NOP。 |
 | S3 | 比较实际轨迹/断言，独立复核检查证据；程序缺陷与工具缺陷分别处理，S2不能改冻结预期。 |
 | S4 | 提供可检查候选及真实验证等级；草稿保持MD，需要交付时再正式排版。 |
-| S5/S6 | 按适用且已授权的厂家/人工下载和台架通路执行，只记录真实做过的检查；精度不足保留UNVERIFIED。 |
+| S5/S6 | 按适用且已授权的厂家/人工下载和台架通路执行，只记录真实做过的检查；精度不足保留UNVERIFIED。S6 HIL方法见[S6-HIL-V2](skills/plc-program-development/references/s6-hil-v2.md)。 |
 | S7 | 执行受影响回归及依赖，完成复核，在项目内建立交付目录和ZIP，校验哈希，释放任务资源。 |
 
 **四位独立复核者**：S1冻结、S3/重大修订、S6判定、最终交付复核节点，使用四个不同、独立上下文Agent；主Agent组织/修复，不计入四位。每人仅接收相关原始材料、版本/哈希、验收标准和资源边界，不传完整主会话或预设结论。
@@ -187,15 +222,15 @@ project/
 
 每客户独立文件夹，支持明确指定的外部目录；客户内容不能放进工具代码、测试、说明或技能中。新草稿仅MD，历史冻结JSON可兼容读取但不改写；真实执行报告/轨迹可用JSON/CSV。交付只选定项目成果，不打包环境、凭据、其他客户或整个仓库。
 
-## 4. AI Agent执行指令
+## 5. AI Agent执行指令
 
 将本仓库和以下任务交给Agent：
 
 > 先读AGENTS.md、skills/plc-program-development/SKILL.md及MD参考。识别系统、Python ABI/版本、Rust和原生编译器，在主机权限内安装缺失前提；创建/使用专用.venv，先安装./vendor/gxwlib，再安装.[test]。实际执行导入、CLI帮助、测试和无硬件示例，记录命令、版本、错误与结果；依赖错误先修依赖，不改PLC逻辑。公开安装不需要公司服务、兄弟仓库、客户案例或全局技能。未指定位置时新建project子目录；指定外部位置则遵从。需求/测试只MD，规定节点组织四位独立新上下文复核，先冻结后源程序，再真实执行和比较轨迹，不改预期迎合实现。仿真/协议/硬件/未验证分开记录；没有现场授权和已知映射不访问设备或切RUN/STOP。保留旧证据，最终项目内交付目录+ZIP、核对哈希，仅清理本任务资源。复核者、前提、权限、指令或采集能力缺失时说明确切阻塞，不得伪造完成。
 
-可以直接阅读仓库技能，全局安装可选。tools/sync_plc_skill.py仅更新**已有旧技能**，不是通用新技能安装器。Hindsight/ZERO仅适用于已配置的公司工作区，开源用户不需要这些服务或凭据。
+可以直接阅读仓库技能，全局安装可选（安装方法见第1节“安装工作流技能”）。tools/sync_plc_skill.py仅更新**已有旧技能**，不是通用新技能安装器。Hindsight/ZERO仅适用于已配置的公司工作区，开源用户不需要这些服务或凭据。只要“自动安装+跑演示”的话，直接把根目录 [PROMPT.md](PROMPT.md) 的提示词交给Agent（见第2节）。
 
-## 5. 可选PlatformIO与硬件
+## 6. 可选PlatformIO与硬件
 
 ### PlatformIO：当前适配器Windows专用
 
@@ -236,11 +271,11 @@ custom_workspace = ../..
 ./tools/plcweave.ps1 hil project/my-project --isolated-bench
 ```
 
-这是带门禁的命令，不是通用设备教程。先配置受支持适配器并复核机型/映射。内置L01S通路当前使用COM7、站号1、9600/8/N/1，不自动发现端口/型号。新MD项目需要匹配build_identity.json；HIL还需当前manual_download.json，绑定源/测试哈希、真实操作者确认/时间。没有CLI自动生成这些文件。旧端点HIL拒绝完整扫描关系套件，必须使用合格采样适配器。
+这是带门禁的命令，不是通用设备教程。先配置受支持适配器并复核机型/映射。内置L01S默认COM7、站号1、9600/8/N/1，可用`bench_config.json`覆盖，不自动发现端口/型号。新MD项目需要匹配`build_identity.json`；HIL还需当前`manual_download.json`，绑定源/测试哈希、真实操作者确认/时间；演示项目还需要`demo confirm-bench`生成的`bench_ready.json`。核心CLI不会自动生成这些文件，演示命令会。旧端点HIL拒绝完整扫描关系套件，必须使用合格采样适配器。
 
 SIM_PASS不是硬件验收。轮询不能证明每扫描安全、端子电压/电流、掉电保持或真实工艺性能。详见[执行核边界](docs/RUNTIME-CHANGES.md)、[蓝图](docs/BLUEPRINT.md)、[路线图](docs/ROADMAP.md)。
 
-## 6. 常见问题
+## 7. 常见问题
 
 | 现象 | 处理 |
 | --- | --- |

@@ -69,7 +69,8 @@ def engine_gate(output):
         path.unlink(missing_ok=True)
     return {"status":"PASS" if all(r["status"]=="BLOCKED" for r in results) else "TEST_INFRA_ERROR","fixtures":results}
 
-def simulate(directory, output=None):
+def simulate(directory, output=None, *, source=None, input_map=None, routing_map=None,
+             reset_inputs=None, reset_ms=0, reset_expectations=None):
     import gxwlib
     from .fx import export
     directory=Path(directory)
@@ -77,21 +78,27 @@ def simulate(directory, output=None):
     from .validation import SCHEMA
     independent=suite.get("schema_version")==SCHEMA
     output=Path(output or directory/("evidence/simulation/latest" if independent else "candidate/V001"))
-    instructions=export(directory/"source.fxil",output)
+    source=Path(source or directory/"source.fxil")
+    input_map=dict(input_map or {})
+    routing_map=dict(routing_map or {})
+    if routing_map:
+        suite={**suite,"watch":list(dict.fromkeys([*suite['watch'],*routing_map,*routing_map.values()]))}
+    instructions=export(source,output)
     (output/"simulation_trace.csv").unlink(missing_ok=True)
     from gxwlib import _core
-    report={"environment":"local_instruction_simulator","engine_binary_sha256":digest(_core.__file__),"source_sha256":digest(directory/"source.fxil"),
+    report={"environment":"local_instruction_simulator","engine_binary_sha256":digest(_core.__file__),"source_sha256":digest(source),
             "test_sha256":digest(suite_path(directory)),"suite_version":suite["suite_version"],
             "scan_ms":suite["scan_ms"],"instruction_count":len(instructions),"cases":[],
             "limits":["No vendor or hardware equivalence claimed", "ADC/DAC and UART are external register images", "No power-cycle retention model"]}
     from .validation import InputImage, INPUTS, TraceOracle, independent_fingerprint
+    report.update(input_map=input_map,routing_map=routing_map)
     report["comparator_sha256"]=digest(Path(__file__).with_name("validation.py"))
     context={}
     if independent:
         report["engine_gate"]=engine_gate(output)
         context["engine_gate_pass"]=report["engine_gate"]["status"]=="PASS"
         try:
-            report["independent_fingerprint"]=independent_fingerprint(directory/"source.fxil")
+            report["independent_fingerprint"]=independent_fingerprint(source)
             context.update(report["independent_fingerprint"])
         except ValueError as exc:
             report["independent_fingerprint"]={"status":"UNVERIFIED","error":str(exc)}
@@ -107,16 +114,31 @@ def simulate(directory, output=None):
         writer.writeheader()
         for case in suite["cases"]:
             sim=gxwlib.Simulator(compiled,scan_period_ns=suite["scan_ms"]*1_000_000)
-            sim.set_word_devices(case["initial_words"])
+            reset_failures=[]
+            if reset_inputs is not None:
+                reset={input_map.get(k,k):v for k,v in reset_inputs.items()}
+                sim.set_word_devices({k:v for k,v in reset.items() if k.startswith('D')})
+                sim.set_inputs({k:bool(v) for k,v in reset.items() if not k.startswith('D')})
+                reset_watch=list(dict.fromkeys([*suite['watch'],*(reset_expectations or {})]))
+                reset_trace=sim.run(max(1,(reset_ms+suite['scan_ms']-1)//suite['scan_ms']),watch=reset_watch)
+                reset_sample=reset_trace.samples[-1]
+                reset_values=dict(zip([d for d in reset_trace.watch if not d.startswith('D')],[int(v) for v in reset_sample.values]))
+                reset_values.update(reset_sample.words)
+                reset_failures=compare(reset_values,reset_expectations or {})
+            initial={input_map.get(k,k):v for k,v in case["initial_words"].items()}
+            if initial:
+                sim.set_word_devices({k:v for k,v in initial.items() if k.startswith("D")})
+                sim.set_inputs({k:bool(v) for k,v in initial.items() if not k.startswith("D")})
             inputs=InputImage(case["initial_words"])
             oracle=TraceOracle(suite,case,capabilities={"full_scan_trace":True,"verified_applied_inputs":True},context=context)
-            failures=[]
-            failure_count=0
-            failure_kinds=set()
+            failures=[{'reset':True,'checks':reset_failures}] if reset_failures else []
+            failure_count=len(reset_failures)
+            failure_kinds={error['kind'] for error in reset_failures}
             scans=0
             for index,step in enumerate(case["steps"]):
-                words={key:value for key,value in step["write"].items() if key.startswith("D")}
-                bits={key:bool(value) for key,value in step["write"].items() if not key.startswith("D")}
+                mapped={input_map.get(k,k):v for k,v in step["write"].items()}
+                words={key:value for key,value in mapped.items() if key.startswith("D")}
+                bits={key:bool(value) for key,value in mapped.items() if not key.startswith("D")}
                 if words: sim.set_word_devices(words)
                 if bits: sim.set_inputs(bits)
                 inputs.apply(step["write"])
@@ -140,7 +162,8 @@ def simulate(directory, output=None):
                             row.update({"applied_"+key:value for key,value in before_scan.items()})
                             oracle.consume(observation,applied,row["time_ms"])
                         writer.writerow(row)
-                        errors=compare(observation,suite["global_invariants"])+compare(observation,step["invariant"])
+                        errors=(compare(observation,suite["global_invariants"])+compare(observation,step["invariant"])
+                                +compare(observation,{physical:observation.get(logical) for physical,logical in routing_map.items()}))
                         if errors:
                             failure_count+=len(errors)
                             failure_kinds.update(error["kind"] for error in errors)
