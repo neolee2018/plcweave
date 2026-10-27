@@ -6,6 +6,8 @@ English | [简体中文](README.zh-CN.md)
 
 Markdown requirements and tests → supported FX instruction execution → independent verification → controlled hardware sampling → traceable delivery. The first execution subset targets FX3U/HBDTECH L01S. Start with the [quick demo](#2-quick-demo-one-prompt) if you just want to see it run. This is an engineering toolkit under development, not a complete PLC simulator or certified production controller.
 
+For customer engineering, use the [two-phase workflow](skills/plc-program-development/references/two-phase-workflow.md): users edit only requirements; the AI maintains design, independent tests and a shared control core. Phase 1 delivers separate HIL and production instruction lists. In phase 2, the user compiles/downloads the HIL program, then the AI collects PLC registers, compares and iterates. The `workflow init/freeze/build/deliver/confirm-download/test/status/revise` commands currently cover the supported FX subset and L01S steady-state sampling. Delta adapters are not implemented; vendor compilation and downloading remain manual.
+
 ## 1. Install
 
 ### Prerequisites
@@ -196,7 +198,7 @@ Expected: `TC-001 PASS`, final `SIM_PASS`, exit 0. This basic suite produces `ca
 
 Expected: `project/quickstart/delivery/smoke-V001/` and `project/quickstart/delivery/quickstart-smoke-V001.zip`. The folder contains the selected files plus `MANIFEST.md` with SHA-256 hashes; the ZIP contains the same contents. Existing versions are rejected.
 
-This is a **smoke evidence package**, not a formal customer delivery. Formal FX/L01S delivery requires reviewed `MAIN.csv`, `COMMENT.csv`, a test/setup/full-register-map PDF, and a same-source annotated instruction-list PDF, explicitly selected for packaging. The core CLI does not automatically generate complete manuals or download device programs.
+This is a **smoke evidence package**. Customer deliveries use `workflow`, including requirements, design, tests, separate HIL/production instruction lists and explanations, and matching evidence. PDFs are additional exports when requested. Natural-language design, vendor compilation and PLC downloads are not automated by the CLI.
 
 ## 4. Development workflow
 

@@ -4,6 +4,7 @@
 - task_id：`two-phase-20261024-review-1`；owner：本复核Agent；时限：本次复核；日期：2026-10-24。
 - 资源归属：仅本任务 `logs/review-two-phase-1/` 中的隔离合成工程及临时文件；未接PLC、未开串口、未操作GUI。只修改本报告，不修改实现或工具测试。
 - 初次结论：**BLOCKED，等待问题修复后复查**。本报告不是客户S1或硬件验证PASS。
+- 2026-10-26最终复查结论：**PASS（需求/测试/修订及双版本地工具范围）**。初查和复查过程保留下文；此结论仅适用于末尾列明的实际输入哈希，不是厂家编译或实机PASS。
 
 ## 输入版本 SHA256
 
@@ -62,3 +63,72 @@
 ## 清理
 
 所有运行同步退出；合成Bench由runner关闭，未创建真实串口、进程常驻、锁或GUI。保留本任务的probe脚本、合成工程及测试输出作为可复现证据；不清理用户进程或共享服务。最终结论待相关修复后由本Agent复查更新。
+
+## 2026-10-26独立复查
+
+### 范围与版本
+
+沿用同一reviewer、task_id及资源边界；本次任务为复核修复，不继承主Agent的通过结论。基准HEAD为`be13030ee2143e2c1956254f1c660a6c0fb4a9fe`，加当前工作树；以下文件的原始字节SHA256构成本次实际适用版本。除明确注明的有关部分外，读取了完整实现及测试；README读取安装/入口相关部分。未变更的既有材料可引用初查，但新增修订门禁、冻结回滚和路径改动已实际重读。
+
+| 已实际复查文件 | SHA256 |
+| --- | --- |
+| docs/PART-ONE.md | 310f797286af6d69a3c801b0e1bea58343c7777c1f12afe81bec80c2becd3585 |
+| docs/PART-TWO.md | 0f896bea36cbfda20e0bae6dbc802d6b8d9e0af1af455ff164bb9044393c3d2a |
+| src/plcweave/workflow.py | 43cc72d255193c3047ff6369ac55b434af334ea658aac678b1be91319ac4a020 |
+| src/plcweave/variants.py | 7d6b7a712f9205db04b5c2ee35d78a5cbcc3e65443eed10ddfcf6be2edf39b9f |
+| src/plcweave/testing.py | 8323dde4b0867daa0ee2024347edd20aa8972518abeb6563b22ee8e112956a60 |
+| src/plcweave/markdown_suite.py | 48d8fef550af86b5f2dd1330dd651c963ebd07c781b5b3c479797649419faa7e |
+| src/plcweave/validation.py（套件契约有关部分） | 5e4d4b2ad351bb69efb3e9d5d0a651d0399cb43303c0bce299e7d09d93524099 |
+| src/plcweave/fx.py | d92be0d668f219af6197eefddc7cce228638d327c209897845f7b10d70b06c98 |
+| src/plcweave/projects.py | 0ab14695cd9eb2c6ed4937bab3158bbd57a6d98e56158d03612f7be5fd634b0c |
+| tests/test_workflow.py | cbd5eeab9d67714b18fc3eb55191412a6c0a52451e85d8ada3e3f9f729f8d090 |
+| skills/plc-program-development/SKILL.md | f8c94cc427782b5a35a616c08ec99f25f5fc5dc0bee7039b418b8c8ca2ebc965 |
+| skills/plc-program-development/references/two-phase-workflow.md | 7d0300cd87891b5c5a17343aae1f25962c1a494b6aac425b60d7383c6ff390bf |
+| README.md（入口/安装相关部分） | c3e20f0c3498185ecfa8f9b4bea7293df57dba699006c70ed6e7c5a8dad2ac76 |
+
+### 执行证据
+
+- 先对当时31项工作流测试独立运行，31 passed in 11.90s。随后修复继续发生，此结果不作为最终版本通过证据。
+- 最终执行：`PYTHONPATH=src .venv/Scripts/python.exe -m pytest tests/test_workflow.py -p no:cacheprovider --basetemp=logs/review-two-phase-1/pytest-20261026-final -q`，**36 passed in 13.03s**，无失败/跳过。没有改写用例预期追求通过。
+- 最终自行反例入口：`logs/review-two-phase-1/recheck-final-20261026.py`；结果保存在`logs/review-two-phase-1/recheck-final-20261026/result.json`。该脚本重建独立合成工程，未复用旧build或旧下载记录。
+- 中间版本发现新缺口的反例及原始结果保留在`logs/review-two-phase-1/recheck-20261026.py`和其同名目录`result.json`，不覆盖为通过证据。
+
+### 原问题复查
+
+| 问题 | 实际检查 | 结论 |
+| --- | --- | --- |
+| R1-1 每例初态不同 | 原部分写入反例现在两版均PROGRAM_FAIL，构建LOCAL_FAIL，confirm-download以Both variants require SIM_PASS阻断；另建仅一稳态步骤，保留停止复位输入且明确预期M0=0，两版本地LOCAL_PASS，合成HIL PASS，串口替身已关闭。读取实现确认两版均先施加同一设计reset、运行等待并比较同一reset预期，再覆盖Initial和Steps。 | 关闭 |
+| R1-2 旧需求原文缺失 | 用户只改requirements后revise，原字节出现在baseline/s1/requirements.md、build/B001/inputs/requirements.md、该build的baseline副本和revision/previous/requirements.md；需求差异包含旧内容删除及新内容增加。新修订没有s1-freeze和source，不继承旧PASS。 | 关闭 |
+| R1-3 锁存/停止覆盖缺口 | SUITE增加释放启动后保持与启动停止同时有效；自行分别删除OR M0、删除ANI M101，两版均PROGRAM_FAIL/LOCAL_FAIL。对应定向突变测试也实际通过。 | 关闭 |
+| 初查ZIP fixture失败 | 提取目录改为tmp_path/project/extracted，保留客户目录门禁；最终定向测试中的ZIP内容、哈希和提取后validate_build检查实际通过。 | 关闭 |
+
+### 复查中新发现并已修复的问题
+
+1. 中间版本的revise只核验旧requirements快照。自行分别修改`baseline/s1/test_cases.md`和`design.md`，再修改requirements并revise，工具仍成功且`previous/`复制了篡改内容。已向主Agent报告。最终实现从s1-freeze与design-freeze读取三份旧摘要，复制前全部核验，复制到previous后再次核验；最终同一反例均返回`Old frozen snapshot missing or changed`，未生成新版修订目录。36项中的三种历史MD损坏回归也实际通过。**关闭**。
+2. 中间版本对末尾无换行的旧requirements生成diff时，把删除尾行与新增行粘接。已向主Agent报告。最终实现规范化diff展示行分隔，MD原文字节仍独立原样留存；自行反例的删除与新增现为分开的行，专门回归通过。**关闭**。该展示差异用于AI理解变更，完整原文和SHA256仍是版本证据。
+3. 后续通知的`require_reviews`路径统一为POSIX分隔和冻结部分写失败回滚已读取；最终定向测试覆盖解包验证与design-freeze部分写入故障，均通过。该回滚只移除本次创建文件，保留需求及复核输入。
+
+### 最终判断与限制
+
+本角色的需求/冻结/修订/双版测试覆盖问题已关闭，**PASS（本地工具范围）**。四类交付及双程序的确定性生成、独立冻结用例和程序修错/需求修订分支，在本次合成范围内符合目标流程；需求语义澄清、资源设计及独立测试设计由Agent执行，CLI不自称自动理解任意需求。当前技能/参考/目标流程对该分工、人工下载、新build重测、L01S稳态边界、未实现台达适配与正式版实机范围说明一致。
+
+本结论不证明任意客户需求的覆盖充分性、不证明独立记录实际来自四个上下文，也不证明厂家导入/编译、PLC实机或物理I/O。当前设计reset对本次输入/输出契约有效；首扫、重启、保持及不可观测内部历史不由合成稳态用例升级为硬件通过。
+
+任务结束：定向测试和自建反例均已退出；合成连接替身正常关闭。保留任务脚本/结果与隔离工程用于复测；无本任务真实串口、GUI、后台服务或共享资源残留。报告只由本复核者更新。
+
+## 最终相邻S1异常路径补充复核（2026-10-26）
+
+主Agent随后通知仅修复`freeze_markdown()`在新建`s1-freeze.md`部分写入后失败时的残留，并把工作流故障测试扩展为两种冻结文件。本Agent重新读取该函数和测试，未继承其他Agent结果。下列两个SHA256更新上述最终适用输入；`workflow.py`仍为`43cc72d255193c3047ff6369ac55b434af334ea658aac678b1be91319ac4a020`，其余已列输入与本角色结论沿用。
+
+| 文件 | 最终SHA256 |
+| --- | --- |
+| src/plcweave/markdown_suite.py | ed5f50aee5fe10452d208dd7620aa28b8c11bda2c5a6da6114eff5baaa16d4de |
+| tests/test_workflow.py | 7fdc38414f4f5385b4d1690ddaaba91876cc0360dcab8adbdd743ec920f8b763 |
+
+实际执行与检查：
+
+- `tests/test_workflow.py::test_partial_freeze_failure_rolls_back_owned_files`（design-freeze及s1-freeze两种）加`tests/test_markdown_projects.py`，`-p no:cacheprovider --basetemp=logs/review-two-phase-1/pytest-s1-exception-final -q`：**13 passed in 0.30s**。
+- `tests/test_markdown_review.py`，`-p no:cacheprovider --basetemp=logs/review-two-phase-1/pytest-s1-markdown-review-final -q`：**8 passed in 0.07s**。两次共21项，无失败/跳过；未无故重复其他完整场景。
+- 自建反例`logs/review-two-phase-1/s1-exception-probe-final.py`另检查四条路径：写入前10字符后OSError；同位置KeyboardInterrupt；已有冻结再次调用；exists检查后另一归属者抢先创建文件导致exclusive open失败。结果保存在同名目录`result.json`。前两者移除本次部分文件且作者源原字节不变，已有冻结和竞争者创建文件均保留原字节。
+
+语义判断：`created`只在exclusive open成功后置真，BaseException路径只回收该调用创建的目标。已有冻结不被覆盖，编程前冻结、MD作者源和hash格式不变；工作流外层仍清理本次baseline及design-freeze，不删除要求或复核记录。**补充复核PASS，本角色原最终PASS继续适用至上述新输入哈希。**未连接设备。所有补充执行已退出，未留下连接或后台任务，反例文件作为证据保留。

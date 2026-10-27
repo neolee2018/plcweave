@@ -183,7 +183,14 @@ def freeze_markdown(directory):
     suite=parse_markdown(directory/'test_cases.md');validate_suite(suite)
     rows=[(name,digest(directory/name)) for name in ['requirements.md','test_cases.md']]
     text='# S1 freeze\n\n| File | SHA256 |\n| --- | --- |\n'+''.join(f'| {name} | {sha} |\n' for name,sha in rows)
-    with target.open('x',encoding='utf-8') as stream:stream.write(text)
+    created=False
+    try:
+        with target.open('x',encoding='utf-8') as stream:
+            created=True
+            stream.write(text)
+    except BaseException:
+        if created:target.unlink(missing_ok=True)
+        raise
     return target
 
 

@@ -20,7 +20,7 @@ from pathlib import Path
 from .demo import serial_format
 from .hil import Bench, DEFAULT_BENCH, validate_bench_settings
 from .markdown_suite import freeze_markdown, parse_markdown, read_freeze
-from .projects import _location, _name, create_project, package_delivery
+from .projects import _location, _name, _publish, create_project, package_delivery
 from .testing import compare, digest, frozen_suite, simulate
 from .validation import independent_fingerprint
 from .variants import DESIGN_DRAFT, _internal, read_design, render_variant
@@ -87,7 +87,7 @@ def require_reviews(case, node, bindings):
         if any(value.get("input_sha256", {}).get(k) != v for k, v in bindings.items()):
             raise ValueError(f"Stale review inputs: {path.name}")
         reviewers.add(reviewer)
-        records[str(path.relative_to(case))] = digest(path)
+        records[path.relative_to(case).as_posix()] = digest(path)
     if len(reviewers) != 4:
         raise ValueError(f"{node} requires four independent review records; found {len(reviewers)}")
     return records
@@ -123,6 +123,7 @@ def freeze_workflow(directory, *, workspace=None):
     baseline = _child(case, "baseline/s1")
     baseline.mkdir(parents=True, exist_ok=False)
     freeze = None
+    target_created = False
     try:
         for name in bindings:
             shutil.copy2(_child(case, name), baseline / name)
@@ -130,8 +131,11 @@ def freeze_workflow(directory, *, workspace=None):
                 raise ValueError("Inputs changed during freeze")
         freeze = freeze_markdown(case)
         with target.open('x',encoding='utf-8') as stream:
+            target_created = True
             stream.write(f"# Design freeze\n\nSHA256: {bindings['design.md']}\n")
     except BaseException:
+        if target_created:
+            target.unlink(missing_ok=True)
         if freeze is not None:
             freeze.unlink()  # only the file just created by this invocation
         if baseline.resolve() == baseline:
@@ -246,7 +250,7 @@ def build_workflow(directory, version, *, settings=None, workspace=None):
             raise ValueError("Inputs changed during build")
         _write_json(stage / "BUILD.json", manifest)
         # Publish only a complete, immutable build; TemporaryDirectory owns leftovers.
-        stage.rename(target)
+        _publish(stage,target)
     return {"build": target, "status": status, "variants": manifest["variants"]}
 
 
@@ -538,9 +542,15 @@ def revise_workflow(directory, version, *, reason, workspace=None):
     if not reason.strip():
         raise ValueError("Revision reason required")
     previous = read_freeze(case)
+    frozen_design = _child(case,'design-freeze.md').read_text(encoding='utf-8')
+    design_match = re.fullmatch(r'# Design freeze\n\nSHA256: ([0-9a-f]{64})\n',frozen_design)
+    if design_match is None:
+        raise ValueError('Invalid previous design freeze')
+    old_hashes = {**previous,'design.md':design_match[1]}
+    for name,sha in old_hashes.items():
+        if digest(_child(case,f'baseline/s1/{name}')) != sha:
+            raise ValueError(f'Old frozen snapshot missing or changed: {name}')
     original = _child(case,"baseline/s1/requirements.md")
-    if digest(original) != previous["requirements.md"]:
-        raise ValueError("Old frozen requirements snapshot missing or changed")
     folder = _child(case, "revisions")
     folder.mkdir(exist_ok=True)
     target = _child(case, f"revisions/{version}")
@@ -553,8 +563,10 @@ def revise_workflow(directory, version, *, reason, workspace=None):
         old.mkdir()
         for name in ("requirements.md","test_cases.md","design.md"):
             shutil.copy2(_child(case,f"baseline/s1/{name}"),old/name)
-        changes = ''.join(difflib.unified_diff(original.read_text(encoding='utf-8-sig').splitlines(keepends=True),
-                                              (result/'requirements.md').read_text(encoding='utf-8-sig').splitlines(keepends=True),
+            if digest(old/name) != old_hashes[name]:
+                raise ValueError('Old snapshot changed while copying revision')
+        changes = ''.join(difflib.unified_diff([line+'\n' for line in original.read_text(encoding='utf-8-sig').splitlines()],
+                                              [line+'\n' for line in (result/'requirements.md').read_text(encoding='utf-8-sig').splitlines()],
                                               fromfile='previous/requirements.md',tofile='requirements.md'))
         (result / "revision.md").write_text(
             f"# 需求修订 {version}\n\n原因：{reason.strip()}\n\n"

@@ -458,3 +458,28 @@ def test_demo_requires_freeze_before_source(tmp_path):
     (project / "test_cases.md").write_text("", encoding="utf-8")
     with pytest.raises(ValueError):
         freeze_markdown(project)
+
+
+def test_delivery_reproduction_commands_run_offline_in_a_new_project(tmp_path):
+    import os
+    import shlex
+    import subprocess
+    import sys
+    project=ready_demo(tmp_path)
+    result=deliver_demo(project,'V001',workspace=tmp_path)
+    summary=(result['folder']/'SUMMARY.md').read_text(encoding='utf-8')
+    reproduction=summary.split('## 8. 复现',1)[1].split('## 9.',1)[0]
+    offline=reproduction.split('```powershell',1)[1].split('```',1)[0]
+    commands=[shlex.split(line)[1:] for line in offline.splitlines() if line.startswith('./tools/plcweave.ps1 ')]
+    assert len(commands)==3 and commands[0][2]=='demo-test-replay'
+    environment={**os.environ,'PYTHONPATH':str(Path(__file__).resolve().parents[1]/'src'),'PYTHONUTF8':'1'}
+    for command in commands:
+        executed=subprocess.run([sys.executable,'-m','plcweave',*command],cwd=tmp_path,
+                                env=environment,capture_output=True,text=True,encoding='utf-8',timeout=30)
+        assert executed.returncode==0,executed.stdout+executed.stderr
+    replay=tmp_path/'project/demo-test-replay'
+    assert (replay/'delivery/V001/SUMMARY.md').is_file()
+    assert not (replay/'manual_download.json').exists()
+    assert not (replay/'evidence/hardware_report.json').exists()
+    assert '--compile-status' in reproduction and '--run-state RUN' in reproduction
+    assert 'demo confirm-bench' in reproduction and '--version V002' in reproduction

@@ -583,6 +583,9 @@ def _hil_report(case, version, hardware, settings, assessment, check):
 
 
 def _summary(case, version, simulation, hardware, settings, assessment, check, display, connected):
+    quote = lambda value: "'" + str(value).replace("'", "''") + "'"
+    replay_name = case.name + "-replay"
+    replay_path = quote("project/" + replay_name)
     sim_status = (simulation or {}).get("status", "未运行") if isinstance(simulation, dict) else "未运行"
     completion = assessment["completion"]
     if assessment["demo_ok"]:
@@ -708,15 +711,22 @@ def _summary(case, version, simulation, hardware, settings, assessment, check, d
         "",
         "## 8. 复现",
         "",
+        "从仓库根目录创建新的无硬件演示工程；若名称已存在，统一换一个新名称，不覆盖原工程。",
+        "",
         "```powershell",
-        f"./tools/plcweave.ps1 demo start {display} --port {settings['port']} --baud {settings['baud']} --parity {settings['parity']} --station {settings['station']}"
-        + ("" if connected else " --not-connected"),
-        f"./tools/plcweave.ps1 simulate {display}",
-        "# 客户烧录并确认后：",
-        f"./tools/plcweave.ps1 demo confirm-flash {display} --operator <姓名> --software <软件版本>",
-        f"./tools/plcweave.ps1 preflight {display}",
-        f"./tools/plcweave.ps1 hil {display} --isolated-bench",
-        f"./tools/plcweave.ps1 demo deliver {display} --version {version}",
+        f"./tools/plcweave.ps1 demo start {quote(replay_name)} --port {quote(settings['port'])} --baud {settings['baud']} --parity {settings['parity']} --station {settings['station']} --data-bits {settings['bytesize']} --stop-bits {settings['stopbits']} --not-connected",
+        f"./tools/plcweave.ps1 simulate {replay_path}",
+        f"./tools/plcweave.ps1 demo deliver {replay_path} --version V001",
+        "```",
+        "",
+        "只有客户实际成功编译下载该新工程、确认RUN和隔离台架后，才按下面继续；姓名和软件版本替换为现场实值。",
+        "",
+        "```powershell",
+        f"./tools/plcweave.ps1 demo confirm-flash {replay_path} --operator '<姓名>' --software 'GX Works2 <现场版本>' --compile-status '客户确认零错误' --run-state RUN",
+        f"./tools/plcweave.ps1 demo confirm-bench {replay_path} --operator '<姓名>' --isolated-bench --rs485-connected --plc-running",
+        f"./tools/plcweave.ps1 preflight {replay_path}",
+        f"./tools/plcweave.ps1 hil {replay_path} --isolated-bench",
+        f"./tools/plcweave.ps1 demo deliver {replay_path} --version V002",
         "```",
         "",
         "## 9. 说明",

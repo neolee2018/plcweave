@@ -6,6 +6,7 @@ REGISTRY ID：040。目录：103-plcweave。产品线：工具（沿现有101/10
 ## 客户项目与技能（2026-10-22用户修订，优先于旧格式说明）
 
 - 工作流技能入口：skills/plc-program-development/SKILL.md。
+- 两阶段定制入口：skills/plc-program-development/references/two-phase-workflow.md。用户只编辑requirements.md，AI维护design.md、独立test_cases.md及共用程序；第一阶段交付需求/设计/测试/程序四类成果，程序含HIL与正式版两个指令表。第二阶段用户编译下载HIL版并确认后，AI运行测试、分析和迭代；每次程序修复新建build并经用户重新下载。旧MD快照、构建和证据保留，不能继承失效的旧PASS。
 - 本仓除project/外只维护技能、工具链、工具测试、依赖和说明；客户程序、资料、需求、测试、证据和交付全部存入客户项目目录。
 - 未指定目录时每项目新建project/<项目名>/；指定外部目录则遵从。仓库内的客户目录只能在project/下，不使用private/、src/或docs/存客户案例。客户内容默认不进入公共Git。
 - 第一版requirements.md和test_cases.md为唯一作者源，不生成同义JSON/YAML/CSV/PDF；S1用s1-freeze.md冻结，执行内存解析MD。必要执行报告/轨迹格式不受此作者源限制。历史冻结JSON证据仅兼容读取，不为迁移改写。
@@ -30,7 +31,7 @@ REGISTRY ID：040。目录：103-plcweave。产品线：工具（沿现有101/10
 
 ## 开发和验证
 
-- 当前CLI支持init/freeze/package/simulate/preflight/hil，具体可复现命令与验证记录见README；没有运行服务、没有已验证的自动下载器。
+- 当前CLI支持workflow两阶段入口及原有init/freeze/package/simulate/preflight/hil、demo；具体可复现命令与验证记录见README。workflow构建受支持FX子集，HIL只接受L01S已知映射和稳态采样；台达适配未实现。没有运行服务、没有已验证的自动下载器。
 - 仿真与硬件后端共用用例模型和比较器，保留时间精度/采样质量差异。
 - 未知映射不连接/写设备；程序下载、RUN/STOP和设备动作遵循现场授权及安全确认。
 - 首版无监听端口。新增服务前先更新工作区PORT-REGISTRY并核验，不能自行使用默认端口。

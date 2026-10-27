@@ -3,6 +3,7 @@ import hashlib
 import re
 import shutil
 import tempfile
+import time
 import zipfile
 from collections.abc import Mapping
 from pathlib import Path
@@ -113,11 +114,23 @@ def package_delivery(directory, version, files, *, workspace=None):
             for p in folder.rglob('*'):
                 if p.is_file() and z.read((Path(f'{case.name}-{version}')/p.relative_to(folder)).as_posix())!=p.read_bytes():
                     raise ValueError('Delivery archive content differs from folder')
-        folder.rename(target)
-        try:staged.rename(archive)
+        _publish(folder,target)
+        try:_publish(staged,archive)
         except BaseException:
             # Remove only the folder this invocation just published.
             if target.resolve()!=target or not target.is_relative_to(case):raise ValueError('Invalid cleanup target')
             shutil.rmtree(target)
             raise
     return {'folder':target,'archive':archive}
+def _publish(source, target):
+    """Publish owned artifacts without overwriting; allow bounded file-lock release."""
+    source, target = Path(source), Path(target)
+    for delay in (0.05, 0.1, 0.2, 0.4, None):
+        if target.exists():
+            raise FileExistsError('Version already exists')
+        try:
+            return source.rename(target)
+        except PermissionError:
+            if delay is None or not source.exists():
+                raise
+            time.sleep(delay)

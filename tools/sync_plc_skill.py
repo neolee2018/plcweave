@@ -23,12 +23,13 @@ def main():
     ref=target/'resources/sop/PLC-MD-First-Workflow.md'
     ref.write_text(body,encoding='utf-8')
     docs=target/'resources/sop/references';docs.mkdir(exist_ok=True)
-    shutil.copy2(source/'references/markdown-cases.md',docs/'markdown-cases.md')
+    for name in ('markdown-cases.md','s6-hil-v2.md','two-phase-workflow.md'):
+        shutil.copy2(source/'references'/name,docs/name)
     marker='<!-- PLCWEAVE-MD-FIRST -->'
     note='''<!-- PLCWEAVE-MD-FIRST -->
-## 2026-10-22 用户修订：当前工作流入口
+## 2026-10-26 用户修订：当前工作流入口
 
-**优先遵循 [MD优先工作流](resources/sop/PLC-MD-First-Workflow.md)**：初版需求/测试仅MD；复核节点使用4个独立上下文Agent（主Agent不计入）；每客户独立目录，未指定时放工具仓库project/下；客户内容与工具链分离；最终在项目内建立delivery版本文件夹并ZIP打包。
+**优先遵循 [MD优先工作流](resources/sop/PLC-MD-First-Workflow.md)及[两阶段入口](resources/sop/references/two-phase-workflow.md)**：用户只改需求，AI维护设计、独立用例及共用控制核心；第一阶段交付HIL/正式版两份指令表，第二阶段用户厂家编译下载后受控测试并迭代。复核节点使用4个独立上下文Agent（主Agent不计入）；每客户独立目录，默认project/下；最终在项目内建立delivery版本文件夹并ZIP打包。台达适配未实现，不把本地或测试版结果升级成正式硬件验收。
 
 后文及旧SOP中的test_cases.json/YAML、project.yaml、旧目录约定仅保留为历史兼容，不再要求新项目生成这些并行作者文件。必要运行报告/轨迹仍可用机器格式。历史冻结文件不改写。正式交付CSV/PDF仍按适用要求生成。
 

@@ -6,6 +6,8 @@
 
 Markdown需求与测试 → 受支持FX指令执行 → 独立验证 → 受控硬件采样 → 可追溯交付。首个执行子集面向FX3U/HBDTECH L01S。只想先看它跑起来，直接走[快速演示](#2-快速演示一条提示词)。目前仍在开发，不是完整PLC仿真器，也不是经过认证的生产控制器。
 
+客户定制项目使用[两阶段工作流](skills/plc-program-development/references/two-phase-workflow.md)：用户只修改需求，AI维护设计、独立测试和共用控制程序，第一阶段交付HIL测试版及正式版两份指令表；第二阶段由用户编译下载后，AI采集PLC寄存器、比较并迭代。新增 `workflow init/freeze/build/deliver/confirm-download/test/status/revise`；当前仅覆盖受支持FX子集和L01S稳态采样，台达适配尚未实现，厂家编译下载保留人工通路。
+
 ## 1. 安装
 
 ### 前提
@@ -189,7 +191,7 @@ M0 Virtual RUN indication
 
 预期生成project/quickstart/delivery/smoke-V001文件夹和project/quickstart/delivery/quickstart-smoke-V001.zip。文件夹含选定文件和带SHA-256的MANIFEST.md，ZIP包含相同内容；已有版本拒绝覆盖。
 
-这是**安装自检证据包**，不是正式客户交付。FX/L01S正式交付仍需复核MAIN.csv、COMMENT.csv、测试/接线/完整寄存器表PDF、同源指令表详解PDF，再显式打包这四个文件。核心CLI不会自动生成完整说明书或下载设备程序。
+这是**安装自检证据包**。客户定制交付使用上述 `workflow` 入口，包含需求、设计、用例、HIL/正式版两份指令表及说明和配套证据；PDF按用户需要额外生成。工具不会自动完成自然语言设计、厂家编译或程序下载。
 
 ## 4. 开发工作流
 

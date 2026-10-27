@@ -112,11 +112,11 @@ def reviews(case, node, bindings, *, count=4):
         }), encoding="utf-8")
 
 
-def prepared(tmp_path):
+def prepared(tmp_path, *, suite=SUITE):
     case = init_workflow("synthetic", workspace=tmp_path)
     (case / "requirements.md").write_text("# 需求\n启动保持，停止优先。", encoding="utf-8")
     (case / "design.md").write_text(DESIGN, encoding="utf-8")
-    (case / "test_cases.md").write_text(SUITE, encoding="utf-8")
+    (case / "test_cases.md").write_text(suite, encoding="utf-8")
     reviews(case, "S1", _hashes(case, ("requirements.md", "test_cases.md", "design.md")))
     freeze_workflow(case, workspace=tmp_path)
     (case / "source.fxil").write_text(CORE, encoding="utf-8")
@@ -360,11 +360,175 @@ def test_tampered_artifact_is_blocked_before_download(tmp_path):
         validate_build(case, "B001", workspace=tmp_path)
 
 
-def test_failed_control_regression_is_never_delivered(tmp_path):
+@pytest.mark.parametrize('mutation',[lambda s:s.replace('OR M0\n',''),lambda s:s.replace('ANI M101','AND M101')])
+def test_failed_control_regression_is_never_delivered(tmp_path, mutation):
     case = prepared(tmp_path)
-    (case / "source.fxil").write_text(CORE.replace("OR M0\n", ""))
-    # A pure start/stop fixture does not test hold yet: add a deliberate wrong output.
-    (case / "source.fxil").write_text(CORE.replace("ANI M101", "AND M101"))
+    (case / "source.fxil").write_text(mutation(CORE),encoding='utf-8')
     assert build_workflow(case, "B001", workspace=tmp_path)["status"] == "LOCAL_FAIL"
     with pytest.raises(ValueError, match="SIM_PASS"):
         deliver_workflow(case, "B001", "V001", workspace=tmp_path)
+
+
+def test_nonzero_reset_is_shared_by_both_local_variants(tmp_path):
+    case=prepared(tmp_path,suite=SUITE.replace('D1000=1;D1001=0','D1000=1',1))
+    result=build_workflow(case,'B001',workspace=tmp_path)
+    assert result['status']=='LOCAL_FAIL'
+    assert result['variants']=={'hil':'PROGRAM_FAIL','production':'PROGRAM_FAIL'}
+
+
+def test_changed_frozen_suite_changes_plc_fingerprint_with_same_core(tmp_path):
+    one=prepared(tmp_path/'first')
+    two=prepared(tmp_path/'second',suite=SUITE.replace('| 20 |','| 30 |'))
+    build_workflow(one,'B001',workspace=tmp_path/'first')
+    build_workflow(two,'B001',workspace=tmp_path/'second')
+    first=json.loads((one/'build/B001/hil/identity.json').read_text(encoding='utf-8'))
+    second=json.loads((two/'build/B001/hil/identity.json').read_text(encoding='utf-8'))
+    assert first['canonical_sha256']==second['canonical_sha256']
+    assert first['contract_sha256']!=second['contract_sha256']
+    assert first['fingerprint_words']!=second['fingerprint_words']
+
+
+def test_old_frozen_content_survives_user_edit_before_first_delivery(tmp_path):
+    case=built(tmp_path)
+    original=(case/'requirements.md').read_bytes()
+    (case/'requirements.md').write_text('# 新需求\n增加LED。',encoding='utf-8')
+    revision=revise_workflow(case,'V002',reason='LED',workspace=tmp_path)
+    assert (case/'baseline/s1/requirements.md').read_bytes()==original
+    assert (revision/'previous/requirements.md').read_bytes()==original
+    diff=(revision/'requirement-diff.md').read_text(encoding='utf-8')
+    assert '-启动保持，停止优先。' in diff and '+增加LED。' in diff
+    assert (case/'build/B001/inputs/requirements.md').read_bytes()==original
+
+
+def test_init_failure_removes_only_its_new_owned_project(tmp_path,monkeypatch):
+    previous=init_workflow('existing',workspace=tmp_path)
+    original=Path.write_text
+    def fail(self,*args,**kwargs):
+        if self.name=='design.md':raise OSError('synthetic disk failure')
+        return original(self,*args,**kwargs)
+    monkeypatch.setattr(Path,'write_text',fail)
+    with pytest.raises(OSError):init_workflow('new',workspace=tmp_path)
+    assert not (tmp_path/'project/new').exists()
+    assert previous.exists()
+
+
+def test_hil_cancellation_saves_report_and_cleanup_before_reraising(tmp_path,monkeypatch):
+    case=downloaded(tmp_path)
+    class Interrupted(DummyBench):
+        def sample(self,watch):
+            self.calls=getattr(self,'calls',0)+1
+            if self.calls==2:raise KeyboardInterrupt()
+            return super().sample(watch)
+    monkeypatch.setattr('plcweave.workflow.Bench',Interrupted)
+    with pytest.raises(KeyboardInterrupt):run_test(case,tmp_path)
+    report=json.loads((case/'evidence/hil/B001/T001/report.json').read_text(encoding='utf-8'))
+    assert report['status']=='TEST_INFRA_ERROR' and report['error_type']=='KeyboardInterrupt'
+    assert report['serial_closed'] is True and report['cleanup']=='CONFIRMED'
+    assert report['trace_sha256']==digest(case/'evidence/hil/B001/T001/trace.jsonl')
+
+
+def test_final_settled_read_crossing_deadline_cannot_pass(tmp_path,monkeypatch):
+    case=downloaded(tmp_path)
+    clock=[0.0]
+    monkeypatch.setattr('plcweave.workflow.time.monotonic',lambda:clock[0])
+    monkeypatch.setattr('plcweave.workflow.time.sleep',lambda duration:clock.__setitem__(0,clock[0]+duration))
+    class SlowFinal(DummyBench):
+        def sample(self,watch):
+            self.calls=getattr(self,'calls',0)+1
+            # reset + (during, settled) * five steps: last settled is read 11
+            if self.calls==11:clock[0]+=1.0
+            return super().sample(watch)
+    monkeypatch.setattr('plcweave.workflow.Bench',SlowFinal)
+    report=run_test(case,tmp_path,timeout_s=0.5)
+    assert report['status']=='TEST_INFRA_ERROR' and report['error_type']=='TimeoutError'
+    assert report['cleanup']=='CONFIRMED' and report['serial_closed']
+
+
+@pytest.mark.parametrize('mode',['missing_input_echo','cleanup_failure','close_failure'])
+def test_hil_cannot_pass_missing_consumption_or_unconfirmed_cleanup(tmp_path,monkeypatch,mode):
+    case=downloaded(tmp_path)
+    class Broken(DummyBench):
+        def sample(self,watch):
+            values=super().sample(watch)
+            if mode=='missing_input_echo' and 'M100' in watch:values.pop('M100')
+            if mode=='cleanup_failure' and len(self.writes)>=14:values['M0']=1
+            return values
+        def close(self):
+            if mode=='close_failure':raise OSError('synthetic close failure')
+            super().close()
+    monkeypatch.setattr('plcweave.workflow.Bench',Broken)
+    report=run_test(case,tmp_path)
+    assert report['status']=='TEST_INFRA_ERROR'
+    if mode=='close_failure':assert report['serial_closed'] is False
+    else:assert report['serial_closed'] is True
+
+
+def test_delivery_manifest_distinguishes_both_main_files(tmp_path):
+    case=built(tmp_path)
+    stage_reviews(case,1)
+    result=deliver_workflow(case,'B001','V001',workspace=tmp_path)
+    manifest=(result['folder']/'MANIFEST.md').read_text(encoding='utf-8')
+    for variant in ('hil','production'):
+        name=f'build/B001/{variant}/MAIN.csv'
+        assert f'| {name} | {digest(result["folder"]/name)} |' in manifest
+
+
+def test_publish_retries_transient_lock_without_overwriting(tmp_path,monkeypatch):
+    from plcweave.projects import _publish
+    source=tmp_path/'owned';source.mkdir()
+    target=tmp_path/'version'
+    original=Path.rename
+    attempts=[]
+    def locked(self,destination):
+        attempts.append(self)
+        if len(attempts)==1:raise PermissionError('synthetic transient file lock')
+        return original(self,destination)
+    monkeypatch.setattr(Path,'rename',locked)
+    _publish(source,target)
+    assert len(attempts)==2 and target.is_dir() and not source.exists()
+    another=tmp_path/'another';another.mkdir()
+    with pytest.raises(FileExistsError):_publish(another,target)
+    assert another.is_dir() and target.is_dir()
+
+
+@pytest.mark.parametrize('filename',['design-freeze.md','s1-freeze.md'])
+def test_partial_freeze_failure_rolls_back_owned_files(tmp_path,monkeypatch,filename):
+    case=init_workflow('freeze-error',workspace=tmp_path)
+    (case/'design.md').write_text(DESIGN,encoding='utf-8')
+    (case/'test_cases.md').write_text(SUITE,encoding='utf-8')
+    reviews(case,'S1',_hashes(case,('requirements.md','test_cases.md','design.md')))
+    original=Path.open
+    class FailedWrite:
+        def __init__(self,stream):self.stream=stream
+        def __enter__(self):return self
+        def write(self,value):
+            self.stream.write(value[:10])
+            raise OSError('synthetic partial freeze write')
+        def __exit__(self,*args):self.stream.close()
+    def fail(self,*args,**kwargs):
+        stream=original(self,*args,**kwargs)
+        return FailedWrite(stream) if self.name==filename and args and args[0]=='x' else stream
+    monkeypatch.setattr(Path,'open',fail)
+    with pytest.raises(OSError):freeze_workflow(case,workspace=tmp_path)
+    assert not (case/'design-freeze.md').exists()
+    assert not (case/'s1-freeze.md').exists()
+    assert not (case/'baseline/s1').exists()
+    assert (case/'requirements.md').exists() and (case/'reviews/S1').is_dir()
+
+
+@pytest.mark.parametrize('name',['requirements.md','design.md','test_cases.md'])
+def test_revision_rejects_corrupted_historical_md_before_creating_new_directory(tmp_path,name):
+    case=built(tmp_path)
+    (case/'requirements.md').write_text('# 用户新需求\n新增LED',encoding='utf-8')
+    with (case/'baseline/s1'/name).open('a',encoding='utf-8') as stream:stream.write('\ncorrupted snapshot')
+    with pytest.raises(ValueError,match='Old frozen snapshot'):
+        revise_workflow(case,'V002',reason='LED',workspace=tmp_path)
+    assert not (case/'revisions/V002').exists()
+
+
+def test_requirement_diff_keeps_separate_lines_without_final_newline(tmp_path):
+    case=built(tmp_path)
+    (case/'requirements.md').write_text('# 需求\n新增LED',encoding='utf-8')
+    revision=revise_workflow(case,'V002',reason='LED',workspace=tmp_path)
+    diff=(revision/'requirement-diff.md').read_text(encoding='utf-8')
+    assert '-启动保持，停止优先。\n+新增LED\n' in diff
