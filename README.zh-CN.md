@@ -4,7 +4,7 @@
 
 [English](README.md) | 简体中文
 
-Markdown需求与测试 → 受支持FX指令执行 → 独立验证 → 受控硬件采样 → 可追溯交付。首个执行子集面向FX3U/HBDTECH L01S。只想先看它跑起来，直接走[快速演示](#2-快速演示一条提示词)。目前仍在开发，不是完整PLC仿真器，也不是经过认证的生产控制器。
+Markdown需求与测试 → 受支持FX指令执行 → 独立验证 → 受控硬件采样 → 可追溯交付。首个执行子集面向FX3U/HBDTECH L01S。只想先看它跑起来，直接走[快速演示](#2-快速演示一条提示词)；要直接开发自己的控制程序，用第 2 节末尾的[两阶段编程提示词](#一条提示词开始真实项目编程两阶段工作流)。目前仍在开发，不是完整PLC仿真器，也不是经过认证的生产控制器。
 
 客户定制项目使用[两阶段工作流](skills/plc-program-development/references/two-phase-workflow.md)：用户只修改需求，AI维护设计、独立测试和共用控制程序，第一阶段交付HIL测试版及正式版两份指令表；第二阶段由用户编译下载后，AI采集PLC寄存器、比较并迭代。新增 `workflow init/freeze/build/deliver/confirm-download/test/status/revise`；当前仅覆盖受支持FX子集和L01S稳态采样，台达适配尚未实现，厂家编译下载保留人工通路。
 
@@ -27,6 +27,14 @@ cd plcweave
 ```
 
 下面命令都在包含pyproject.toml的仓库根目录执行。不能从其他私有兄弟项目补文件。
+
+**安装步骤总览**（各平台完整命令见下文小节）：
+
+1. 装系统前提：CPython 3.13+、Rust 1.93+、本机 C++ 构建工具/链接器（Windows 另需 MSVC C++ 工作负载与 Windows SDK）；
+2. 在仓库根目录创建专用 `.venv`；
+3. 先安装本仓执行核 `./vendor/gxwlib`（maturin 编译 Rust，需联网，几分钟属正常）；
+4. 再安装 PLCWeave 本体 `-e ".[test]"`；需要 S6/USB-RS485 硬件在环时加装 `.[hil]`；
+5. 验证：gxwlib 导入、`plcweave --help`、测试套件全部通过。
 
 ### 安装工作流技能（AI Agent建议安装）
 
@@ -90,10 +98,11 @@ rustup toolchain install 1.93.0 --profile minimal --component rustfmt --componen
 
 ## 2. 快速演示（一条提示词）
 
-克隆仓库后，把仓库根目录 [`PROMPT.md`](PROMPT.md) 里的提示词复制给你的 AI Agent，剩下的它全
-做：安装前置条件与工具链、跑测试套件、执行**固定**的 L01S 场景（启停 + 3 秒延时输出 + 运行
-计时）、打出带核验清单的交付 ZIP 并向你汇报。要求 Agent 能在本仓库目录执行终端命令（Codex
-CLI、Claude Code、Cursor、ZCode 等）；没有本机执行能力的纯聊天窗口跑不了本流程。
+克隆仓库后，把仓库根目录 [`PROMPT.md`](PROMPT.md) 的提示词一（安装 + 演示）复制给你的 AI
+Agent，剩下的它全做：安装前置条件与工具链、跑测试套件、执行**固定**的 L01S 场景（启停 +
+3 秒延时输出 + 运行计时）、打出带核验清单的交付 ZIP 并向你汇报。要求 Agent 能在本仓库目录
+执行终端命令（Codex CLI、Claude Code、Cursor、ZCode 等）；没有本机执行能力的纯聊天窗口跑
+不了本流程。
 
 默认是**无硬件全自动**模式：Agent 不提问、不打开串口，S6 在交付报告里如实写“未执行”（完成度
 60%）。环境已装好想要更短的提示词，用 [`demo/PROMPT.md`](demo/PROMPT.md)。接了隔离 L01S 台架
@@ -112,6 +121,48 @@ CLI、Claude Code、Cursor、ZCode 等）；没有本机执行能力的纯聊天
 `COMMENT.csv`、区分“已完成/未测试”的 S6 报告，以及带完成度（无硬件 60%）和“演示验收/正式验收”
 结论的总结报告。演示只证明工作流，不是生产控制程序；轮询限制
 和电气/带载缺口保留为 UNVERIFIED。
+
+### 一条提示词开始真实项目编程（两阶段工作流）
+
+演示只证明工作流；要开发你自己的控制程序，把下面整段提示词复制给能在本机执行终端命令的
+AI Agent，并在【我的控制需求】处填入你的控制要求（写不清楚也没关系，Agent 会先提问澄清
+再动工）。内容与根目录 [`PROMPT.md`](PROMPT.md) 的提示词二保持一致。
+
+```text
+你在 PLCWeave 仓库根目录工作（目录里有 pyproject.toml 和 vendor/gxwlib）。请按两阶段工作流
+为我开发一个 PLC 控制程序：每一步真实执行、如实记录，不伪造结果；流程细节一律以仓库技能
+文件为准。
+
+【我的控制需求】（在此填写；写不清楚也没关系，你会先向我提问澄清）
+机型/品牌：例如 HBDTECH L01S（FX3U 兼容）
+输入/输出：例如 X0 启动按钮、X1 停止按钮、Y0 水泵、Y1 故障指示灯
+控制逻辑：例如启动后水泵运行；停止或液位超限立即停机；故障报警并自锁
+保护/复位/验收要求：（补充你的验收要求）
+
+0. 准备：先读 AGENTS.md、skills/plc-program-development/SKILL.md 和
+   skills/plc-program-development/references/two-phase-workflow.md。环境没装就先按 README
+   第 1 节装好：创建专用 .venv；先 python -m pip install ./vendor/gxwlib，再
+   python -m pip install -e ".[test]"；导入与 --help 验证通过。不要动无关环境。项目默认建在
+   仓库 project/<项目名>/ 下；我指定了外部目录就遵从。
+1. 第一阶段（AI 主导，我只改 requirements.md）：
+   - 澄清需求后用 workflow init 建项目；项目名已存在就停下问我，不合并不覆盖；
+   - 你维护 design.md、独立 test_cases.md 和共用 source.fxil，关键产出给我确认；
+   - 构建前向我收集串口参数（COM 口、波特率、校验、站号），程序与台架必须同一套；
+   - S1 冻结（workflow freeze）前组织 4 个不同独立上下文的 Agent 复核，主 Agent 不计入；
+   - workflow build 生成同一控制核心的 HIL 测试版与正式版两份指令表；
+   - 复核通过后 workflow deliver --stage 1：在项目 delivery/<版本>/ 打成 ZIP，汇报需求、
+     设计、测试、程序四类成果与哈希清单。
+2. 第二阶段（我烧录，你采样）：
+   - 我在 GX Works2 导入 hil/MAIN.csv 与同目录 COMMENT.csv，选对 CPU，编译并下载 HIL 版；
+   - 我明确确认"已编译、已下载、RUN"后，你才执行 workflow confirm-download；等我确认
+     隔离空机、RS485 已接后再 workflow test 采样，与冻结预期比较；
+   - 程序缺陷修共用核心并出新 build，等我重新编译下载确认后再测；不放宽预期，不把通信
+     或脚本错误当程序缺陷；
+   - 全部规定用例同版 PASS、四位独立复核通过后 workflow deliver --stage 2。
+3. 边界（任何情况下）：不改冻结预期；未知指令不当 NOP；未经我明确确认不打开串口、不写
+   设备、不切 RUN/STOP；SIM_PASS 与稳态采样不冒充正式/电气验收；被权限或环境挡住时
+   如实说明卡在哪一步，不伪造完成。我改需求时走 workflow revise，旧快照与证据保留。
+```
 
 ## 3. 首次运行：不连接硬件
 
@@ -230,7 +281,7 @@ project/
 
 > 先读AGENTS.md、skills/plc-program-development/SKILL.md及MD参考。识别系统、Python ABI/版本、Rust和原生编译器，在主机权限内安装缺失前提；创建/使用专用.venv，先安装./vendor/gxwlib，再安装.[test]。实际执行导入、CLI帮助、测试和无硬件示例，记录命令、版本、错误与结果；依赖错误先修依赖，不改PLC逻辑。公开安装不需要公司服务、兄弟仓库、客户案例或全局技能。未指定位置时新建project子目录；指定外部位置则遵从。需求/测试只MD，规定节点组织四位独立新上下文复核，先冻结后源程序，再真实执行和比较轨迹，不改预期迎合实现。仿真/协议/硬件/未验证分开记录；没有现场授权和已知映射不访问设备或切RUN/STOP。保留旧证据，最终项目内交付目录+ZIP、核对哈希，仅清理本任务资源。复核者、前提、权限、指令或采集能力缺失时说明确切阻塞，不得伪造完成。
 
-可以直接阅读仓库技能，全局安装可选（安装方法见第1节“安装工作流技能”）。tools/sync_plc_skill.py仅更新**已有旧技能**，不是通用新技能安装器。Hindsight/ZERO仅适用于已配置的公司工作区，开源用户不需要这些服务或凭据。只要“自动安装+跑演示”的话，直接把根目录 [PROMPT.md](PROMPT.md) 的提示词交给Agent（见第2节）。
+可以直接阅读仓库技能，全局安装可选（安装方法见第1节“安装工作流技能”）。tools/sync_plc_skill.py仅更新**已有旧技能**，不是通用新技能安装器。Hindsight/ZERO仅适用于已配置的公司工作区，开源用户不需要这些服务或凭据。只要“自动安装+跑演示”的话，直接把根目录 [PROMPT.md](PROMPT.md) 的提示词一交给Agent（见第2节）；真实项目编程用同文件的提示词二（同见第2节末尾）。
 
 ## 6. 可选PlatformIO与硬件
 

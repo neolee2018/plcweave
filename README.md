@@ -4,7 +4,7 @@
 
 English | [简体中文](README.zh-CN.md)
 
-Markdown requirements and tests → supported FX instruction execution → independent verification → controlled hardware sampling → traceable delivery. The first execution subset targets FX3U/HBDTECH L01S. Start with the [quick demo](#2-quick-demo-one-prompt) if you just want to see it run. This is an engineering toolkit under development, not a complete PLC simulator or certified production controller.
+Markdown requirements and tests → supported FX instruction execution → independent verification → controlled hardware sampling → traceable delivery. The first execution subset targets FX3U/HBDTECH L01S. Start with the [quick demo](#2-quick-demo-one-prompt) if you just want to see it run, or jump to [one prompt to start real programming](#one-prompt-to-start-real-programming-two-phase-workflow) at the end of section 2 to develop your own controller. This is an engineering toolkit under development, not a complete PLC simulator or certified production controller.
 
 For customer engineering, use the [two-phase workflow](skills/plc-program-development/references/two-phase-workflow.md): users edit only requirements; the AI maintains design, independent tests and a shared control core. Phase 1 delivers separate HIL and production instruction lists. In phase 2, the user compiles/downloads the HIL program, then the AI collects PLC registers, compares and iterates. The `workflow init/freeze/build/deliver/confirm-download/test/status/revise` commands currently cover the supported FX subset and L01S steady-state sampling. Delta adapters are not implemented; vendor compilation and downloading remain manual.
 
@@ -27,6 +27,14 @@ cd plcweave
 ```
 
 Run commands from the directory containing `pyproject.toml`. Do not fetch missing files from a private sibling project.
+
+**Installation at a glance** (full per-platform commands below):
+
+1. Install the prerequisites: CPython 3.13+, Rust 1.93+, and a native C++ toolchain/linker (Windows additionally needs the MSVC C++ workload and Windows SDK).
+2. Create a dedicated `.venv` at the repository root.
+3. Install the vendored runtime `./vendor/gxwlib` first (maturin compiles Rust; network access is needed, and a few minutes is normal).
+4. Install PLCWeave itself with `-e ".[test]"`; add `.[hil]` for the optional S6/USB-RS485 extras.
+5. Verify: the gxwlib import, `plcweave --help`, and the test suite all pass.
 
 ### Install the workflow skill (recommended for AI agents)
 
@@ -92,10 +100,10 @@ Public toolkit tests use synthetic fixtures and do not require customer `project
 
 Clone the repository, paste one prompt, and your agent does the rest: it installs the prerequisites
 and the toolkit, runs the test suite, executes a **fixed** L01S demo scenario (start/stop + 3 s
-delayed output + runtime counter) and hands you a checked delivery ZIP. Copy the prompt from
-[`PROMPT.md`](PROMPT.md) at the repository root and give it to any agent that can run terminal
-commands in this checkout (Codex CLI, Claude Code, Cursor, ZCode, ...). A plain chat window without
-local execution cannot run the flow.
+delayed output + runtime counter) and hands you a checked delivery ZIP. Copy prompt 1
+(install + demo) from [`PROMPT.md`](PROMPT.md) at the repository root and give it to any agent that
+can run terminal commands in this checkout (Codex CLI, Claude Code, Cursor, ZCode, ...). A plain
+chat window without local execution cannot run the flow.
 
 The default is the **no-hardware autonomous mode**: the agent asks no questions, never opens a
 serial port, and the S6 report honestly stays "not executed" (completion 60%). Already installed
@@ -119,6 +127,63 @@ document, test cases, `MAIN.csv`, `COMMENT.csv`, an S6 report that separates com
 items, and a summary with the completion score (60% without hardware) and a demo-vs-formal
 acceptance verdict. The demo is a workflow proof, not a production control program; polling limits
 and electrical/load gaps stay `UNVERIFIED`.
+
+### One prompt to start real programming (two-phase workflow)
+
+The demo proves the workflow. To develop your own controller, copy the whole prompt below to an
+AI agent that can run terminal commands on this machine, and fill in the **[My control
+requirement]** section (unclear requirements are fine — the agent asks clarifying questions
+first). The text matches "prompt 2" in [`PROMPT.md`](PROMPT.md).
+
+```text
+You are working at the PLCWeave repository root (the directory contains pyproject.toml and
+vendor/gxwlib). Develop a PLC control program for me through the two-phase workflow: execute
+every step for real, record honest results, never fabricate completion, and treat the repository
+skill files as the authority for details.
+
+[My control requirement] (fill in here; unclear requirements are fine — you ask me first)
+Model/brand: e.g. HBDTECH L01S (FX3U compatible)
+Inputs/outputs: e.g. X0 start button, X1 stop button, Y0 pump, Y1 fault lamp
+Control logic: e.g. the pump runs after start; stops immediately on stop or high level; latched
+alarm on fault
+Protection / reset / acceptance: (add your acceptance requirements)
+
+0. Preparation: read AGENTS.md, skills/plc-program-development/SKILL.md and
+   skills/plc-program-development/references/two-phase-workflow.md first. If the environment is
+   not installed, follow README section 1: create a dedicated .venv; install ./vendor/gxwlib
+   first, then -e ".[test]"; verify the import and --help. Never touch unrelated environments.
+   Create the project under project/<name>/ in the repository unless I specify an external
+   directory.
+1. Phase 1 (AI-led; I edit only requirements.md):
+   - Clarify my requirement, then workflow init the project; on a name clash stop and ask me,
+     never merge or overwrite;
+   - You maintain design.md, independent test_cases.md and the shared source.fxil; show me key
+     outputs for confirmation;
+   - Collect serial parameters from me before building (COM port, baud, parity, station); the
+     program and the bench must use the same set;
+   - Arrange review by 4 distinct fresh-context agents before the S1 freeze (workflow freeze);
+     the main agent does not count;
+   - workflow build produces the HIL test build and the production build from one shared
+     control core;
+   - After review passes, workflow deliver --stage 1: build delivery/<version>/ plus a ZIP in
+     the project and report requirements, design, tests, program and the hash manifest.
+2. Phase 2 (I download, you sample):
+   - I import hil/MAIN.csv with its COMMENT.csv into GX Works2, select the right CPU, compile
+     and download the HIL build;
+   - Only after I explicitly confirm "compiled, downloaded, RUN" do you run workflow
+     confirm-download; after I confirm the isolated idle bench with RS485 connected, run
+     workflow test and compare against frozen expectations;
+   - For program defects fix the shared core into a new build and wait for my re-download and
+     confirmation; never loosen expectations and never blame communication or script errors on
+     the PLC program;
+   - After all planned cases PASS on one final build and the four-agent review passes, run
+     workflow deliver --stage 2.
+3. Boundaries (always): never edit frozen expectations; never treat unknown instructions as
+   NOPs; never open a serial port, write a device or switch RUN/STOP without my explicit
+   confirmation; never present SIM_PASS or steady-state sampling as formal/electrical
+   acceptance; when blocked, say exactly which step is blocked instead of faking completion.
+   When I change requirements use workflow revise and keep old snapshots and evidence.
+```
 
 ## 3. First run: no hardware
 
@@ -237,7 +302,7 @@ Give an agent this repository and the following task:
 
 > Read AGENTS.md, skills/plc-program-development/SKILL.md and its MD reference first. Identify OS, Python ABI/version, Rust and native compiler. Install missing prerequisites within host permissions; create/use a dedicated .venv; install ./vendor/gxwlib before .[test]. Actually run imports, CLI help, tests and the no-hardware example. Record commands, versions, failures and results; dependency errors do not justify PLC logic changes. Public installation requires no company services, sibling repository, customer case or globally installed skill. Create a fresh project/ subfolder unless the user specifies an external folder. Author MD requirements/tests, arrange four independent fresh-context reviewers at required gates, freeze before source, then execute and compare real traces. Never change expectations to fit implementation. Separate simulation/protocol/hardware/unverified results. Do not access devices or change RUN/STOP without field authorization and known mappings. Preserve previous evidence. Build the final project-local delivery directory and ZIP, verify hashes, and clean only owned resources. If a reviewer, prerequisite, permission, instruction or capture capability is unavailable, report the exact blocked step; do not fabricate completion.
 
-Read the repository skill directly; global installation is optional (see [Install the workflow skill](#install-the-workflow-skill-recommended-for-ai-agents)). `tools/sync_plc_skill.py` updates an **existing legacy skill**, not a fresh general-purpose skill install. Hindsight/ZERO references apply only in configured company workspaces; public users need neither those services nor credentials. For an automated install-plus-demo bootstrap, give the agent the one-prompt in [`PROMPT.md`](PROMPT.md) instead (section 2).
+Read the repository skill directly; global installation is optional (see [Install the workflow skill](#install-the-workflow-skill-recommended-for-ai-agents)). `tools/sync_plc_skill.py` updates an **existing legacy skill**, not a fresh general-purpose skill install. Hindsight/ZERO references apply only in configured company workspaces; public users need neither those services nor credentials. For an automated install-plus-demo bootstrap, give the agent prompt 1 in [`PROMPT.md`](PROMPT.md) instead (section 2); for real programming projects use prompt 2 in the same file (end of section 2).
 
 ## 6. Optional PlatformIO and hardware
 
