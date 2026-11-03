@@ -17,5 +17,6 @@ logs/
 private/
 project/*
 !project/README.md
+reusable/
 local/
 *.log
