@@ -6,7 +6,7 @@
 
 Markdown需求与测试 → 受支持FX指令执行 → 独立验证 → 受控硬件采样 → 可追溯交付。首个执行子集面向FX3U/HBDTECH L01S。只想先看它跑起来，直接走[快速演示](#2-快速演示一条提示词)；要直接开发自己的控制程序，用第 2 节末尾的[两阶段编程提示词](#一条提示词开始真实项目编程两阶段工作流)。目前仍在开发，不是完整PLC仿真器，也不是经过认证的生产控制器。
 
-客户定制项目使用[两阶段工作流](skills/plc-program-development/references/two-phase-workflow.md)：用户只修改需求，AI维护设计、独立测试和共用控制程序，第一阶段交付HIL测试版及正式版两份指令表；第二阶段由用户编译下载后，AI采集PLC寄存器、比较并迭代。新增 `workflow init/freeze/build/deliver/confirm-download/test/status/revise`；当前仅覆盖受支持FX子集和L01S稳态采样，台达适配尚未实现，厂家编译下载保留人工通路。
+客户定制项目使用[两阶段工作流](skills/plc-program-development/references/two-phase-workflow.md)：用户只修改需求，AI维护设计、共用控制程序，并在第二阶段维护独立测试用例。第一阶段做语法检查与逻辑关系静态检查后即交付HIL测试版及正式版两份指令表——交付前不再设本地仿真门禁（`plcweave simulate` 保留为可选调试工具）；第二阶段由用户编译下载后，AI先冻结测试用例再做硬件在环采样、比较和迭代。新增 `workflow init/freeze/freeze-tests/build/deliver/confirm-download/test/status/revise`；当前仅覆盖受支持FX子集和L01S稳态采样，台达适配尚未实现，厂家编译下载保留人工通路。
 
 ## 1. 安装
 
@@ -146,27 +146,52 @@ AI Agent，并在【我的控制需求】处填入你的控制要求（写不清
    仓库 project/<项目名>/ 下；我指定了外部目录就遵从。
 1. 第一阶段（AI 主导，我只改 requirements.md）：
    - 澄清需求后用 workflow init 建项目；项目名已存在就停下问我，不合并不覆盖；
-   - 你维护 design.md、独立 test_cases.md 和共用 source.fxil，关键产出给我确认；
+   - 你维护 design.md 和共用 source.fxil，关键产出给我确认；本阶段不写测试用例；
    - 构建前向我收集串口参数（COM 口、波特率、校验、站号），程序与台架必须同一套；
-   - S1 冻结（workflow freeze）前组织 4 个不同独立上下文的 Agent 复核，主 Agent 不计入；
-   - workflow build 生成同一控制核心的 HIL 测试版与正式版两份指令表；
-   - 复核通过后 workflow deliver --stage 1：在项目 delivery/<版本>/ 打成 ZIP，汇报需求、
-     设计、测试、程序四类成果与哈希清单。
+   - workflow freeze 冻结需求与设计后，workflow build 生成同一控制核心的 HIL 测试版与
+     正式版两份指令表；构建门禁是语法检查（真实指令解释器编译、未知指令阻断）加逻辑
+     关系静态检查（双线圈、未驱动器件、梯形结构）——交付前不再要求本地仿真回归，
+     simulate 仅作可选调试工具；
+   - workflow deliver --stage 1：在项目 delivery/<版本>/ 打成 ZIP，汇报需求、设计、
+     程序与哈希清单。
 2. 第二阶段（我烧录，你采样）：
    - 我在 GX Works2 导入 hil/MAIN.csv 与同目录 COMMENT.csv，选对 CPU，编译并下载 HIL 版；
-   - 我明确确认"已编译、已下载、RUN"后，你才执行 workflow confirm-download；等我确认
-     隔离空机、RS485 已接后再 workflow test 采样，与冻结预期比较；
+   - 我明确确认"已编译、已下载、RUN"后，你才执行 workflow confirm-download；随后依据
+     冻结需求独立编写 test_cases.md 并用 workflow freeze-tests 冻结——预期必须在看到
+     PLC 实际输出之前写好并冻结；
+   - 等我确认隔离空机、RS485 已接后再 workflow test 采样，与冻结预期比较；
    - 程序缺陷修共用核心并出新 build，等我重新编译下载确认后再测；不放宽预期，不把通信
      或脚本错误当程序缺陷；
    - 全部规定用例同版 PASS、四位独立复核通过后 workflow deliver --stage 2。
 3. 边界（任何情况下）：不改冻结预期；未知指令不当 NOP；未经我明确确认不打开串口、不写
-   设备、不切 RUN/STOP；SIM_PASS 与稳态采样不冒充正式/电气验收；被权限或环境挡住时
+   设备、不切 RUN/STOP；静态检查与稳态采样不冒充正式/电气验收；被权限或环境挡住时
    如实说明卡在哪一步，不伪造完成。我改需求时走 workflow revise，旧快照与证据保留。
 ```
+
+### 指令表转台达 DVP（一键复制提示词）
+
+已有指令表程序，想生成台达 `.dvp` 工程：先看[转换说明、模板路径与完整提示词](docs/DVP-CONVERSION.md)。下载仓库后，双击打开[一键复制页面](hmi/prototype/dvp-prompt.html)，点击“复制转换提示词”，连同指令表、PLC 完整型号和厂家软件版本一起发给能访问本项目的 Codex 或类似 AI Agent。
+
+提示词明确要求 AI **先查看项目已有的 DVP 程序模板及转换实现**，核对指令覆盖、机型与文件结构，再输出新版本工程候选和核验报告。现有本机 ES2 转换器仅支持成对 `LD X…` / `OUT Y…` 加末尾 `END`；不支持的程序须先补齐依据，不能猜测生成。公开克隆可能不含私有模板；厂家打开/编译与实机验证需分别确认。
 
 ## 3. 首次运行：不连接硬件
 
 本示例只检查安装和CLI，不访问PLC，不代表客户程序验收，也不代替独立复核。若project/quickstart已存在，请换名称并替换全部路径，不能删除旧证据。
+
+### 3.0 手动硬件在环仿真台（桌面工具，V0.5）
+
+> 界面文案由字典 `src/plcweave/bench/i18n.py` 驱动，顶栏“语言”下拉即时切换中/英/法/葡/西/阿拉伯语并记忆选择；新增语言补译文即可（机制见 [hmi/README.md](hmi/README.md) 多语言一节）。
+
+独立于CLI的手动调试入口：四象限界面（X0–X7 / AD0–AD3 / Y0–Y7 / DA1–DA2），Modbus RTU 直读输出、注入接口档案化管理、30次调试记录轮转与ZIP导出。设计文档见 [hmi/README.md](hmi/README.md)。
+
+```powershell
+# 实机模式：先核对版本地址与接口档案（confirmed=true）再连接
+.venv\Scripts\python.exe -m plcweave.bench
+```
+
+实机连接须填写目标程序实际维护的版本地址（本机水站工程为 `D196`），接口档案的地址、数值范围及构建标识须与目标程序核对一致。[配置说明](hmi/params.md#5-客户寄存器)
+
+**原 Python 脚本联动（推荐实机入口）**：双击 `run-water-test.bat`，打开前端并运行 `project/l01s-water-standard/run_hil_v3.py`，显示实际发送命令与 PLC 读回。串口以脚本为准（本机台架：RS485 用 COM11，编程口用 COM5，可用 `--port`/`--cpu-port` 覆盖）。脚本结束弹出“测试完毕”，确定后按原工程定义继续手动测试，窗口由用户手动关闭。每次自动创建新输出目录，原脚本的用例与报告不变。详细参数、寄存器定义与验证边界见 [脚本联动说明](hmi/README.md#运行已有-python-测试)。
 
 ### A. 建项，先写测试再写源程序
 

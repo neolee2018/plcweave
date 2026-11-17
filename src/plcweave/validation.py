@@ -8,38 +8,42 @@ import hashlib
 from pathlib import Path
 
 SCHEMA = "plcweave-case-v1-with-independent-oracles"
-INPUTS = ("D102", "D190", "D191", "D192", "D193", "D194", "D261", "D1056",
-          "D8030", "D8031", "D8032", "D8033", "D1070", "D1071")
+INPUTS = ("D320", "D321", "D322", "D323", "D324", "D325", "D326", "D327",
+          "D328", "D329", "D330", "D331", "D332", "D333", "D334", "D335")
 KINDS = {
     "state_output_consistency", "physical_routing", "scaling_settings",
     "independent_pi_recurrence", "continuous_timers", "first_crossing_and_monotonicity",
     "diagnostics", "independent_fingerprint", "command_state_oracle", "serial_and_engine_gate",
+    "batch_mirror",
 }
 PARAMS = {
     "independent_pi_recurrence": {"clock": "M8012", "integral_min": 0, "integral_max": 30000,
         "proportional_factor": 10, "integral_divisor": 10, "increment_min": 0,
         "increment_max": 3000, "frequency_base": 2000, "skip_transition_scan": True},
-    "continuous_timers": {"sleep_delay_ms": {"min": 4900, "max": 5100},
-        "wake_delay_ms": {"min": 2900, "max": 3100}, "timestamp_uncertainty_ms": 10},
+    "continuous_timers": {"tick_ms": 100, "tolerance_ms": 100,
+        "clamp": {"sleep_delay": [10, 600], "wake_delay": [5, 300],
+                  "wake_pressure": [0, 160], "no_flow": [2000, 3000]},
+        "timestamp_uncertainty_ms": 10},
     "first_crossing_and_monotonicity": {"first_full_frequency_ms": {"min": 39800, "max": 40200},
         "integral_saturated_by_ms": 50200},
     "diagnostics": {"heartbeat_interval_ms": 100, "timestamp_uncertainty_ms": 10,
         "counter_width_bits": 16, "counter_delta_per_scan": 1},
-    "independent_fingerprint": {"fingerprint_words": ["D200", "D201"], "hash": "sha256",
+    "independent_fingerprint": {"fingerprint_words": ["D302", "D303"], "hash": "sha256",
         "bytes": 4, "byteorder": "little", "signed_word_width": 16,
         "excluded_block": ["BEGIN_IDENTITY", "END_IDENTITY"]},
 }
 REQUIRED = {
-    "state_output_consistency": "M0 M10 M11 D120 D154 Y0 D8050 D8051",
+    "state_output_consistency": "M0 M11 D120 D154 Y0 D8050 D8051",
     "physical_routing": "M0 D154 Y0 D8050 D8051",
-    "scaling_settings": "D100 D102 D260 D261 D262 " + " ".join(INPUTS[1:]),
-    "independent_pi_recurrence": "M0 M10 M11 M8012 D100 D102 D120 D154",
-    "continuous_timers": "M0 M10 M11 D100 D260 D262",
-    "first_crossing_and_monotonicity": "M0 M10 M11 D100 D120 D154",
-    "diagnostics": "D195 D196 D197 D198 D199 D200 D201 D202",
-    "independent_fingerprint": "D200 D201",
+    "scaling_settings": "D100 D102 D308 D309 D110 D318 " + " ".join(INPUTS),
+    "independent_pi_recurrence": "M0 M11 M8012 D100 D102 D120 D154",
+    "continuous_timers": "M0 M11 D100 D102 D154 D314 D315",
+    "first_crossing_and_monotonicity": "M0 M11 D100 D120 D154",
+    "diagnostics": "D317 D300 D301 D304 D305 D306 D302 D303",
+    "independent_fingerprint": "D302 D303",
     "command_state_oracle": "M0",
     "serial_and_engine_gate": "M8196 M8125 D8120 D8121",
+    "batch_mirror": "D100 D102 D110 D120 D154 D8050 D307 D308 D309 D310 D311 D312 D313 D314 D315 D318 D319",
 }
 
 def signed16(value):
@@ -85,8 +89,9 @@ def validate_suite(suite):
             raise ValueError("Relationship case selector cannot be empty")
         if not set(rule.get("case_ids", [])) <= set(ids):
             raise ValueError("Relationship references absent case")
-    if seen != KINDS:
-        raise ValueError(f"Missing mandatory relationship kinds: {sorted(KINDS-seen)}")
+    OPTIONAL_KINDS = {"batch_mirror"}
+    if missing := KINDS - seen - OPTIONAL_KINDS:
+        raise ValueError(f"Missing mandatory relationship kinds: {sorted(missing)}")
     for case in suite["cases"]:
         _keys(case, "id title priority requirements injection_mode hardware_scope initial_words steps expected_behavior_note", "case")
         if case["priority"] not in {"MUST", "SHOULD"}:
@@ -128,9 +133,13 @@ def independent_fingerprint(path):
             continue
         if excluded:
             code = raw.split("//", 1)[0].strip().upper().split()
-            if code and not (code == ["LD", "M8002"] or
-                    len(code) == 3 and code[0] == "MOV" and code[1].startswith(("K", "H")) and
-                    code[2] in {"D196", "D197", "D200", "D201", "D202"}):
+            ok = (code == ["LD", "M8002"] or
+                  len(code) == 3 and code[0] == "MOV" and code[1].startswith(("K", "H")) and
+                  code[2] in {"D196", "D197", "D200", "D201", "D202",
+                              "D300", "D301", "D302", "D303", "D304"} or
+                  len(code) == 4 and code[0] == "MUL" and
+                  code[1].startswith("K") and code[2].startswith("K") and code[3] in ("D302", "D303"))
+            if code and not ok:
                 raise ValueError("Identity block contains nonidentity instructions")
             continue
         code = raw.split("//", 1)[0].strip()
@@ -155,12 +164,13 @@ class InputImage:
 
     def next_scan(self):
         if self.first:
-            self.values.update(D190=1, D191=0, D192=0, D193=0, D194=0)
-            saved = self.values["D261"]
-            self.values["D261"] = saved if 10 <= saved <= 160 else 60
-            self.values["D102"] = self.values["D261"]
+            self.values.update(D322=1, D320=0, D321=0, D323=0, D333=0,
+                               D327=100, D328=30, D329=2000)
+            saved = self.values["D325"]
+            self.values["D325"] = saved if 10 <= saved <= 160 else 60
+            self.values["D324"] = self.values["D325"]
+            self.values["D326"] = self.values["D325"] * 85 // 100
             self.first = False
-        self.values["D102"] = clamp(self.values["D102"], 10, 160)
         return self.values.copy()
 
 class TraceOracle:
@@ -233,93 +243,112 @@ class TraceOracle:
         # Independent command state depends only on separately recorded inputs.
         if first:
             self.run = False
-        elif i["D190"] not in (0, 1):
+        elif i["D322"] not in (0, 1):
             self.run, self.inhibit = False, True
         else:
-            if self.inhibit and i["D191"] == 0:
+            # V005: parallel bench terminals D334/D335 join the same
+            # start/stop/inhibit semantics (suite STD-005, REL-09 revision).
+            if self.inhibit and i["D320"] == 0 and i["D334"] == 0:
                 self.inhibit = False
-            if i["D192"] == 1:
+            if i["D321"] == 1 or i["D335"] == 1:
                 self.run = False
-            elif i["D191"] == 1 and not self.inhibit:
+            elif (i["D320"] == 1 or i["D334"] == 1) and not self.inhibit:
                 self.run = True
-        valid = i["D190"] in (0, 1)
-        raw = i["D1056"] if i["D190"] == 1 else (i["D1070"] if i.get("D1071") == 1 else i["D8030"])
+        valid = i["D322"] in (0, 1)
+        raw = i["D330"] if i["D322"] == 1 else (i["D331"] if i["D332"] == 1 else i.get("D8030", 0))
         pv = (clamp(signed16(raw), 0, 4000) + 12) // 25
-        sv = i["D102"]
+        sv = clamp(i["D324"], 10, 160)
         if "command_state_oracle" in ready:
             self._expect("command_state_oracle", t, o, {"M0": int(self.run)})
         if "scaling_settings" in ready:
-            expected = {**i, "D260": sv-2, "D262": sv*85//100}
+            expected = {**i, "D102": sv, "D308": pv, "D309": sv, "D318": clamp(signed16(raw), 0, 4000)}
             if valid:
                 expected["D100"] = pv
             self._expect("scaling_settings", t, o, expected)
         if "state_output_consistency" in ready:
             k = "state_output_consistency"
             if not o["M0"] or not valid:
-                self._expect(k, t, o, dict.fromkeys("M0 M10 M11 D120 D154 Y0 D8050 D8051".split(), 0))
+                self._expect(k, t, o, dict.fromkeys("M0 M11 D120 D154 Y0 D8050 D8051".split(), 0))
             elif o["M11"]:
-                self._expect(k, t, o, {"M0": 1, "M10": 0, "D120": 0, "D154": 0, "Y0": 0, "D8050": 0})
-            elif o["M10"]:
-                self._expect(k, t, o, {"M0": 1, "M11": 0, "D120": 0, "D154": 2000})
+                self._expect(k, t, o, {"M0": 1, "D120": 0, "D154": 0, "Y0": 0, "D8050": 0})
             elif not 2000 <= o["D154"] <= 5000:
                 self._fail(k, t, "normal frequency 2000..5000", o["D154"])
         if "physical_routing" in ready:
-            enabled = i["D193"] == 1 and o["M0"] == 1 and o["D154"] > 0
+            enabled = i["D323"] == 1 and o["M0"] == 1 and o["D154"] > 0
             self._expect("physical_routing", t, o, {"Y0": int(enabled), "D8050": o["D154"]*4//5 if enabled else 0, "D8051": 0})
-        # Timer state is adopted only at a legal observed transition. Every
-        # transition and every missed upper deadline is checked independently.
+        if "batch_mirror" in ready:
+            k = "batch_mirror"
+            self._expect(k, t, o, {"D308": o["D100"], "D309": o["D102"], "D310": clamp(i["D326"], 0, 160),
+                                   "D311": o["D154"], "D312": o["D8050"], "D313": 0,
+                                   "D318": o["D110"], "D319": o["D120"]})
+            bitmap = (1 if o["M0"] else 0) + (2 if o["M11"] else 0) + (16 if i["D322"] == 1 else 0) + (32 if i["D323"] == 1 else 0)
+            if (o["D307"] & 0x33) != bitmap:   # bits 2/3 (延时进行中) 不在本判定内
+                self._fail(k, t, "status bitmap mirrored bits", {"D307": o["D307"], "expected": bitmap})
+        # V005 timers are parameter-driven software tick counters: sleep fires
+        # after clamp(D327) qualifying ticks on (PV>=SV or f<=no-flow), wake
+        # after clamp(D328) ticks with PV strictly below the wake pressure.
+        # Transition windows carry +/-100ms host sampling tolerance, and the
+        # tick counter mirrors must equal the clamped parameter at transition.
         if "continuous_timers" in ready:
             k = "continuous_timers"
             current_sleep = bool(o["M11"])
+            sleep_ms = clamp(i["D327"], 10, 600) * 100
+            wake_ms = clamp(i["D328"], 5, 300) * 100
+            wake_p = clamp(i["D326"], 0, 160)
+            noflow = clamp(i["D329"], 2000, 3000)
+            f_for_nf = (self.previous.get("D154") if self.previous else None)
+            if f_for_nf is None:
+                f_for_nf = o["D154"]
+            qualifying = self.run and valid and not self.sleep and (pv >= sv or f_for_nf <= noflow)
             if not self.run or not valid:
                 self.high_start = self.low_start = None
-                self._expect(k, t, o, {"M10": 0, "M11": 0})
+                self._expect(k, t, o, {"M11": 0})
             elif not self.sleep:
                 self.low_start = None
-                if pv >= sv-2:
+                if qualifying:
                     if self.high_start is None:
                         self.high_start = t
                     elapsed = t-self.high_start
                     if current_sleep:
-                        if not 4900 <= elapsed <= 5100 or not self.previous or not self.previous.get("M10"):
-                            self._fail(k, t, "sleep after continuous 4900..5100ms and prior pre-sleep", elapsed)
+                        if not sleep_ms-100 <= elapsed <= sleep_ms+100 or o["D314"] != 0:
+                            self._fail(k, t, f"sleep after continuous {sleep_ms}±100ms with counter reset",
+                                       {"elapsed": elapsed, "D314": o["D314"]})
                         self.sleep_events += 1
                         self.high_start = None
+                    elif elapsed >= sleep_ms-100:
+                        pass   # ±100ms 双态窗口：休眠允许发生
                     else:
-                        self._expect(k, t, o, {"M10": 1})
-                        if elapsed > 5100:
-                            self._fail(k, t, "sleep by 5100ms", elapsed)
+                        self._expect(k, t, o, {"M11": 0})
                 else:
                     self.high_start = None
-                    self._expect(k, t, o, {"M10": 0, "M11": 0})
+                    self._expect(k, t, o, {"M11": 0})
             else:
                 self.high_start = None
-                if pv <= sv*85//100:
+                if pv < wake_p:
                     if self.low_start is None:
                         self.low_start = t
                     elapsed = t-self.low_start
                     if not current_sleep:
-                        if not 2900 <= elapsed <= 3100:
-                            self._fail(k, t, "wake after continuous 2900..3100ms", elapsed)
+                        if not wake_ms-100 <= elapsed <= wake_ms+100 or o["D315"] != 0:
+                            self._fail(k, t, f"wake after continuous {wake_ms}±100ms with counter reset",
+                                       {"elapsed": elapsed, "D315": o["D315"]})
                         self.wake_events += 1
                         self.low_start = None
-                        if pv >= sv-2:
-                            self.high_start = t  # SV10 overlap permits immediate pre-sleep.
-                        else:
-                            self._expect(k, t, o, {"M10": 0})
-                    elif elapsed > 3100:
-                        self._fail(k, t, "wake by 3100ms", elapsed)
+                    elif elapsed >= wake_ms-100:
+                        pass   # ±100ms 双态窗口：唤醒允许发生
+                    else:
+                        self._expect(k, t, o, {"M11": 1})
                 else:
                     self.low_start = None
-                    self._expect(k, t, o, {"M11": 1, "M10": 0})
+                    self._expect(k, t, o, {"M11": 1})
             self.sleep = current_sleep if self.run and valid else False
         if "independent_pi_recurrence" in ready:
             k = "independent_pi_recurrence"
-            normal = bool(o["M0"] and not o["M10"] and not o["M11"])
+            normal = bool(o["M0"] and not o["M11"])
             rising = bool(o["M8012"] and not self.clock)
             if not normal:
                 self.a = 0
-                self.frequency = 2000 if o["M10"] else 0
+                self.frequency = 0
             elif not self.normal:
                 self.a, self.frequency = 0, 2000
             elif rising:
@@ -332,7 +361,7 @@ class TraceOracle:
         if "first_crossing_and_monotonicity" in ready:
             k = "first_crossing_and_monotonicity"
             if self.run and valid and pv == 0:
-                self._expect(k, t, o, {"M10": 0, "M11": 0})
+                self._expect(k, t, o, {"M11": 0})
                 if self.start_normal is None:
                     self.start_normal = t
                 elapsed = t-self.start_normal
@@ -348,14 +377,14 @@ class TraceOracle:
                     self._expect(k, t, o, {"D120": 30000, "D154": 5000})
         if "diagnostics" in ready:
             k = "diagnostics"
-            identity = {d: v for d in ("D196", "D197", "D202")
+            identity = {d: v for d in ("D300", "D301", "D304")
                         if isinstance((v := self.suite.get("global_invariants", {}).get(d)), int)}
-            self._expect(k, t, o, {"D195": i["D194"], **(identity or {"D196": 2, "D197": 31, "D202": 2})})
-            if self.previous and all(self.previous.get(d) is not None for d in ("D199", "D198", "D200", "D201")):
-                self._expect(k, t, o, {"D199": signed16(self.previous["D199"]+1), "D200": self.previous["D200"], "D201": self.previous["D201"]})
-                if self.previous["D199"] == 32767 and o["D199"] == -32768:
+            self._expect(k, t, o, {"D317": i["D333"], **(identity or {"D300": 5, "D301": 31, "D304": 5})})
+            if self.previous and all(self.previous.get(d) is not None for d in ("D306", "D305", "D302", "D303")):
+                self._expect(k, t, o, {"D306": signed16(self.previous["D306"]+1), "D302": self.previous["D302"], "D303": self.previous["D303"]})
+                if self.previous["D306"] == 32767 and o["D306"] == -32768:
                     self.counter_wraps += 1
-                if o["D198"] != self.previous["D198"]:
+                if o["D305"] != self.previous["D305"]:
                     if self.heartbeat_changed is not None:
                         interval = t-self.heartbeat_changed
                         if not 90 <= interval <= 110:
@@ -369,7 +398,9 @@ class TraceOracle:
             if words is None:
                 self._fail("independent_fingerprint", t, "independently calculated build fingerprint", None, "UNVERIFIED")
             else:
-                self._expect("independent_fingerprint", t, o, dict(zip(("D200", "D201"), words)))
+                o_fp = {**o, "D302": o["D302"] & 0xFFFF, "D303": o["D303"] & 0xFFFF}
+                fp_expected = dict(zip(("D302", "D303"), (w & 0xFFFF for w in words)))
+                self._expect("independent_fingerprint", t, o_fp, fp_expected)
         if "serial_and_engine_gate" in ready:
             if first:
                 self._expect("serial_and_engine_gate", t, o, {"M8196": 1, "M8125": 1, "D8120": -8063, "D8121": 1})

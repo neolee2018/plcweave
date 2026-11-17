@@ -1,6 +1,6 @@
 # Markdown 用例格式
 
-需求全文写 `requirements.md`，用例全文写 `test_cases.md`。初版可先写普通文字和未完成表格；未完成用例不能冻结或执行。程序先不要创建。
+需求全文写 `requirements.md`，用例全文写 `test_cases.md`。初版可先写普通文字和未完成表格；未完成用例不能冻结或执行。两阶段工程中用例在第二阶段（烧录确认后、HIL前）编写并冻结，与先行的程序不冲突：`s2-freeze.md` 冻结 `test_cases.md`，且必须在看到PLC实际输出之前完成。
 
 普通可执行格式如下：表头和字段为固定英文标识，标题、说明和note可用中文。不使用额外JSON/YAML作者文件。
 
@@ -43,7 +43,7 @@
 - 值为整数；预期可用闭区间 `0..100`。输入值和初始值不能写范围。所断言的设备必须在watch中。
 - 每步duration_ms是正整数且为scan_ms的整数倍。MUST/SHOULD之外的优先级拒绝。未知栏目、重复ID、无步骤或无断言拒绝，不能默认为通过。
 - Metadata支持priority、requirements、hardware_scope、injection_mode、expected_behavior_note；不支持的规则应扩展执行器并独立测试后再使用，不能写在备注里假装执行。
-- 冻结命令只生成 `s1-freeze.md`，记录requirements.md和test_cases.md的原始字节哈希；不能覆盖旧冻结。执行前后再次核验。
+- 冻结命令生成原始字节哈希表：两阶段工程第二阶段用 `workflow freeze-tests` 生成 `s2-freeze.md`（test_cases.md）；旧单程序流程与历史记录的 `s1-freeze.md`（requirements.md+test_cases.md）仅兼容读取。不能覆盖旧冻结。执行前后再次核验。
 
 ## 复杂关系与历史导入
 

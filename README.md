@@ -4,9 +4,15 @@
 
 English | [简体中文](README.zh-CN.md)
 
+The [desktop test bench](hmi/README.md) can display existing Python tests' actual PLC commands and readbacks, then wait for completion acknowledgement before manual testing. The window stays open until the user closes it. UI text is driven by a translation dictionary (`src/plcweave/bench/i18n.py`) with live switching among Chinese, English, French, Portuguese, Spanish and Arabic from the top bar; more languages are add-by-translation. The local L01S water project uses `run-water-test.bat` (RS485 on COM11, programming port on COM5) when that customer project is present.
+
 Markdown requirements and tests → supported FX instruction execution → independent verification → controlled hardware sampling → traceable delivery. The first execution subset targets FX3U/HBDTECH L01S. Start with the [quick demo](#2-quick-demo-one-prompt) if you just want to see it run, or jump to [one prompt to start real programming](#one-prompt-to-start-real-programming-two-phase-workflow) at the end of section 2 to develop your own controller. This is an engineering toolkit under development, not a complete PLC simulator or certified production controller.
 
-For customer engineering, use the [two-phase workflow](skills/plc-program-development/references/two-phase-workflow.md): users edit only requirements; the AI maintains design, independent tests and a shared control core. Phase 1 delivers separate HIL and production instruction lists. In phase 2, the user compiles/downloads the HIL program, then the AI collects PLC registers, compares and iterates. The `workflow init/freeze/build/deliver/confirm-download/test/status/revise` commands currently cover the supported FX subset and L01S steady-state sampling. Delta adapters are not implemented; vendor compilation and downloading remain manual.
+For customer engineering, use the [two-phase workflow](skills/plc-program-development/references/two-phase-workflow.md): users edit only requirements; the AI maintains design, a shared control core and (in phase 2) independent test cases. Phase 1 runs static syntax and logic checks, then delivers separate HIL and production instruction lists — no local simulation gate before delivery (`plcweave simulate` stays an optional debug tool). In phase 2, the user compiles/downloads the HIL program, the AI freezes test cases and runs hardware-in-the-loop sampling, comparing and iterating. The `workflow init/freeze/freeze-tests/build/deliver/confirm-download/test/status/revise` commands currently cover the supported FX subset and L01S steady-state sampling. Delta adapters are not implemented; vendor compilation and downloading remain manual.
+
+### Convert an instruction list to a Delta DVP project
+
+See the [conversion guide, existing template locations and AI prompt (Chinese)](docs/DVP-CONVERSION.md). After downloading the repository, open [the offline copy page](hmi/prototype/dvp-prompt.html) in a browser and click the copy button. Send the prompt with your instruction list, exact PLC model and vendor software version to Codex or another agent with access to the checkout. The prompt requires inspecting existing `.dvp` templates and conversion tools first. The local ES2 converter covers paired `LD X…` / `OUT Y…` networks followed by `END`; other instructions require additional evidence and validation. Private templates may be absent from public checkouts. Vendor compilation and hardware verification remain separate steps.
 
 ## 1. Install
 
@@ -157,30 +163,34 @@ Protection / reset / acceptance: (add your acceptance requirements)
 1. Phase 1 (AI-led; I edit only requirements.md):
    - Clarify my requirement, then workflow init the project; on a name clash stop and ask me,
      never merge or overwrite;
-   - You maintain design.md, independent test_cases.md and the shared source.fxil; show me key
-     outputs for confirmation;
+   - You maintain design.md and the shared source.fxil; show me key outputs for confirmation;
+     test cases are not written in this phase;
    - Collect serial parameters from me before building (COM port, baud, parity, station); the
      program and the bench must use the same set;
-   - Arrange review by 4 distinct fresh-context agents before the S1 freeze (workflow freeze);
-     the main agent does not count;
-   - workflow build produces the HIL test build and the production build from one shared
-     control core;
-   - After review passes, workflow deliver --stage 1: build delivery/<version>/ plus a ZIP in
-     the project and report requirements, design, tests, program and the hash manifest.
+   - workflow freeze freezes requirements and design, then workflow build produces the HIL test
+     build and the production build from one shared control core; the build gate is a static
+     syntax check (real instruction interpreter, unknown instructions blocked) plus static
+     logic diagnostics (double-coil, undriven devices, ladder structure) — no local
+     simulation regression is required before delivery;
+   - workflow deliver --stage 1: build delivery/<version>/ plus a ZIP in the project and
+     report requirements, design, program and the hash manifest.
 2. Phase 2 (I download, you sample):
    - I import hil/MAIN.csv with its COMMENT.csv into GX Works2, select the right CPU, compile
      and download the HIL build;
    - Only after I explicitly confirm "compiled, downloaded, RUN" do you run workflow
-     confirm-download; after I confirm the isolated idle bench with RS485 connected, run
-     workflow test and compare against frozen expectations;
+     confirm-download; then author independent test_cases.md from the frozen requirements and
+     freeze them with workflow freeze-tests before touching hardware (expectations must never
+     be written after seeing PLC outputs);
+   - After I confirm the isolated idle bench with RS485 connected, run workflow test and
+     compare PLC samples against the frozen expectations;
    - For program defects fix the shared core into a new build and wait for my re-download and
      confirmation; never loosen expectations and never blame communication or script errors on
      the PLC program;
-   - After all planned cases PASS on one final build and the four-agent review passes, run
-     workflow deliver --stage 2.
+   - After all planned cases PASS on one final build and the four-agent independent review
+     passes, run workflow deliver --stage 2.
 3. Boundaries (always): never edit frozen expectations; never treat unknown instructions as
    NOPs; never open a serial port, write a device or switch RUN/STOP without my explicit
-   confirmation; never present SIM_PASS or steady-state sampling as formal/electrical
+   confirmation; never present static checks or steady-state sampling as formal/electrical
    acceptance; when blocked, say exactly which step is blocked instead of faking completion.
    When I change requirements use workflow revise and keep old snapshots and evidence.
 ```

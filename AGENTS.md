@@ -3,14 +3,14 @@
 用途：测试驱动的PLC开发与验证工具链。技术栈：Python + Rust + Markdown + pytest（运行证据按需JSON/CSV）。
 REGISTRY ID：040。目录：103-plcweave。产品线：工具（沿现有101/102工具序列扩展）。
 
-## 客户项目与技能（2026-10-22用户修订，优先于旧格式说明）
+## 客户项目与技能（2026-11-08用户修订，优先于旧格式说明）
 
 - 工作流技能入口：skills/plc-program-development/SKILL.md。
-- 两阶段定制入口：skills/plc-program-development/references/two-phase-workflow.md。用户只编辑requirements.md，AI维护design.md、独立test_cases.md及共用程序；第一阶段交付需求/设计/测试/程序四类成果，程序含HIL与正式版两个指令表。第二阶段用户编译下载HIL版并确认后，AI运行测试、分析和迭代；每次程序修复新建build并经用户重新下载。旧MD快照、构建和证据保留，不能继承失效的旧PASS。
+- 两阶段定制入口：skills/plc-program-development/references/two-phase-workflow.md。用户只编辑requirements.md，AI维护design.md、共用程序及（第二阶段的）独立test_cases.md。**第一阶段：编程 → 语法检查 + 逻辑关系静态检查 → 生成CSV（三菱；台达按P0门禁）→ 交付需求/设计/程序三类成果，程序含HIL与正式版两个指令表；本地仿真回归不是交付门禁（simulate仅为可选调试工具），本阶段不写测试用例。**第二阶段用户编译下载HIL版并确认后，AI先编写并冻结测试用例（freeze-tests，预期先于看到PLC输出），再运行HIL测试、分析和迭代；每次程序修复新建build并经用户重新下载。旧MD快照、构建和证据保留，不能继承失效的旧PASS。
 - 本仓除project/与reusable/外只维护技能、工具链、工具测试、依赖和说明；客户程序、资料、需求、测试、证据和交付全部存入客户项目目录；跨项目可复用资源（程序模板/寄存器表/HMI套件/工具链经验）统一存reusable/，来源与许可逐项登记reusable/PROVENANCE.md。
 - 未指定目录时每项目新建project/<项目名>/；指定外部目录则遵从。仓库内的客户目录只能在project/下，不使用private/、src/或docs/存客户案例。客户内容默认不进入公共Git。
-- 第一版requirements.md和test_cases.md为唯一作者源，不生成同义JSON/YAML/CSV/PDF；S1用s1-freeze.md冻结，执行内存解析MD。必要执行报告/轨迹格式不受此作者源限制。历史冻结JSON证据仅兼容读取，不为迁移改写。
-- 需要复核的节点必须由4个不同的独立上下文Agent进行，主Agent不计入；传最少原始材料与验收条件，不传完整主会话或预设结论。额度不足分批运行，失败或缺席不得写成PASS；记录输入版本、实际检查、问题与结论。细则见技能。
+- 第一版requirements.md和test_cases.md为唯一作者源，不生成同义JSON/YAML/CSV/PDF；第一阶段用s1-freeze.md冻结需求与设计，第二阶段用s2-freeze.md冻结测试用例，执行内存解析MD。必要执行报告/轨迹格式不受此作者源限制。历史冻结JSON证据仅兼容读取，不为迁移改写。
+- 需要复核的节点（2026-11-08缩减：仅最终交付stage 2）必须由4个不同的独立上下文Agent进行，主Agent不计入；传最少原始材料与验收条件，不传完整主会话或预设结论。额度不足分批运行，失败或缺席不得写成PASS；记录输入版本、实际检查、问题与结论。细则见技能。
 - 最终交付必须在客户项目内建立delivery/<版本>/并打成ZIP，核验清单和压缩包，不只给散落文件，不覆盖已有版本。
 
 ## 项目状态与权威入口
@@ -31,8 +31,8 @@ REGISTRY ID：040。目录：103-plcweave。产品线：工具（沿现有101/10
 
 ## 开发和验证
 
-- 当前CLI支持workflow两阶段入口及原有init/freeze/package/simulate/preflight/hil、demo；具体可复现命令与验证记录见README。workflow构建受支持FX子集，HIL只接受L01S已知映射和稳态采样；台达适配未实现。没有运行服务、没有已验证的自动下载器。
-- 仿真与硬件后端共用用例模型和比较器，保留时间精度/采样质量差异。
+- 当前CLI支持workflow两阶段入口（init/freeze/freeze-tests/build/deliver/confirm-download/test/status/revise）及原有init/freeze/package/simulate/preflight/hil、demo；具体可复现命令与验证记录见README。workflow构建门禁为语法检查+逻辑关系静态检查（STATIC_PASS）；HIL只接受L01S已知映射和稳态采样；台达适配未实现。没有运行服务、没有已验证的自动下载器。
+- 仿真与硬件后端共用用例模型和比较器，保留时间精度/采样质量差异；本地仿真（simulate）为可选调试工具，不作为交付门禁。
 - 未知映射不连接/写设备；程序下载、RUN/STOP和设备动作遵循现场授权及安全确认。
 - 首版无监听端口。新增服务前先更新工作区PORT-REGISTRY并核验，不能自行使用默认端口。
 - 每个客户项目必须在project/<项目名>/hmi/维护与PLC配套的HMI资源：三件套（PRD.md前端PRD、params.md/registers.md参数与通讯寄存器表、prototype/页面原型图），随PLC程序同步演进；做界面工作时先遵循工作区hmi规范（hmi-frontend skill）。

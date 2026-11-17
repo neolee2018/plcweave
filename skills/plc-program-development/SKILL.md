@@ -1,16 +1,16 @@
 ---
 name: plc-program-development
-description: 用PLCWeave进行需求驱动的PLC设计、独立测试、双版本指令表交付及人工下载后的HIL闭环。当前执行子集面向FX3U/HBDTECH L01S，客户项目独立存放，节点由4名独立Agent复核。
+description: 用PLCWeave进行需求驱动的PLC设计、静态语法/逻辑检查交付双版本指令表，以及人工下载后的用例冻结与HIL闭环。当前执行子集面向FX3U/HBDTECH L01S，客户项目独立存放，最终交付由4名独立Agent复核。
 ---
 
 # PLC 开发与交付
 
-## 两阶段入口（2026-10-26）
+## 两阶段入口（2026-11-08用户修订）
 
-- 客户定制按[两阶段工作流](references/two-phase-workflow.md)执行。用户只提供或修改requirements.md；AI维护资源分配、design.md、独立test_cases.md、共用source.fxil及后续全部成果。
-- 第一阶段使用 `workflow init/freeze/build/deliver --stage 1`：完成设计、用例、编程、两版检查与规定复核后，交付需求、设计、测试、程序四类成果；程序必须有HIL测试版与去除测试接口的正式版，二者由同一控制核心生成。
-- 第二阶段由用户在厂家软件编译下载HIL版并明确确认RUN后，AI `workflow confirm-download/test`，保存PLC实际返回数据并与冻结预期比较。程序缺陷须同步更新两版，用新build经用户重新编译下载再测；单一最终版本的全部规定用例通过、清理确认和独立复核后，`workflow deliver --stage 2`。
-- 新CLI仅覆盖受支持FX子集与L01S稳态采样，跨品牌和其他验证范围见上述参考；不凭两版仿真或测试版HIL升级正式版硬件结论。需求变化用 `workflow revise`保留旧MD快照及证据，AI实际修订后再走冻结与交付。
+- 客户定制按[两阶段工作流](references/two-phase-workflow.md)执行。用户只提供或修改requirements.md；AI维护资源分配、design.md、共用source.fxil及后续全部成果。
+- 第一阶段使用 `workflow init/freeze/build/deliver --stage 1`：冻结需求与设计、编程后做**语法检查**（真实指令解释器编译，未知指令/地址阻断）与**逻辑关系静态检查**（双线圈、未驱动器件、梯形结构诊断），通过即交付；程序必须有HIL测试版与去除测试接口的正式版，二者由同一控制核心生成。**交付前不设本地仿真门禁**；`plcweave simulate` 仅为可选调试工具。本阶段不写测试用例。
+- 第二阶段由用户在厂家软件编译下载HIL版并明确确认RUN后，AI `workflow confirm-download`，随后依据冻结需求独立编写test_cases.md并用 `workflow freeze-tests` 冻结（预期必须在看到PLC实际输出之前冻结），再 `workflow test` 采样并与冻结预期比较。程序缺陷须同步更新两版，用新build经用户重新编译下载再测；单一最终版本的全部规定用例通过、清理确认和独立复核后，`workflow deliver --stage 2`。
+- 新CLI仅覆盖受支持FX子集与L01S稳态采样，跨品牌和其他验证范围见上述参考；静态检查与测试版HIL不升级正式版硬件结论。需求变化用 `workflow revise`保留旧MD快照及证据，AI实际修订后再走冻结与交付。
 
 ## 项目存放
 
@@ -29,48 +29,62 @@ description: 用PLCWeave进行需求驱动的PLC设计、独立测试、双版�
 
 ## Markdown 优先
 
-- 需求与测试唯一可编辑作者源分别为 `requirements.md` 和 `test_cases.md`；新两阶段工程另有AI维护的 `design.md`。用户只改需求，AI独立更新设计和测试，不要求用户同步编辑多份文件。均用Markdown，不建立同义作者副本。
+- 需求唯一可编辑作者源为 `requirements.md`；测试唯一可编辑作者源为 `test_cases.md`（第二阶段编写）；新两阶段工程另有AI维护的 `design.md`。用户只改需求，AI独立更新设计和测试，不要求用户同步编辑多份文件。均用Markdown，不建立同义作者副本。
 - 不提前生成需求/测试的JSON、YAML、CSV、HTML或PDF副本，不维护两套正确答案。
 - 可执行用例使用MD内的表格；执行时直接解析到内存模型，不生成 `test_cases.json`。格式见 [Markdown用例规范](references/markdown-cases.md)。复杂关系可放在同一MD的结构块中，仍只有这份MD权威源。
-- S1完成后以 `s1-freeze.md` 记录两份MD的SHA256。初次冻结必须先于新PLC源；S2不得更改冻结预期。规格确需改变时，独立记录修订原因、影响和新版本，不覆盖旧冻结。
+- 第一阶段以 `s1-freeze.md` 记录 requirements.md 与 design.md 的SHA256，初次冻结必须先于新PLC源；第二阶段烧录确认后、HIL前以 `s2-freeze.md` 冻结 test_cases.md。冻结后不得更改冻结预期；规格确需改变时，独立记录修订原因、影响和新版本，不覆盖旧冻结。
 - 历史JSON案例与历史证据仅作兼容读取和归档；不得为了这次目录整理改写历史冻结文件或伪造新的验证结果。
 
 ## S0–S7
 
 1. **S0**：在项目中写MD需求，确认机型、映射、功能、现场授权和验收范围。先确认本地/串口/电气测量的能力边界。
-2. **S1**：独立设计MD用例，覆盖正常、边界、故障、恢复及有关不变量，再冻结。
-3. **S2**：依据冻结需求/测试编写 `source.fxil`，生成所需CSV并运行真实指令解释器。未知指令或地址明确阻断，不能NOP化。
-4. **S3**：实际执行并比较轨迹；复核按下节的4 Agent执行。数据不全不判PASS；主Agent不能凭读源码代替独立复核。
-5. **S4**：完成第一阶段独立复核与交付，包含需求、设计、用例、两版指令表/说明及本地验证证据；草稿保持MD，额外排版按用户需要生成。
-6. **S5/S6**：按用户选定的厂家通路/人工烧录/PlatformIO编排执行。没有经过验证的下载器就明确保留人工下载，不改写原厂固件。写入、RUN/STOP和设备动作须有现场授权与已知映射。S6 硬件在环方法见 [S6-HIL-V2](references/s6-hil-v2.md)：默认 L01S 档案，先绑定镜像身份再写入，只写程序只读的注入寄存器，轮询只证明稳态标量。
+2. **S1**：完善设计并冻结需求与设计（不含用例）。
+3. **S2**：依据冻结需求/设计编写 `source.fxil`，构建生成两版指令表并做**语法检查**：真实指令解释器编译，未知指令或地址明确阻断，不能NOP化。
+4. **S3**：**逻辑关系静态检查**（双线圈、未驱动器件、梯形结构诊断）通过后即允许第一阶段交付；本地仿真回归不作为门禁，需要调试时可选执行。
+5. **S4**：第一阶段交付需求、设计、程序说明及两版指令表/静态检查证据；草稿保持MD，额外排版按用户需要生成。
+6. **S5/S6**：用户人工编译下载HIL版并确认RUN（无经验证的下载器就保留人工下载，不改写原厂固件）。AI随后编写并冻结独立测试用例，再执行HIL采样；写入、RUN/STOP和设备动作须有现场授权与已知映射。S6 硬件在环方法见 [S6-HIL-V2](references/s6-hil-v2.md)：默认 L01S 档案，先绑定镜像身份再写入，只写程序只读的注入寄存器，轮询只证明稳态标量。
 7. **S7**：归因、必要回归、独立复核、最终交付与资源清理。程序、测试基础设施失败和证据不足分别处理。
 
-## 需要复核的节点：4个独立Agent
+## 需要复核的节点：4个独立Agent（2026-11-08缩减）
 
-- S1冻结、S3验证/重大修订、S6结果判定、最终交付等需要复核的节点，必须由 **4个独立上下文的Agent** 复核。主Agent只组织、汇总和修复，不计入4名复核者，不代写其结论。
+- **最终交付（stage 2）** 必须由 **4个独立上下文的Agent** 复核；主Agent只组织、汇总和修复，不计入4名复核者，不代写其结论。S1冻结、S3静态检查、stage1交付不再强制4-Agent复核，由主Agent自检并把静态检查结果如实写入交付。
 - 为每名复核Agent创建全新上下文（支持时使用 `fork_turns="none"`）。只给任务、相关原始文件/冻结版本、独立验收标准和资源边界；不传主会话完整历史、预设结论或希望它通过的答案。
 - 四个角色分别检查：①需求与测试覆盖/独立性；②程序、执行记录与判定；③工具、异常路径、身份门禁和资源清理；④项目隔离、文档、交付一致性与可复测性。每人独立作出结论，重叠检查关键风险。
 - 并发额度不足时分批运行，仍须4名不同的独立Agent；不能用同一Agent换角色凑数。额度/工具失败记为“未完成复核”，不能写成PASS。
-- 复核记录存入项目 `reviews/<节点>/`，保留reviewer、输入版本/哈希、实际检查、问题和结论（MD即可）。阻断问题修复后由相关复核Agent复查，不无故重复全部4轮。
+- 复核记录存入项目 `reviews/<节点>/`，保留reviewer、输入版本/哈希、实际检查、问题和结论（工具读取JSON记录）。阻断问题修复后由相关复核Agent复查，不无故重复全部4轮。
 - 未变更且版本/哈希相同的已复核材料可以引用既有结论；必须写清适用范围。新的冻结、程序或判定语义不继承不适用的旧结论。
 
 ## 测试范围与停止规则
 
-- 本地快速回归保留。实机按变更影响选择用例和必要依赖；仅采集策略或排版变化不自动触发无关的全量PLC重跑。
+- 本地仿真仅为可选调试工具（`plcweave simulate`），不作为任何交付门禁；调试发现的问题如实记录并修复程序。实机按变更影响选择用例和必要依赖；仅采集策略或排版变化不自动触发无关的全量PLC重跑。
 - 保留PASS / PROGRAM_FAIL / TEST_INFRA_ERROR / UNVERIFIED。普通轮询不能证明每扫描轨迹、未测电气量或真实水压闭环；不通过放宽原容差追求PASS。
 - 显然精度不足时记录缺口，停止无效重试。只有已证明的程序问题回S2；工具问题先修工具。
 
 ## 最终交付
 
 - 必须先在客户项目内建立 `delivery/<版本>/`，再把该交付目录打成ZIP，放在项目的 `delivery/` 下。不能只返回分散文件或只给仓库路径。
-- 双程序工程按上述两阶段交付规范：需求、设计、测试用例，以及HIL/正式版各自的指令表、注释与程序说明，附同版证据。PDF按用户明确格式额外生成，不再把旧“单程序+双PDF四件套”当作默认交付。
+- 双程序工程按上述两阶段交付规范：第一阶段交需求、设计、程序说明及HIL/正式版各自的指令表、注释与静态检查证据；第二阶段另附冻结测试用例、HIL报告/轨迹与复核记录。PDF按用户明确格式额外生成，不再把旧“单程序+双PDF四件套”当作默认交付。
 - 交付附文件哈希清单（工具生成的MANIFEST.md可随包，属于清单而非编辑源），核验ZIP可读且内容一致；不覆盖既有版本。客户另有明确格式时优先遵从。
 - 演示交付可用 `plcweave demo deliver`：至少含 `requirements.md`、`test_cases.md`、`MAIN.csv`、`COMMENT.csv`、`HIL-REPORT.md`、`SUMMARY.md`，另附 `MANIFEST.md`。总结报告必须写清完成度、演示验收/正式验收的区别及未测试项。
 - 交付只收纳本项目明确选定的成果，禁止自动打包整个工具仓库、环境、凭据或其他客户目录。
 
 ## 当前CLI
 
-在工具仓库根使用自动配置本仓环境的PowerShell入口（或使用已安装的 `plcweave` 命令；源码直接用python时先设置PYTHONPATH=src）：
+在工具仓库根使用自动配置本仓环境的PowerShell入口（或使用已安装的 `plcweave` 命令；源码直接用python时先设置PYTHONPATH=src）。两阶段工程用 `workflow` 前缀：
+
+```powershell
+./tools/plcweave.ps1 workflow init 客户项目名
+./tools/plcweave.ps1 workflow freeze project/客户项目名          # 冻结需求+设计（无需用例/复核）
+./tools/plcweave.ps1 workflow build project/客户项目名 --version B001 --port COM7 --baud 9600 --parity N --station 1
+# build 门禁=语法检查+逻辑关系静态检查（STATIC_PASS）；不跑本地仿真
+./tools/plcweave.ps1 workflow deliver project/客户项目名 --build B001 --stage 1 --version V001-stage1
+./tools/plcweave.ps1 workflow confirm-download project/客户项目名 --build B001 --operator 姓名 --software "GX Works2 版本" --compiled --running
+./tools/plcweave.ps1 workflow freeze-tests project/客户项目名     # 第二阶段：HIL前冻结测试用例
+./tools/plcweave.ps1 workflow test project/客户项目名 --build B001 --batch T001 --port COM7 --isolated-bench --connected --running
+./tools/plcweave.ps1 workflow deliver project/客户项目名 --build B001 --stage 2 --batch T001 --version V001-stage2
+```
+
+原单程序/演示命令保留：
 
 ```powershell
 ./tools/plcweave.ps1 init 客户项目名
@@ -85,4 +99,4 @@ description: 用PLCWeave进行需求驱动的PLC设计、独立测试、双版�
 ./tools/plcweave.ps1 demo deliver project/演示项目 --version V001
 ```
 
-新建目录只有MD草稿，没有PLC程序或测试JSON。用例尚未完整、尚未冻结时执行应阻断。运行报告/轨迹可以使用JSON/CSV等机器格式；“初版只存MD”约束作者源，不禁止必要的真实执行证据。
+新建目录只有MD草稿，没有PLC程序或测试JSON。第一阶段冻结只需需求与设计；用例在第二阶段编写并经 `workflow freeze-tests` 冻结后才能执行HIL。运行报告/轨迹可以使用JSON/CSV等机器格式；“初版只存MD”约束作者源，不禁止必要的真实执行证据。

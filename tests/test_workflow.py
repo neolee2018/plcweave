@@ -6,9 +6,11 @@ from pathlib import Path
 import pytest
 
 from plcweave.testing import digest
-from plcweave.workflow import (INPUT_FILES, _hashes, build_workflow, confirm_download,
-                               deliver_workflow, freeze_workflow, init_workflow,
-                               revise_workflow, run_hil, status_workflow, validate_build)
+from plcweave.workflow import (INPUT_FILES, TEST_FREEZE_FILES, _hashes, _static_check,
+                               build_workflow, confirm_download, deliver_workflow,
+                               freeze_tests_workflow, freeze_workflow, init_workflow,
+                               require_reviews, revise_workflow, run_hil, status_workflow,
+                               validate_build)
 
 DESIGN = """# 控制设计
 
@@ -24,7 +26,7 @@ DESIGN = """# 控制设计
 
 ## Inputs
 | logical | physical | injection |
-| --- | --- | --- |
+| --- | --- |
 | M100 | X0 | D1000 |
 | M101 | X1 | D1001 |
 
@@ -112,26 +114,32 @@ def reviews(case, node, bindings, *, count=4):
         }), encoding="utf-8")
 
 
-def prepared(tmp_path, *, suite=SUITE):
+def prepared(tmp_path, *, requirements="# 需求\n启动保持，停止优先。"):
+    """Stage-1 fixture: requirements and design frozen, no test cases yet."""
     case = init_workflow("synthetic", workspace=tmp_path)
-    (case / "requirements.md").write_text("# 需求\n启动保持，停止优先。", encoding="utf-8")
+    (case / "requirements.md").write_text(requirements, encoding="utf-8")
     (case / "design.md").write_text(DESIGN, encoding="utf-8")
-    (case / "test_cases.md").write_text(suite, encoding="utf-8")
-    reviews(case, "S1", _hashes(case, ("requirements.md", "test_cases.md", "design.md")))
     freeze_workflow(case, workspace=tmp_path)
     (case / "source.fxil").write_text(CORE, encoding="utf-8")
     return case
 
 
-def built(tmp_path):
-    case = prepared(tmp_path)
+def built(tmp_path, **kwargs):
+    case = prepared(tmp_path, **kwargs)
     result = build_workflow(case, "B001", workspace=tmp_path)
-    assert result["status"] == "LOCAL_PASS"
+    assert result["status"] == "STATIC_PASS"
     return case
 
 
-def downloaded(tmp_path):
+def frozen_tests(case, tmp_path, *, suite=SUITE):
+    (case / "test_cases.md").write_text(suite, encoding="utf-8")
+    freeze_tests_workflow(case, workspace=tmp_path)
+    return case
+
+
+def downloaded(tmp_path, *, suite=SUITE):
     case = built(tmp_path)
+    frozen_tests(case, tmp_path, suite=suite)
     confirm_download(case, "B001", operator="pytest fixture", software="GX Works2 fixture",
                      compiled=True, running=True, workspace=tmp_path)
     return case
@@ -157,20 +165,30 @@ def test_two_actual_programs_share_core_and_formal_program_has_no_test_interface
     assert "LD X0" in production and "OUT Y0" in production
     assert "OUT Y0" not in hil
     for variant in ("hil", "production"):
-        report = json.loads((case / f"build/B001/{variant}/simulation_report.json").read_text())
-        assert report["status"] == "SIM_PASS"
-        assert report["cases"][0]["status"] == "PASS"
+        check = json.loads((case / f"build/B001/{variant}/static_check.json").read_text())
+        assert check["status"] == "STATIC_PASS"
+        assert check["syntax"]["status"] == "PASS"
+        assert not (case / f"build/B001/{variant}/simulation_report.json").exists()
     with pytest.raises(FileExistsError):
         build_workflow(case, "B001", workspace=tmp_path)
 
 
-@pytest.mark.parametrize("name", ["requirements.md", "design.md", "test_cases.md", "source.fxil"])
+@pytest.mark.parametrize("name", ["requirements.md", "design.md", "source.fxil"])
 def test_changed_input_invalidates_old_build_and_cannot_unlock_serial(tmp_path, monkeypatch, name):
     case = downloaded(tmp_path)
     with (case / name).open("a", encoding="utf-8") as stream:
         stream.write("\n// changed\n")
     monkeypatch.setattr("plcweave.workflow.Bench", lambda **kw: pytest.fail("Opened serial"))
     with pytest.raises(ValueError):
+        run_hil(case, "B001", "T001", port="COM1", isolated_bench=True, running=True, connected=True, workspace=tmp_path)
+
+
+def test_changed_frozen_tests_block_hil_before_any_serial_access(tmp_path, monkeypatch):
+    case = downloaded(tmp_path)
+    with (case / "test_cases.md").open("a", encoding="utf-8") as stream:
+        stream.write("\n<!-- changed expectations -->\n")
+    monkeypatch.setattr("plcweave.workflow.Bench", lambda **kw: pytest.fail("Opened serial"))
+    with pytest.raises(ValueError, match="Frozen tests changed"):
         run_hil(case, "B001", "T001", port="COM1", isolated_bench=True, running=True, connected=True, workspace=tmp_path)
 
 
@@ -187,19 +205,29 @@ def test_build_blocks_hardware_outputs_in_common_core_and_unknown_targets(tmp_pa
         read_design(case / "design.md")
 
 
-def test_four_distinct_version_bound_reviewers_are_required(tmp_path):
-    case = init_workflow("review", workspace=tmp_path)
+def test_freeze_and_stage1_delivery_need_no_review_records(tmp_path):
+    case = init_workflow("noreview", workspace=tmp_path)
+    (case / "requirements.md").write_text("# 需求\n启动保持。", encoding="utf-8")
     (case / "design.md").write_text(DESIGN, encoding="utf-8")
-    (case / "test_cases.md").write_text(SUITE, encoding="utf-8")
-    bindings = _hashes(case, ("requirements.md", "test_cases.md", "design.md"))
-    reviews(case, "S1", bindings, count=3)
+    freeze_workflow(case, workspace=tmp_path)
+    (case / "source.fxil").write_text(CORE, encoding="utf-8")
+    assert build_workflow(case, "B001", workspace=tmp_path)["status"] == "STATIC_PASS"
+    assert not (case / "reviews").exists()
+    result = deliver_workflow(case, "B001", "V001", workspace=tmp_path)
+    assert result["stage"] == 1 and result["hardware"] == "NOT_EXECUTED"
+
+
+def test_stage2_delivery_demands_four_distinct_version_bound_reviewers(tmp_path):
+    case = init_workflow("review", workspace=tmp_path)
+    bindings = {"requirements.md": "a" * 64}
+    reviews(case, "stage2-B001", bindings, count=3)
     with pytest.raises(ValueError, match="four"):
-        freeze_workflow(case, workspace=tmp_path)
-    assert not (case / "s1-freeze.md").exists()
-    reviews(case, "S1", bindings)
-    (case / "requirements.md").write_text("changed")
-    with pytest.raises(ValueError, match="Stale"):
-        freeze_workflow(case, workspace=tmp_path)
+        require_reviews(case, "stage2-B001", bindings)
+    reviews(case, "stage2-B001", bindings)
+    (case / "reviews/stage2-B001/extra.json").write_text(
+        (case / "reviews/stage2-B001/0.json").read_text(encoding="utf-8"), encoding="utf-8")
+    with pytest.raises(ValueError, match="Four different"):
+        require_reviews(case, "stage2-B001", bindings)
 
 
 def test_both_versions_receive_control_fix_and_old_download_does_not_transfer(tmp_path):
@@ -227,26 +255,27 @@ def test_requirements_revision_preserves_old_delivery_and_starts_unfrozen(tmp_pa
         revise_workflow(case, "V002", reason="retry", workspace=tmp_path)
 
 
-def stage_reviews(case, stage, batch=None):
+def stage2_reviews(case, batch):
     bindings = _hashes(case, INPUT_FILES)
+    bindings.update(_hashes(case, TEST_FREEZE_FILES))
     bindings["build/B001/BUILD.json"] = digest(case / "build/B001/BUILD.json")
-    if batch:
-        for filename in ("report.json", "trace.jsonl"):
-            name = f"evidence/hil/B001/{batch}/{filename}"
-            bindings[name] = digest(case / name)
-    reviews(case, f"stage{stage}-B001", bindings)
+    for filename in ("report.json", "trace.jsonl"):
+        name = f"evidence/hil/B001/{batch}/{filename}"
+        bindings[name] = digest(case / name)
+    reviews(case, f"stage2-B001", bindings)
 
 
-def test_stage_one_zip_contains_four_categories_two_programs_and_no_hardware_claim(tmp_path):
+def test_stage_one_zip_contains_contract_programs_and_no_tests_or_hardware_claim(tmp_path):
     case = built(tmp_path)
-    stage_reviews(case, 1)
     result = deliver_workflow(case, "B001", "V001-stage1", workspace=tmp_path)
     assert result["hardware"] == "NOT_EXECUTED"
     assert result["production_hardware"] == "UNVERIFIED"
     with zipfile.ZipFile(result["archive"]) as archive:
         names = {"/".join(Path(n).parts[1:]) for n in archive.namelist()}
-        assert {"requirements.md", "design.md", "test_cases.md", "build/B001/hil/MAIN.csv", "build/B001/production/MAIN.csv",
-                "build/B001/hil/instruction_list.md", "build/B001/production/instruction_list.md", "SUMMARY.md", "MANIFEST.md"} <= names
+        assert {"requirements.md", "design.md", "build/B001/hil/MAIN.csv", "build/B001/production/MAIN.csv",
+                "build/B001/hil/instruction_list.md", "build/B001/production/instruction_list.md",
+                "build/B001/hil/static_check.json", "SUMMARY.md", "MANIFEST.md"} <= names
+        assert "test_cases.md" not in names and "s2-freeze.md" not in names
         assert archive.testzip() is None
         extracted = tmp_path / "project/extracted"
         archive.extractall(extracted)
@@ -303,7 +332,7 @@ def run_test(case, tmp_path, **kwargs):
                    running=True, connected=True, workspace=tmp_path, **kwargs)
 
 
-def test_hil_requires_manual_download_and_explicit_bench_conditions(tmp_path, monkeypatch):
+def test_hil_requires_download_test_freeze_and_explicit_bench_conditions(tmp_path, monkeypatch):
     case = built(tmp_path)
     monkeypatch.setattr("plcweave.workflow.Bench", lambda **kw: pytest.fail("Opened serial"))
     with pytest.raises(FileNotFoundError):
@@ -311,6 +340,9 @@ def test_hil_requires_manual_download_and_explicit_bench_conditions(tmp_path, mo
     with pytest.raises(ValueError):
         confirm_download(case, "B001", operator="name", software="GX Works2", compiled=False, running=True, workspace=tmp_path)
     confirm_download(case, "B001", operator="name", software="GX Works2", compiled=True, running=True, workspace=tmp_path)
+    with pytest.raises(ValueError, match="not frozen"):
+        run_test(case, tmp_path)
+    frozen_tests(case, tmp_path)
     with pytest.raises(ValueError, match="isolated"):
         run_hil(case, "B001", "T001", port="COM1", workspace=tmp_path)
 
@@ -330,7 +362,7 @@ def test_hil_collects_raw_values_compares_and_always_closes(tmp_path, monkeypatc
         assert not DummyBench.instances[0].writes
     if mode == "good":
         assert any(row["kind"] == "sample" and row["values"]["M0"] == 1 for row in rows)
-        stage_reviews(case, 2, "T001")
+        stage2_reviews(case, "T001")
         result = deliver_workflow(case, "B001", "V001-stage2", stage=2, batch="T001", workspace=tmp_path)
         assert result["hardware"].startswith("PASS")
         assert result["production_hardware"] == "UNVERIFIED"
@@ -340,15 +372,9 @@ def test_hil_collects_raw_values_compares_and_always_closes(tmp_path, monkeypatc
 
 
 def test_polling_does_not_upgrade_continuous_invariants(tmp_path, monkeypatch):
-    case = init_workflow("continuous", workspace=tmp_path)
-    (case / "requirements.md").write_text("steady and continuous invariant", encoding="utf-8")
-    (case / "design.md").write_text(DESIGN, encoding="utf-8")
-    (case / "test_cases.md").write_text(SUITE.replace("| - | M0=1 |", "| M0=0..1 | M0=1 |"), encoding="utf-8")
-    reviews(case, "S1", _hashes(case, ("requirements.md", "test_cases.md", "design.md")))
-    freeze_workflow(case, workspace=tmp_path)
-    (case / "source.fxil").write_text(CORE)
-    assert build_workflow(case, "B001", workspace=tmp_path)["status"] == "LOCAL_PASS"
+    case = built(tmp_path)
     confirm_download(case, "B001", operator="pytest", software="fixture", compiled=True, running=True, workspace=tmp_path)
+    frozen_tests(case, tmp_path, suite=SUITE.replace("| - | M0=1 |", "| M0=0..1 | M0=1 |"))
     dummy(monkeypatch)
     assert run_test(case, tmp_path)["status"] == "UNVERIFIED"
 
@@ -360,175 +386,216 @@ def test_tampered_artifact_is_blocked_before_download(tmp_path):
         validate_build(case, "B001", workspace=tmp_path)
 
 
-@pytest.mark.parametrize('mutation',[lambda s:s.replace('OR M0\n',''),lambda s:s.replace('ANI M101','AND M101')])
-def test_failed_control_regression_is_never_delivered(tmp_path, mutation):
+def test_unsupported_instruction_never_reaches_a_build(tmp_path):
     case = prepared(tmp_path)
-    (case / "source.fxil").write_text(mutation(CORE),encoding='utf-8')
-    assert build_workflow(case, "B001", workspace=tmp_path)["status"] == "LOCAL_FAIL"
-    with pytest.raises(ValueError, match="SIM_PASS"):
-        deliver_workflow(case, "B001", "V001", workspace=tmp_path)
+    (case / "source.fxil").write_text(CORE.replace("OUT M0", "PID D0 D1 D2 D3"), encoding="utf-8")
+    with pytest.raises(ValueError):
+        build_workflow(case, "B001", workspace=tmp_path)
+    assert not (case / "build/B001").exists()
 
 
-def test_nonzero_reset_is_shared_by_both_local_variants(tmp_path):
-    case=prepared(tmp_path,suite=SUITE.replace('D1000=1;D1001=0','D1000=1',1))
-    result=build_workflow(case,'B001',workspace=tmp_path)
-    assert result['status']=='LOCAL_FAIL'
-    assert result['variants']=={'hil':'PROGRAM_FAIL','production':'PROGRAM_FAIL'}
+def test_unknown_instruction_fails_the_static_syntax_gate(tmp_path):
+    from plcweave.fx import export
+    folder = tmp_path / "check"
+    folder.mkdir()
+    source = folder / "source.fxil"
+    source.write_text(CORE.replace("OUT M0", "BOGUS M0"), encoding="utf-8")
+    export(source, folder)
+    result = _static_check(source, folder)
+    assert result["status"] == "STATIC_FAIL"
+    assert result["syntax"]["status"] == "BLOCKED"
+    assert not result["logic"]
 
 
-def test_changed_frozen_suite_changes_plc_fingerprint_with_same_core(tmp_path):
-    one=prepared(tmp_path/'first')
-    two=prepared(tmp_path/'second',suite=SUITE.replace('| 20 |','| 30 |'))
-    build_workflow(one,'B001',workspace=tmp_path/'first')
-    build_workflow(two,'B001',workspace=tmp_path/'second')
-    first=json.loads((one/'build/B001/hil/identity.json').read_text(encoding='utf-8'))
-    second=json.loads((two/'build/B001/hil/identity.json').read_text(encoding='utf-8'))
-    assert first['canonical_sha256']==second['canonical_sha256']
-    assert first['contract_sha256']!=second['contract_sha256']
-    assert first['fingerprint_words']!=second['fingerprint_words']
+def test_behavioral_regression_no_longer_blocks_stage1_but_awaits_hil(tmp_path):
+    """Static checks cannot see behavior; such bugs are caught by stage-2 HIL."""
+    case = prepared(tmp_path)
+    (case / "source.fxil").write_text(CORE.replace("OR M0\n", ""), encoding="utf-8")
+    assert build_workflow(case, "B001", workspace=tmp_path)["status"] == "STATIC_PASS"
+    result = deliver_workflow(case, "B001", "V001", workspace=tmp_path)
+    assert result["hardware"] == "NOT_EXECUTED"
+
+
+def test_changed_requirements_change_plc_fingerprint_with_same_core(tmp_path):
+    one = prepared(tmp_path / "first")
+    two = prepared(tmp_path / "second", requirements="# 需求\n启动保持，停止优先；另含指示灯。")
+    three = prepared(tmp_path / "third")
+    build_workflow(one, "B001", workspace=tmp_path / "first")
+    build_workflow(two, "B001", workspace=tmp_path / "second")
+    build_workflow(three, "B001", workspace=tmp_path / "third")
+    first = json.loads((one / "build/B001/hil/identity.json").read_text(encoding="utf-8"))
+    second = json.loads((two / "build/B001/hil/identity.json").read_text(encoding="utf-8"))
+    third = json.loads((three / "build/B001/hil/identity.json").read_text(encoding="utf-8"))
+    assert first["canonical_sha256"] == second["canonical_sha256"]
+    assert first["contract_sha256"] != second["contract_sha256"]
+    assert first["fingerprint_words"] != second["fingerprint_words"]
+    assert first["contract_sha256"] == third["contract_sha256"]
 
 
 def test_old_frozen_content_survives_user_edit_before_first_delivery(tmp_path):
-    case=built(tmp_path)
-    original=(case/'requirements.md').read_bytes()
-    (case/'requirements.md').write_text('# 新需求\n增加LED。',encoding='utf-8')
-    revision=revise_workflow(case,'V002',reason='LED',workspace=tmp_path)
-    assert (case/'baseline/s1/requirements.md').read_bytes()==original
-    assert (revision/'previous/requirements.md').read_bytes()==original
-    diff=(revision/'requirement-diff.md').read_text(encoding='utf-8')
-    assert '-启动保持，停止优先。' in diff and '+增加LED。' in diff
-    assert (case/'build/B001/inputs/requirements.md').read_bytes()==original
+    case = built(tmp_path)
+    original = (case / "requirements.md").read_bytes()
+    (case / "requirements.md").write_text("# 新需求\n增加LED。", encoding="utf-8")
+    revision = revise_workflow(case, "V002", reason="LED", workspace=tmp_path)
+    assert (case / "baseline/s1/requirements.md").read_bytes() == original
+    assert (revision / "previous/requirements.md").read_bytes() == original
+    diff = (revision / "requirement-diff.md").read_text(encoding="utf-8")
+    assert "-启动保持，停止优先。" in diff and "+增加LED。" in diff
+    assert (case / "build/B001/inputs/requirements.md").read_bytes() == original
 
 
-def test_init_failure_removes_only_its_new_owned_project(tmp_path,monkeypatch):
-    previous=init_workflow('existing',workspace=tmp_path)
-    original=Path.write_text
-    def fail(self,*args,**kwargs):
-        if self.name=='design.md':raise OSError('synthetic disk failure')
-        return original(self,*args,**kwargs)
-    monkeypatch.setattr(Path,'write_text',fail)
-    with pytest.raises(OSError):init_workflow('new',workspace=tmp_path)
-    assert not (tmp_path/'project/new').exists()
+def test_frozen_tests_travel_into_revisions_and_corruption_blocks_them(tmp_path):
+    case = downloaded(tmp_path)
+    original = (case / "baseline/s2/test_cases.md").read_bytes()
+    (case / "requirements.md").write_text("# 新需求\n增加LED。", encoding="utf-8")
+    with (case / "baseline/s2/test_cases.md").open("a", encoding="utf-8") as stream:
+        stream.write("\ncorrupted snapshot")
+    with pytest.raises(ValueError, match="Old frozen test snapshot"):
+        revise_workflow(case, "V002", reason="LED", workspace=tmp_path)
+    assert not (case / "revisions/V002").exists()
+    (case / "baseline/s2/test_cases.md").write_bytes(original)
+    revision = revise_workflow(case, "V002", reason="LED", workspace=tmp_path)
+    assert (revision / "test_cases.md").read_bytes() == original
+    assert (revision / "previous/test_cases.md").read_bytes() == original
+    assert not (revision / "s2-freeze.md").exists()
+
+
+def test_init_failure_removes_only_its_new_owned_project(tmp_path, monkeypatch):
+    previous = init_workflow("existing", workspace=tmp_path)
+    original = Path.write_text
+    def fail(self, *args, **kwargs):
+        if self.name == "design.md": raise OSError("synthetic disk failure")
+        return original(self, *args, **kwargs)
+    monkeypatch.setattr(Path, "write_text", fail)
+    with pytest.raises(OSError): init_workflow("new", workspace=tmp_path)
+    assert not (tmp_path / "project/new").exists()
     assert previous.exists()
 
 
-def test_hil_cancellation_saves_report_and_cleanup_before_reraising(tmp_path,monkeypatch):
-    case=downloaded(tmp_path)
+def test_hil_cancellation_saves_report_and_cleanup_before_reraising(tmp_path, monkeypatch):
+    case = downloaded(tmp_path)
     class Interrupted(DummyBench):
-        def sample(self,watch):
-            self.calls=getattr(self,'calls',0)+1
-            if self.calls==2:raise KeyboardInterrupt()
+        def sample(self, watch):
+            self.calls = getattr(self, "calls", 0) + 1
+            if self.calls == 2: raise KeyboardInterrupt()
             return super().sample(watch)
-    monkeypatch.setattr('plcweave.workflow.Bench',Interrupted)
-    with pytest.raises(KeyboardInterrupt):run_test(case,tmp_path)
-    report=json.loads((case/'evidence/hil/B001/T001/report.json').read_text(encoding='utf-8'))
-    assert report['status']=='TEST_INFRA_ERROR' and report['error_type']=='KeyboardInterrupt'
-    assert report['serial_closed'] is True and report['cleanup']=='CONFIRMED'
-    assert report['trace_sha256']==digest(case/'evidence/hil/B001/T001/trace.jsonl')
+    monkeypatch.setattr("plcweave.workflow.Bench", Interrupted)
+    with pytest.raises(KeyboardInterrupt): run_test(case, tmp_path)
+    report = json.loads((case / "evidence/hil/B001/T001/report.json").read_text(encoding="utf-8"))
+    assert report["status"] == "TEST_INFRA_ERROR" and report["error_type"] == "KeyboardInterrupt"
+    assert report["serial_closed"] is True and report["cleanup"] == "CONFIRMED"
+    assert report["trace_sha256"] == digest(case / "evidence/hil/B001/T001/trace.jsonl")
 
 
-def test_final_settled_read_crossing_deadline_cannot_pass(tmp_path,monkeypatch):
-    case=downloaded(tmp_path)
-    clock=[0.0]
-    monkeypatch.setattr('plcweave.workflow.time.monotonic',lambda:clock[0])
-    monkeypatch.setattr('plcweave.workflow.time.sleep',lambda duration:clock.__setitem__(0,clock[0]+duration))
+def test_final_settled_read_crossing_deadline_cannot_pass(tmp_path, monkeypatch):
+    case = downloaded(tmp_path)
+    clock = [0.0]
+    monkeypatch.setattr("plcweave.workflow.time.monotonic", lambda: clock[0])
+    monkeypatch.setattr("plcweave.workflow.time.sleep", lambda duration: clock.__setitem__(0, clock[0] + duration))
     class SlowFinal(DummyBench):
-        def sample(self,watch):
-            self.calls=getattr(self,'calls',0)+1
+        def sample(self, watch):
+            self.calls = getattr(self, "calls", 0) + 1
             # reset + (during, settled) * five steps: last settled is read 11
-            if self.calls==11:clock[0]+=1.0
+            if self.calls == 11: clock[0] += 1.0
             return super().sample(watch)
-    monkeypatch.setattr('plcweave.workflow.Bench',SlowFinal)
-    report=run_test(case,tmp_path,timeout_s=0.5)
-    assert report['status']=='TEST_INFRA_ERROR' and report['error_type']=='TimeoutError'
-    assert report['cleanup']=='CONFIRMED' and report['serial_closed']
+    monkeypatch.setattr("plcweave.workflow.Bench", SlowFinal)
+    report = run_test(case, tmp_path, timeout_s=0.5)
+    assert report["status"] == "TEST_INFRA_ERROR" and report["error_type"] == "TimeoutError"
+    assert report["cleanup"] == "CONFIRMED" and report["serial_closed"]
 
 
-@pytest.mark.parametrize('mode',['missing_input_echo','cleanup_failure','close_failure'])
-def test_hil_cannot_pass_missing_consumption_or_unconfirmed_cleanup(tmp_path,monkeypatch,mode):
-    case=downloaded(tmp_path)
+@pytest.mark.parametrize("mode", ["missing_input_echo", "cleanup_failure", "close_failure"])
+def test_hil_cannot_pass_missing_consumption_or_unconfirmed_cleanup(tmp_path, monkeypatch, mode):
+    case = downloaded(tmp_path)
     class Broken(DummyBench):
-        def sample(self,watch):
-            values=super().sample(watch)
-            if mode=='missing_input_echo' and 'M100' in watch:values.pop('M100')
-            if mode=='cleanup_failure' and len(self.writes)>=14:values['M0']=1
+        def sample(self, watch):
+            values = super().sample(watch)
+            if mode == "missing_input_echo" and "M100" in watch: values.pop("M100")
+            if mode == "cleanup_failure" and len(self.writes) >= 14: values["M0"] = 1
             return values
         def close(self):
-            if mode=='close_failure':raise OSError('synthetic close failure')
+            if mode == "close_failure": raise OSError("synthetic close failure")
             super().close()
-    monkeypatch.setattr('plcweave.workflow.Bench',Broken)
-    report=run_test(case,tmp_path)
-    assert report['status']=='TEST_INFRA_ERROR'
-    if mode=='close_failure':assert report['serial_closed'] is False
-    else:assert report['serial_closed'] is True
+    monkeypatch.setattr("plcweave.workflow.Bench", Broken)
+    report = run_test(case, tmp_path)
+    assert report["status"] == "TEST_INFRA_ERROR"
+    if mode == "close_failure": assert report["serial_closed"] is False
+    else: assert report["serial_closed"] is True
 
 
 def test_delivery_manifest_distinguishes_both_main_files(tmp_path):
-    case=built(tmp_path)
-    stage_reviews(case,1)
-    result=deliver_workflow(case,'B001','V001',workspace=tmp_path)
-    manifest=(result['folder']/'MANIFEST.md').read_text(encoding='utf-8')
-    for variant in ('hil','production'):
-        name=f'build/B001/{variant}/MAIN.csv'
-        assert f'| {name} | {digest(result["folder"]/name)} |' in manifest
+    case = built(tmp_path)
+    result = deliver_workflow(case, "B001", "V001", workspace=tmp_path)
+    manifest = (result["folder"] / "MANIFEST.md").read_text(encoding="utf-8")
+    for variant in ("hil", "production"):
+        name = f"build/B001/{variant}/MAIN.csv"
+        expected = f"| {name} | {digest(result['folder'] / name)} |"
+        assert expected in manifest
 
 
-def test_publish_retries_transient_lock_without_overwriting(tmp_path,monkeypatch):
+def test_publish_retries_transient_lock_without_overwriting(tmp_path, monkeypatch):
     from plcweave.projects import _publish
-    source=tmp_path/'owned';source.mkdir()
-    target=tmp_path/'version'
-    original=Path.rename
-    attempts=[]
-    def locked(self,destination):
+    source = tmp_path / "owned"; source.mkdir()
+    target = tmp_path / "version"
+    original = Path.rename
+    attempts = []
+    def locked(self, destination):
         attempts.append(self)
-        if len(attempts)==1:raise PermissionError('synthetic transient file lock')
-        return original(self,destination)
-    monkeypatch.setattr(Path,'rename',locked)
-    _publish(source,target)
-    assert len(attempts)==2 and target.is_dir() and not source.exists()
-    another=tmp_path/'another';another.mkdir()
-    with pytest.raises(FileExistsError):_publish(another,target)
+        if len(attempts) == 1: raise PermissionError("synthetic transient file lock")
+        return original(self, destination)
+    monkeypatch.setattr(Path, "rename", locked)
+    _publish(source, target)
+    assert len(attempts) == 2 and target.is_dir() and not source.exists()
+    another = tmp_path / "another"; another.mkdir()
+    with pytest.raises(FileExistsError): _publish(another, target)
     assert another.is_dir() and target.is_dir()
 
 
-@pytest.mark.parametrize('filename',['design-freeze.md','s1-freeze.md'])
-def test_partial_freeze_failure_rolls_back_owned_files(tmp_path,monkeypatch,filename):
-    case=init_workflow('freeze-error',workspace=tmp_path)
-    (case/'design.md').write_text(DESIGN,encoding='utf-8')
-    (case/'test_cases.md').write_text(SUITE,encoding='utf-8')
-    reviews(case,'S1',_hashes(case,('requirements.md','test_cases.md','design.md')))
-    original=Path.open
+@pytest.mark.parametrize("filename", ["design-freeze.md", "s1-freeze.md"])
+def test_partial_freeze_failure_rolls_back_owned_files(tmp_path, monkeypatch, filename):
+    case = init_workflow("freeze-error", workspace=tmp_path)
+    (case / "design.md").write_text(DESIGN, encoding="utf-8")
+    original = Path.open
     class FailedWrite:
-        def __init__(self,stream):self.stream=stream
-        def __enter__(self):return self
-        def write(self,value):
+        def __init__(self, stream): self.stream = stream
+        def __enter__(self): return self
+        def write(self, value):
             self.stream.write(value[:10])
-            raise OSError('synthetic partial freeze write')
-        def __exit__(self,*args):self.stream.close()
-    def fail(self,*args,**kwargs):
-        stream=original(self,*args,**kwargs)
-        return FailedWrite(stream) if self.name==filename and args and args[0]=='x' else stream
-    monkeypatch.setattr(Path,'open',fail)
-    with pytest.raises(OSError):freeze_workflow(case,workspace=tmp_path)
-    assert not (case/'design-freeze.md').exists()
-    assert not (case/'s1-freeze.md').exists()
-    assert not (case/'baseline/s1').exists()
-    assert (case/'requirements.md').exists() and (case/'reviews/S1').is_dir()
+            raise OSError("synthetic partial freeze write")
+        def __exit__(self, *args): self.stream.close()
+    def fail(self, *args, **kwargs):
+        stream = original(self, *args, **kwargs)
+        return FailedWrite(stream) if self.name == filename and args and args[0] == "x" else stream
+    monkeypatch.setattr(Path, "open", fail)
+    with pytest.raises(OSError): freeze_workflow(case, workspace=tmp_path)
+    assert not (case / "design-freeze.md").exists()
+    assert not (case / "s1-freeze.md").exists()
+    assert not (case / "baseline/s1").exists()
+    assert (case / "requirements.md").exists()
 
 
-@pytest.mark.parametrize('name',['requirements.md','design.md','test_cases.md'])
-def test_revision_rejects_corrupted_historical_md_before_creating_new_directory(tmp_path,name):
-    case=built(tmp_path)
-    (case/'requirements.md').write_text('# 用户新需求\n新增LED',encoding='utf-8')
-    with (case/'baseline/s1'/name).open('a',encoding='utf-8') as stream:stream.write('\ncorrupted snapshot')
-    with pytest.raises(ValueError,match='Old frozen snapshot'):
-        revise_workflow(case,'V002',reason='LED',workspace=tmp_path)
-    assert not (case/'revisions/V002').exists()
+@pytest.mark.parametrize("name", ["requirements.md", "design.md"])
+def test_revision_rejects_corrupted_historical_md_before_creating_new_directory(tmp_path, name):
+    case = built(tmp_path)
+    (case / "requirements.md").write_text("# 用户新需求\n新增LED", encoding="utf-8")
+    with (case / "baseline/s1" / name).open("a", encoding="utf-8") as stream: stream.write("\ncorrupted snapshot")
+    with pytest.raises(ValueError, match="Old frozen snapshot"):
+        revise_workflow(case, "V002", reason="LED", workspace=tmp_path)
+    assert not (case / "revisions/V002").exists()
 
 
 def test_requirement_diff_keeps_separate_lines_without_final_newline(tmp_path):
-    case=built(tmp_path)
-    (case/'requirements.md').write_text('# 需求\n新增LED',encoding='utf-8')
-    revision=revise_workflow(case,'V002',reason='LED',workspace=tmp_path)
-    diff=(revision/'requirement-diff.md').read_text(encoding='utf-8')
-    assert '-启动保持，停止优先。\n+新增LED\n' in diff
+    case = built(tmp_path)
+    (case / "requirements.md").write_text("# 需求\n新增LED", encoding="utf-8")
+    revision = revise_workflow(case, "V002", reason="LED", workspace=tmp_path)
+    diff = (revision / "requirement-diff.md").read_text(encoding="utf-8")
+    assert "-启动保持，停止优先。\n+新增LED\n" in diff
+
+
+def test_status_reports_test_authoring_gap_after_download(tmp_path):
+    case = built(tmp_path)
+    confirm_download(case, "B001", operator="pytest", software="fixture", compiled=True, running=True, workspace=tmp_path)
+    state = status_workflow(case, "B001", workspace=tmp_path)
+    assert state["state"] == "AUTHOR_AND_FREEZE_TESTS"
+    frozen_tests(case, tmp_path)
+    assert status_workflow(case, "B001", workspace=tmp_path)["state"] == "READY_FOR_HIL"

@@ -21,3 +21,5 @@ reusable/
 local/*
 !local/.gitkeep
 *.log
+# FX3U 第三方参考开源仓库（仅本地参考，来源/许可见 third-party-repos/README.md，不同步 GitHub）
+third-party-repos/

@@ -32,7 +32,13 @@ def frozen_suite(directory):
     source=suite_path(directory)
     if source.suffix=='.md':
         from .markdown_suite import read_freeze,parse_markdown
-        freeze=read_freeze(directory)
+        if (directory/'s2-freeze.md').exists():
+            # Two-phase projects freeze tests in stage 2, after stage-1 delivery.
+            freeze={'test_cases.md':read_freeze(directory,name='s2-freeze.md')['test_cases.md']}
+        else:
+            freeze=read_freeze(directory)
+            if 'test_cases.md' not in freeze:
+                raise ValueError('Tests are not frozen yet; run workflow freeze-tests before simulating or sampling')
     else:
         freeze=json.loads((directory/"s1-freeze.json").read_text(encoding="utf-8"))
     for file,expected in freeze.items():

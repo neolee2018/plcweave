@@ -4,9 +4,9 @@
 
 - **提示词一：安装 + 演示**——一条提示词让 Agent 自动装环境、跑测试、执行固定场景演示并
   打出交付 ZIP，中途不需要你回答任何问题；
-- **提示词二：真实项目编程**——按两阶段工作流开发你自己的控制程序：第一阶段交付
-  需求/设计/测试/程序（HIL 测试版与正式版两份指令表），第二阶段在你编译下载并确认后完成
-  在环测试与正式交付（见文末）。
+- **提示词二：真实项目编程**——按两阶段工作流开发你自己的控制程序：第一阶段做语法检查与
+  逻辑关系静态检查，通过即交付需求/设计/程序（HIL 测试版与正式版两份指令表，不跑本地仿真
+  回归）；第二阶段在你编译下载并确认后，先冻结测试用例再完成在环测试与正式交付（见文末）。
 
 两份都要求 Agent 能在本机执行终端命令和读写文件；纯网页聊天窗口（没有本机执行能力的对话）
 跑不了这些流程。
@@ -94,21 +94,24 @@ Agent 第一步就会读它们。
    仓库 project/<项目名>/ 下；我指定了外部目录就遵从。
 1. 第一阶段（AI 主导，我只改 requirements.md）：
    - 澄清需求后用 workflow init 建项目；项目名已存在就停下问我，不合并不覆盖；
-   - 你维护 design.md、独立 test_cases.md 和共用 source.fxil，关键产出给我确认；
+   - 你维护 design.md 和共用 source.fxil，关键产出给我确认；本阶段不写测试用例；
    - 构建前向我收集串口参数（COM 口、波特率、校验、站号），程序与台架必须同一套；
-   - S1 冻结（workflow freeze）前组织 4 个不同独立上下文的 Agent 复核，主 Agent 不计入；
-   - workflow build 生成同一控制核心的 HIL 测试版与正式版两份指令表；
-   - 复核通过后 workflow deliver --stage 1：在项目 delivery/<版本>/ 打成 ZIP，汇报需求、
-     设计、测试、程序四类成果与哈希清单。
+   - workflow freeze 冻结需求与设计后，workflow build 生成同一控制核心的 HIL 测试版与
+     正式版两份指令表；构建门禁是语法检查（真实指令解释器编译、未知指令阻断）加逻辑
+     关系静态检查（双线圈、未驱动器件、梯形结构）——交付前不跑本地仿真回归；
+   - workflow deliver --stage 1：在项目 delivery/<版本>/ 打成 ZIP，汇报需求、设计、
+     程序与哈希清单。
 2. 第二阶段（我烧录，你采样）：
    - 我在 GX Works2 导入 hil/MAIN.csv 与同目录 COMMENT.csv，选对 CPU，编译并下载 HIL 版；
-   - 我明确确认"已编译、已下载、RUN"后，你才执行 workflow confirm-download；等我确认
-     隔离空机、RS485 已接后再 workflow test 采样，与冻结预期比较；
+   - 我明确确认"已编译、已下载、RUN"后，你才执行 workflow confirm-download；随后依据
+     冻结需求独立编写 test_cases.md 并用 workflow freeze-tests 冻结——预期必须在看到
+     PLC 实际输出之前写好并冻结；
+   - 等我确认隔离空机、RS485 已接后再 workflow test 采样，与冻结预期比较；
    - 程序缺陷修共用核心并出新 build，等我重新编译下载确认后再测；不放宽预期，不把通信
      或脚本错误当程序缺陷；
    - 全部规定用例同版 PASS、四位独立复核通过后 workflow deliver --stage 2。
 3. 边界（任何情况下）：不改冻结预期；未知指令不当 NOP；未经我明确确认不打开串口、不写
-   设备、不切 RUN/STOP；SIM_PASS 与稳态采样不冒充正式/电气验收；被权限或环境挡住时
+   设备、不切 RUN/STOP；静态检查与稳态采样不冒充正式/电气验收；被权限或环境挡住时
    如实说明卡在哪一步，不伪造完成。我改需求时走 workflow revise，旧快照与证据保留。
 ```
 
@@ -136,30 +139,34 @@ Protection / reset / acceptance: (add your acceptance requirements)
 1. Phase 1 (AI-led; I edit only requirements.md):
    - Clarify my requirement, then workflow init the project; on a name clash stop and ask me,
      never merge or overwrite;
-   - You maintain design.md, independent test_cases.md and the shared source.fxil; show me key
-     outputs for confirmation;
+   - You maintain design.md and the shared source.fxil; show me key outputs for confirmation;
+     test cases are not written in this phase;
    - Collect serial parameters from me before building (COM port, baud, parity, station); the
      program and the bench must use the same set;
-   - Arrange review by 4 distinct fresh-context agents before the S1 freeze (workflow freeze);
-     the main agent does not count;
-   - workflow build produces the HIL test build and the production build from one shared
-     control core;
-   - After review passes, workflow deliver --stage 1: build delivery/<version>/ plus a ZIP in
-     the project and report requirements, design, tests, program and the hash manifest.
+   - workflow freeze freezes requirements and design, then workflow build produces the HIL test
+     build and the production build from one shared control core; the build gate is a static
+     syntax check (real instruction interpreter, unknown instructions blocked) plus static
+     logic diagnostics (double-coil, undriven devices, ladder structure) — no local
+     simulation regression is required before delivery;
+   - workflow deliver --stage 1: build delivery/<version>/ plus a ZIP in the project and
+     report requirements, design, program and the hash manifest.
 2. Phase 2 (I download, you sample):
    - I import hil/MAIN.csv with its COMMENT.csv into GX Works2, select the right CPU, compile
      and download the HIL build;
    - Only after I explicitly confirm "compiled, downloaded, RUN" do you run workflow
-     confirm-download; after I confirm the isolated idle bench with RS485 connected, run
-     workflow test and compare against frozen expectations;
+     confirm-download; then author independent test_cases.md from the frozen requirements and
+     freeze them with workflow freeze-tests before touching hardware (expectations must never
+     be written after seeing PLC outputs);
+   - After I confirm the isolated idle bench with RS485 connected, run workflow test and
+     compare PLC samples against the frozen expectations;
    - For program defects fix the shared core into a new build and wait for my re-download and
      confirmation; never loosen expectations and never blame communication or script errors on
      the PLC program;
-   - After all planned cases PASS on one final build and the four-agent review passes, run
-     workflow deliver --stage 2.
+   - After all planned cases PASS on one final build and the four-agent independent review
+     passes, run workflow deliver --stage 2.
 3. Boundaries (always): never edit frozen expectations; never treat unknown instructions as
    NOPs; never open a serial port, write a device or switch RUN/STOP without my explicit
-   confirmation; never present SIM_PASS or steady-state sampling as formal/electrical
+   confirmation; never present static checks or steady-state sampling as formal/electrical
    acceptance; when blocked, say exactly which step is blocked instead of faking completion.
    When I change requirements use workflow revise and keep old snapshots and evidence.
 ```

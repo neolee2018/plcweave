@@ -173,16 +173,11 @@ def parse_markdown(path):
     return _validate_model(suite)
 
 
-def freeze_markdown(directory):
+def _write_freeze(directory,target,title,names):
+    """Write one freeze table; the caller owns checks and rollback ordering."""
     from .testing import digest
-    from .validation import validate_suite
-    directory=Path(directory);target=directory/'s1-freeze.md'
-    if target.exists():raise FileExistsError('S1 freeze already exists; create a reviewed revision')
-    if (directory/'source.fxil').exists():raise ValueError('Initial S1 freeze must precede PLC source')
-    if (directory/'test_cases.json').exists():raise ValueError('Ambiguous test sources')
-    suite=parse_markdown(directory/'test_cases.md');validate_suite(suite)
-    rows=[(name,digest(directory/name)) for name in ['requirements.md','test_cases.md']]
-    text='# S1 freeze\n\n| File | SHA256 |\n| --- | --- |\n'+''.join(f'| {name} | {sha} |\n' for name,sha in rows)
+    rows=[(name,digest(directory/name)) for name in names]
+    text=f'# {title}\n\n| File | SHA256 |\n| --- | --- |\n'+''.join(f'| {name} | {sha} |\n' for name,sha in rows)
     created=False
     try:
         with target.open('x',encoding='utf-8') as stream:
@@ -194,15 +189,54 @@ def freeze_markdown(directory):
     return target
 
 
-def read_freeze(directory):
-    text=(Path(directory)/'s1-freeze.md').read_text(encoding='utf-8-sig')
+def freeze_markdown(directory):
+    """Legacy single-program freeze: requirements plus tests before the source."""
+    from .validation import validate_suite
+    directory=Path(directory);target=directory/'s1-freeze.md'
+    if target.exists():raise FileExistsError('S1 freeze already exists; create a reviewed revision')
+    if (directory/'source.fxil').exists():raise ValueError('Initial S1 freeze must precede PLC source')
+    if (directory/'test_cases.json').exists():raise ValueError('Ambiguous test sources')
+    suite=parse_markdown(directory/'test_cases.md');validate_suite(suite)
+    return _write_freeze(directory,target,'S1 freeze',['requirements.md','test_cases.md'])
+
+
+def freeze_contract(directory):
+    """Stage-1 contract freeze: requirements and design only (2026-11-08 revision).
+
+    Test cases are no longer part of the pre-program freeze; they are authored
+    and frozen in stage 2 via freeze_tests before hardware-in-the-loop sampling.
+    """
+    directory=Path(directory);target=directory/'s1-freeze.md'
+    if target.exists():raise FileExistsError('S1 freeze already exists; create a reviewed revision')
+    if (directory/'source.fxil').exists():raise ValueError('Initial S1 freeze must precede PLC source')
+    if (directory/'test_cases.json').exists():raise ValueError('Ambiguous test sources')
+    for name in ('requirements.md','design.md'):
+        if not (directory/name).is_file():raise ValueError(f'Freeze input is missing: {name}')
+    return _write_freeze(directory,target,'S1 freeze',['requirements.md','design.md'])
+
+
+def freeze_tests(directory):
+    """Stage-2 test freeze: binds test_cases.md before any HIL access."""
+    from .validation import validate_suite
+    directory=Path(directory);target=directory/'s2-freeze.md'
+    if target.exists():raise FileExistsError('Test freeze already exists; create a new revision')
+    if (directory/'test_cases.json').exists():raise ValueError('Ambiguous test sources')
+    suite=parse_markdown(directory/'test_cases.md');validate_suite(suite)
+    return _write_freeze(directory,target,'S2 test freeze',['test_cases.md'])
+
+
+def read_freeze(directory,name='s1-freeze.md'):
+    text=(Path(directory)/name).read_text(encoding='utf-8-sig')
     result={}
     for line in text.splitlines():
         if not line.startswith('|'):continue
         cells=[x.strip() for x in line.strip('|').split('|')]
         if cells==['File','SHA256'] or all(re.fullmatch(r':?-{3,}:?',s) for s in cells):continue
-        if len(cells)!=2 or cells[0] not in {'requirements.md','test_cases.md'} or not re.fullmatch('[0-9a-f]{64}',cells[1]) or cells[0] in result:
+        if len(cells)!=2 or cells[0] not in {'requirements.md','test_cases.md','design.md'} or not re.fullmatch('[0-9a-f]{64}',cells[1]) or cells[0] in result:
             raise ValueError('Invalid Markdown freeze')
         result[cells[0]]=cells[1]
-    if set(result)!={'requirements.md','test_cases.md'}:raise ValueError('Incomplete Markdown freeze')
+    if name=='s2-freeze.md':
+        if set(result)!={'test_cases.md'}:raise ValueError('Incomplete Markdown test freeze')
+    elif set(result) not in ({'requirements.md','test_cases.md'},{'requirements.md','design.md'}):
+        raise ValueError('Incomplete Markdown freeze')
     return result

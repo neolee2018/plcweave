@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'none'; base-uri 'none'; form-action 'none'">
+<title>指令表转 DVP · AI 转换提示词</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f3f6fa;color:#172b40;font:16px/1.7 'Segoe UI','Microsoft YaHei',sans-serif}
+main{max-width:1000px;margin:40px auto;padding:32px;background:white;border:1px solid #dbe4ed;border-radius:16px}
+.brand{font-size:14px;color:#005ca1;font-weight:700;letter-spacing:1px}h1{font-size:30px;line-height:1.35;margin:12px 0}
+.intro{color:#40566b}.steps{padding-left:24px}.note{background:#edf4fa;padding:16px;border-left:4px solid #005ca1}
+.toolbar{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin:24px 0 12px}
+button{border:0;border-radius:7px;padding:12px 22px;background:#005ca1;color:white;cursor:pointer;font:inherit;font-weight:600}
+button:hover{background:#004879}button:focus-visible,textarea:focus-visible{outline:3px solid #f26520;outline-offset:3px}
+textarea{display:block;width:100%;height:440px;resize:vertical;border:1px solid #aebfce;border-radius:8px;padding:18px;font:14px/1.8 Consolas,'Microsoft YaHei',monospace;color:#172b40;background:#fcfdff}
+label{display:block;font-weight:600;margin-bottom:8px}#status{color:#314c64}a{color:#005ca1}.footer{font-size:14px;color:#536a7d}
+@media(max-width:640px){main{margin:0;padding:24px 18px;border-radius:0}h1{font-size:25px}textarea{height:400px}.toolbar{align-items:flex-start;flex-direction:column}}
+</style>
+<main>
+<div class="brand">PLCWeave · 控程工坊</div>
+<h1>把指令表交给 AI，转换为 DVP 工程</h1>
+<p class="intro">复制下面的提示词，与指令表一起发给已打开本仓库的 Codex 或类似 AI Agent。提示词要求 AI 先查看已有 DVP 模板，再检查并转换程序。</p>
+<ol class="steps"><li>点击“复制转换提示词”。</li><li>粘贴给 AI，附上指令表、PLC 完整型号、厂家软件版本和客户项目路径。</li><li>取得工程候选后，在匹配机型的 WPLSoft 中打开、编译并核对。</li></ol>
+<p class="note">请让 AI 能够读取本机项目。已有模板属于本机项目资料，公开克隆可能不包含。现有 ES2 转换器仅覆盖成对 LD X / OUT Y 与末尾 END；其他程序需要另行核实支持。生成文件与厂家编译、实机验证分别记录。</p>
+<div class="toolbar"><button id="copy" type="button">复制转换提示词</button><span id="status" role="status" aria-live="polite">复制后，再附上你的指令表程序。</span></div>
+<label for="prompt">完整提示词（可查看、全选复制）</label>
+<textarea id="prompt" readonly spellcheck="false">你在 PLCWeave 仓库中工作。请把我随本消息附上的指令表程序转换为适合目标台达 PLC、可在匹配版本 WPLSoft 中打开的原生 .dvp 工程候选，并交付实际文件。请真实执行文件检查与转换，不能只解释步骤或把 TXT 改名为 .dvp。
+
+【输入】
+- 指令表：本消息附件或后附全文；若未提供，请先索取，不使用演示程序替代。
+- 目标 PLC 完整型号、厂家软件及版本：以我提供的信息为准；缺少影响转换的信息时先询问，不能从示例模板默认推断我的目标。
+- 客户项目路径、程序版本及 HIL/正式版身份：优先使用我指定的项目；未指定时按 AGENTS.md 在 project/ 下选择未占用的新目录。两版分别处理，不混用。
+
+【先看已有模板与工具】
+1. 先阅读 AGENTS.md、docs/DVP-CONVERSION.md 和适用的 skills/plc-program-development/SKILL.md。定位仓库根目录；不可访问仓库时先说明并索取所需材料。
+2. 必须先实际查看项目中已经有的 DVP 程序模板（我口述的“PVP 模板”）：优先检查 project/delta-dvp60es200r-io-test/template/Dvp0.dvp 以及同目录 Dvp0.rcm、Dvp0.sym、Dvp0.csv。记录实际路径、文件 SHA256、目标型号与软件适用性。模板只读，不覆盖。
+3. 阅读 project/delta-dvp60es200r-io-test/hmi/prototype/converter-core.js、scripts/build_html.py、dvp-converter.html 及项目 delivery/V005-html-converter-v2/README.md、TEST-REPORT.md 和相关 evidence。先理解已有解析、模板哈希校验、程序区编码、容量、机型字段和配套文件，再复用已有实现。任何已有验证结论仅用于其明确覆盖的输入和版本。
+4. 上述路径是本机候选，公开克隆可能不含客户文件。不存在就搜索本仓其他已授权模板和工具，列出实际使用资源；仍缺少有效模板或格式依据时暂停原生 DVP 生成并向我索取材料，不编造模板或依赖不可访问的其他盘符。不得公开客户文件。
+
+【转换与检查】
+5. 识别输入方言、编码、行号、注释及网络顺序，列出指令与操作数覆盖。FX 指令表不能当作已经兼容台达：逐项核对目标 CPU 的系统位、定时器时基、计数器位宽、保持区、地址范围和指令语义；需要权威依据时查该型号官方资料，不猜测地址替换，不静默改变控制逻辑或冻结预期。
+6. 当前已知 ES2 转换器只支持成对 LD X… / OUT Y… 网络和末尾 END，X/Y 为八进制；以实际源码和证据核对范围，不推广为任意 DVP 机型或指令通用支持。范围内优先直接复用现有工具；范围外列出不支持项与所缺证据。只有取得对应型号的编码/编译依据并完成必要验证后才扩展；否则明确阻断原生工程输出，可另附已核对的台达指令参考文本，但不得将其宣称为已完成 DVP 转换。
+7. 保留输入原件与哈希、注释和指令顺序。验证模板身份、程序容量、END、生成文件长度、程序区与应保持的头尾/机型字段；把生成程序解码回读，与规范化后的目标指令逐条比较。确有品牌语义转换时另留原始→目标映射和依据，不能仅以文件存在判成功。模板中的默认标题/注释不可冒充我的程序注释；需要保留的注释输出独立映射文件并说明实际导入情况。
+8. 记录每项实际执行的命令与结果，分别标注文件生成、静态/回读检查、厂家打开/编译、仿真、实机验证。未执行项写 UNVERIFIED；FX 仿真不证明 DVP 等价。厂家软件不可用就交付候选并明确编译待确认，不伪造通过。
+
+【交付】
+9. 按项目约定创建新的 build 与 delivery/&lt;新版本&gt;/，不覆盖任何已有版本。成功生成时包含 .dvp、必要且适用的同名配套文件、原始指令表快照、规范化目标指令、注释映射、转换报告（模板来源/哈希、CPU/软件、指令覆盖、差异、检查结果及未验证项）和 SHA256 清单；核验 ZIP 可读及其内容与清单一致。需独立复核的节点按仓库规则执行，不冒充复核结果。若阻断，交付问题清单与已完成的可核验材料，明确尚未生成有效 DVP。
+10. 最后告诉我实际输出文件和 ZIP 的完整路径、已验证范围，以及在 WPLSoft 中打开/编译核对的下一步。未得到现场明确授权与确认，不连接串口、不下载、不切 RUN/STOP、不操作设备。回收本任务临时进程与文件，保留成果和证据。
+
+请从读取项目说明、定位已有 DVP 模板与检查我提供的指令表开始。</textarea>
+<p class="footer">本页离线运行，不上传内容，不连接 PLC。<a href="../../docs/DVP-CONVERSION.md">查看转换说明与模板路径</a> · <a href="../../README.zh-CN.md">返回项目说明</a></p>
+</main>
+<script>
+const prompt = document.getElementById('prompt');
+const button = document.getElementById('copy');
+const status = document.getElementById('status');
+button.addEventListener('click', async () => {
+  let copied = false;
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(prompt.value);
+      copied = true;
+    }
+  } catch (_) { /* Local browser policies may require the selection fallback. */ }
+  if (!copied) {
+    prompt.focus(); prompt.select();
+    try { copied = document.execCommand('copy'); } catch (_) {}
+  }
+  button.textContent = copied ? '已复制提示词' : '重新复制提示词';
+  status.textContent = copied
+    ? '已复制。请粘贴给 AI，并附上指令表、PLC 型号和软件版本。'
+    : '自动复制未成功。提示词已选中，请按 Ctrl+C（Mac：⌘C）复制。';
+});
+</script>
+</html>
