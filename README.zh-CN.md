@@ -143,7 +143,8 @@ AI Agent，并在【我的控制需求】处填入你的控制要求（写不清
    skills/plc-program-development/references/two-phase-workflow.md。环境没装就先按 README
    第 1 节装好：创建专用 .venv；先 python -m pip install ./vendor/gxwlib，再
    python -m pip install -e ".[test]"；导入与 --help 验证通过。不要动无关环境。项目默认建在
-   仓库 project/<项目名>/ 下；我指定了外部目录就遵从。
+   仓库 project/<项目名>/ 下；我指定了外部目录就遵从；项目内目录与文件名一律用英文
+   （lab-tests/、delivery/、delivery-docs/），不用中文路径。
 1. 第一阶段（AI 主导，我只改 requirements.md）：
    - 澄清需求后用 workflow init 建项目；项目名已存在就停下问我，不合并不覆盖；
    - 你维护 design.md 和共用 source.fxil，关键产出给我确认；本阶段不写测试用例；
@@ -162,7 +163,9 @@ AI Agent，并在【我的控制需求】处填入你的控制要求（写不清
    - 等我确认隔离空机、RS485 已接后再 workflow test 采样，与冻结预期比较；
    - 程序缺陷修共用核心并出新 build，等我重新编译下载确认后再测；不放宽预期，不把通信
      或脚本错误当程序缺陷；
-   - 全部规定用例同版 PASS、四位独立复核通过后 workflow deliver --stage 2。
+   - 全部规定用例同版 PASS、四位独立复核通过后 workflow deliver --stage 2；
+   - 我说"测试完毕，导出生产程序"后：核验正式版不含任何仿真/注入寄存器（寄存器表与文档
+     条目同步剔除），把最终版文档导出到项目 delivery/<版本>/ 并打 ZIP，不覆盖旧版本。
 3. 边界（任何情况下）：不改冻结预期；未知指令不当 NOP；未经我明确确认不打开串口、不写
    设备、不切 RUN/STOP；静态检查与稳态采样不冒充正式/电气验收；被权限或环境挡住时
    如实说明卡在哪一步，不伪造完成。我改需求时走 workflow revise，旧快照与证据保留。
@@ -199,7 +202,7 @@ AI Agent，并在【我的控制需求】处填入你的控制要求（写不清
 ./tools/plcweave.ps1 init quickstart
 ```
 
-只创建requirements.md、test_cases.md、README.md。用户指定外部目录可用 `init my-project --directory D:/PLCProjects/my-project`；仓库内客户目录只能放在project下。
+只创建requirements.md、test_cases.md、README.md。用户指定外部目录可用 `init my-project --directory <客户指定目录>/<项目名>`；仓库内客户目录只能放在project下。
 
 在创建source.fxil**之前**写需求和测试：
 
@@ -290,15 +293,19 @@ STATIC_PASS、SIM_PASS、厂家验证、硬件观测、电气/带载分别记录
 ```text
 skills/ src/ tools/ tests/ vendor/ docs/      # 技能、工具、工具测试和说明
 project/
-  customer-project/                         # 公共Git默认忽略
+  customer-project/                         # 公共Git默认忽略；目录与文件名一律英文
     requirements.md  test_cases.md  s1-freeze.md
     source.fxil
     Doc/  evidence/  reviews/
-    delivery/<version>/
+    lab-tests/                              # 仿真与台架产物
+    delivery-docs/                          # 历史交付归档
+    delivery/<version>/                     # 正式交付，不覆盖既有版本
     delivery/customer-project-<version>.zip
 ```
 
 每客户独立文件夹，支持明确指定的外部目录；客户内容不能放进工具代码、测试、说明或技能中。新草稿仅MD，历史冻结JSON可兼容读取但不改写；真实执行报告/轨迹可用JSON/CSV。交付只选定项目成果，不打包环境、凭据、其他客户或整个仓库。
+
+客户项目内目录与文件名一律英文（lab-tests/、delivery/、delivery-docs/），保证交付包和脚本在不支持中文路径的电脑上可用。客户确认“测试完毕，导出生产程序”后：先从正式版程序删除全部仿真/注入寄存器（寄存器表与文档条目同步剔除），再把最终版文档导出到 delivery/<版本>/ 并打成新ZIP，不覆盖既有版本。
 
 ## 5. AI Agent执行指令
 

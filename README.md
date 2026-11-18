@@ -159,7 +159,8 @@ Protection / reset / acceptance: (add your acceptance requirements)
    not installed, follow README section 1: create a dedicated .venv; install ./vendor/gxwlib
    first, then -e ".[test]"; verify the import and --help. Never touch unrelated environments.
    Create the project under project/<name>/ in the repository unless I specify an external
-   directory.
+   directory. Use English-only folder and file names inside the project (lab-tests/,
+   delivery/, delivery-docs/) — never Chinese paths.
 1. Phase 1 (AI-led; I edit only requirements.md):
    - Clarify my requirement, then workflow init the project; on a name clash stop and ask me,
      never merge or overwrite;
@@ -187,7 +188,11 @@ Protection / reset / acceptance: (add your acceptance requirements)
      confirmation; never loosen expectations and never blame communication or script errors on
      the PLC program;
    - After all planned cases PASS on one final build and the four-agent independent review
-     passes, run workflow deliver --stage 2.
+     passes, run workflow deliver --stage 2;
+   - When I say testing is complete and ask to export the production program: verify the
+     production build contains no simulation/injection registers (strip them from register
+     tables and docs), then export the final document set into delivery/<version>/ as a ZIP
+     without overwriting older versions.
 3. Boundaries (always): never edit frozen expectations; never treat unknown instructions as
    NOPs; never open a serial port, write a device or switch RUN/STOP without my explicit
    confirmation; never present static checks or steady-state sampling as formal/electrical
@@ -205,7 +210,7 @@ This example checks installation and the CLI. It does not contact a PLC, certify
 ./tools/plcweave.ps1 init quickstart
 ```
 
-Only `requirements.md`, `test_cases.md`, and `README.md` are created. For a user-selected external folder: `init my-project --directory D:/PLCProjects/my-project`. Internal customer folders must be under `project/`.
+Only `requirements.md`, `test_cases.md`, and `README.md` are created. For a user-selected external folder: `init my-project --directory <customer-folder>/my-project`. Internal customer folders must be under `project/`.
 
 Write the requirements and test **before creating `source.fxil`**:
 
@@ -296,15 +301,19 @@ Separate `STATIC_PASS`, `SIM_PASS`, vendor checks, hardware observations and ele
 ```text
 skills/ src/ tools/ tests/ vendor/ docs/      # toolkit, tests and documentation
 project/
-  customer-project/                         # ignored by public Git
+  customer-project/                         # ignored by public Git; English folder/file names only
     requirements.md  test_cases.md  s1-freeze.md
     source.fxil
     Doc/  evidence/  reviews/
-    delivery/<version>/
+    lab-tests/                              # simulation & bench artifacts
+    delivery-docs/                          # archived past deliveries
+    delivery/<version>/                     # formal deliveries, never overwrite an existing version
     delivery/customer-project-<version>.zip
 ```
 
 Every customer gets an independent folder; explicit external directories are supported. Customer artifacts never belong in toolkit code, tests, docs, or skills. New drafts are MD-only; legacy frozen JSON evidence can be read without rewriting it. Actual execution reports/traces may use JSON/CSV. Package only selected project deliverables—not environments, secrets, other customers, or the whole repository.
+
+Folder and file names inside customer projects are English-only (`lab-tests/`, `delivery/`, `delivery-docs/`) so packages and scripts keep working on machines without CJK path support. When the customer confirms testing is complete and asks for the production program, first strip every simulation/injection register from the production build and its register tables/docs, then export the final document set into `delivery/<version>/` as a new ZIP without overwriting older versions.
 
 ## 5. AI-agent execution instructions
 

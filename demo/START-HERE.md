@@ -212,7 +212,7 @@ ZIP 内至少包含约定的六项：
 | 客户不想接硬件 | 用 `--not-connected`；照常打包，S6 写“未执行”，完成度 60% |
 | GX Works2 导入失败 | 本工具不保证厂商导入；改用 `source.fxil` 的 `#instructions` 段或按你的 GX 版本转换，并如实记录“未导入成功”，不要改冻结预期 |
 | PowerShell 禁止脚本 | 改用 `./.venv/Scripts/python.exe -m plcweave ...`，不要改全局执行策略 |
-| 想放外部目录 | `demo start` 加 `--directory D:/路径/项目`；ZIP 名按目录名生成，不一定是 `<项目名>` |
+| 想放外部目录 | `demo start` 加 `--directory <客户指定目录>/<项目>`；ZIP 名按目录名生成，不一定是 `<项目名>` |
 | 端口打不开 | 检查 USB-RS485 驱动、COM 号是否被占用；不要改程序预期 |
 | `preflight` 身份不符 | 说明烧录的不是当前版本，或 D196/D197 不匹配；停止，不写设备 |
 | 客户临时改波特率/校验/站号 | 重新建一个项目重新烧录；不要只改 `bench_config.json` 造成程序与台架不一致 |

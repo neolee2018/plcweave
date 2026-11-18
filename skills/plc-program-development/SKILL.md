@@ -18,6 +18,7 @@ description: 用PLCWeave进行需求驱动的PLC设计、静态语法/逻辑检�
 - 用户未指定目录时，创建 `<工具仓库>/project/<项目名称>/`；每个项目独立建目录，重名时停止并选择新名称，不能合并或覆盖既有项目。
 - 用户指定项目目录时遵从该位置；若位于本工具仓库内，仍必须在 `project/` 下。不得把客户文件放进 `src/`、`tests/`、`docs/`、技能目录或历史 `private/`。
 - `project/` 中的客户内容默认被公共Git忽略；可按项目另行建立私有版本库。公共仓库不分发客户程序、厂商资料或凭据。
+- **客户项目内的目录名和文件名一律用英文**（如 `lab-tests/`、`delivery/`、`delivery-docs/`、`Doc/`），不用中文命名：部分客户电脑/解压环境不支持中文路径，会导致脚本和交付包运行失败。仿真与台架产物放 `lab-tests/`，正式交付放 `delivery/<版本>/`，历史交付归档放 `delivery-docs/`。
 
 ## 演示入口（克隆后首次）
 
@@ -60,6 +61,13 @@ description: 用PLCWeave进行需求驱动的PLC设计、静态语法/逻辑检�
 - 保留PASS / PROGRAM_FAIL / TEST_INFRA_ERROR / UNVERIFIED。普通轮询不能证明每扫描轨迹、未测电气量或真实水压闭环；不通过放宽原容差追求PASS。
 - 显然精度不足时记录缺口，停止无效重试。只有已证明的程序问题回S2；工具问题先修工具。
 
+## 生产导出（客户确认“测试完毕”后）
+
+- **触发**：客户明确表示测试完毕、要求导出生产程序（如“测试完毕，导出生产程序”）。收到该确认之前，交付保持HIL/测试版本，不擅自改称生产版。
+- **删除所有仿真寄存器**：导出前核验正式版程序（`build/<版本>/production/`）不含任何HIL注入寄存器（injection D区）、仿真专用段和台架替代输入；仅用于仿真/台架的寄存器必须从正式版程序中删除，`register_map.csv`、`HMI-register-map.md` 等寄存器表和说明文档同步剔除这些条目（可注明“HIL/仿真接口仅存在于测试版”）。删除涉及共用核心改动时，按修订流程（`revise` → freeze → build → 用户重新编译下载确认）执行，不得只改文档不改程序。
+- **导出最终版文档**：需求、设计、程序说明、正式版指令表与注释、寄存器表、HIL测试总结、MANIFEST哈希清单，放入 `<客户指定工作目录>/delivery/<版本>/` 并打成ZIP；不覆盖既有版本，核验清单与压缩包后再交付。
+- **路径规则**：本技能所有路径示例一律使用 `<客户指定工作目录>` 占位符，禁止写死绝对路径；实际位置以客户指定的项目工作目录为准。
+
 ## 最终交付
 
 - 必须先在客户项目内建立 `delivery/<版本>/`，再把该交付目录打成ZIP，放在项目的 `delivery/` 下。不能只返回分散文件或只给仓库路径。
@@ -88,10 +96,10 @@ description: 用PLCWeave进行需求驱动的PLC设计、静态语法/逻辑检�
 
 ```powershell
 ./tools/plcweave.ps1 init 客户项目名
-./tools/plcweave.ps1 init 客户项目名 --directory F:/客户指定路径/项目
+./tools/plcweave.ps1 init 客户项目名 --directory <客户指定工作目录>/<项目名>
 ./tools/plcweave.ps1 freeze project/客户项目名
 ./tools/plcweave.ps1 simulate project/客户项目名
-./tools/plcweave.ps1 package project/客户项目名 --version V001 --file 实验室测试/MAIN.csv --file 实验室测试/COMMENT.csv --file Doc/Blackbox-Test-Cases_EN.pdf --file Doc/项目-il-annotated_EN.pdf
+./tools/plcweave.ps1 package project/客户项目名 --version V001 --file lab-tests/MAIN.csv --file lab-tests/COMMENT.csv --file Doc/Blackbox-Test-Cases_EN.pdf --file Doc/<程序名>-il-annotated_EN.pdf
 ./tools/plcweave.ps1 demo start 演示项目 --port COM7 --baud 9600 --parity N --station 1
 ./tools/plcweave.ps1 demo status project/演示项目
 ./tools/plcweave.ps1 demo confirm-flash project/演示项目 --operator 姓名 --software "GX Works2 1.77F" --compile-status "客户报告零错误" --run-state RUN
