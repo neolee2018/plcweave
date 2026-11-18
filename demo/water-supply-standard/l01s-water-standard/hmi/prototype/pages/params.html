@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<title>S2 参数设置</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+
+<div class="top">
+  <span class="title">参数设置</span>
+  <div class="right">
+    <span class="chip eng">工程师权限</span>
+    <span class="clock">10:24  11/11/2026</span>
+  </div>
+</div>
+
+<div style="position:absolute; top:52px; left:0; right:0; bottom:56px; display:flex; gap:12px; padding:14px;">
+
+  <!-- 压力设定 -->
+  <div class="card" style="flex:1; padding:12px; min-width:0;">
+    <div class="grp-title">压力设定（0.1 bar）</div>
+    <div class="row"><span class="lbl">保存 SV</span><span class="addr">D325</span><span class="val editable mono">60</span><span class="unit">6.0 bar</span></div>
+    <div class="row"><span class="lbl">在线 SV</span><span class="addr">D324</span><span class="val editable mono">60</span><span class="unit">10–160</span></div>
+    <div class="row"><span class="lbl">唤醒压力</span><span class="addr">D326</span><span class="val editable mono">51</span><span class="unit">5.1 bar</span></div>
+    <div style="margin-top:8px;" class="note">保存 SV 仅首扫描生效并校验 [10,160]，越界按 60 处理；在线修改即时钳位生效、断电不保存。</div>
+  </div>
+
+  <!-- 延时参数 -->
+  <div class="card" style="flex:1; padding:12px; min-width:0;">
+    <div class="grp-title">休眠 / 唤醒延时</div>
+    <div class="row"><span class="lbl">休眠延时</span><span class="addr">D327</span><span class="val editable mono">100</span><span class="unit">10.0 s</span></div>
+    <div class="row"><span class="lbl">唤醒延时</span><span class="addr">D328</span><span class="val editable mono">30</span><span class="unit">3.0 s</span></div>
+    <div class="row"><span class="lbl">不出水速度</span><span class="addr">D329</span><span class="val editable mono">2000</span><span class="unit">20.00 Hz</span></div>
+    <div style="margin-top:8px;" class="note">在线范围：休眠 10–600（1–60 s）、唤醒 5–300（0.5–30 s）、不出水 2000–5000（20–50 Hz）；越界按边界钳位。</div>
+  </div>
+
+  <!-- 源与路由 -->
+  <div class="card" style="flex:1; padding:12px; min-width:0;">
+    <div class="grp-title">信号源与路由</div>
+    <div class="row">
+      <span class="lbl">信号源</span><span class="addr">D322</span>
+      <span class="seg"><span class="opt on">AI0</span><span class="opt">注入</span></span>
+    </div>
+    <div class="row">
+      <span class="lbl">并联替代 AI0</span><span class="addr">D332</span>
+      <span class="toggle off"></span>
+    </div>
+    <div class="row">
+      <span class="lbl">路由使能 Y0/AO0</span><span class="addr">D323</span>
+      <span class="toggle on"></span>
+    </div>
+    <div class="row"><span class="lbl">注入 PV</span><span class="addr">D330</span><span class="val editable mono">—</span><span class="unit">模式1生效</span></div>
+    <div style="margin-top:8px;" class="note">D322 非 0/1 将停止应用并置重启抑制（M12），需双源归零且模式有效后释放。</div>
+  </div>
+</div>
+
+<div class="nav">
+  <div class="navbtn">主画面</div>
+  <div class="navbtn active">参数设置</div>
+  <div class="navbtn">诊断</div>
+  <span style="flex:1;"></span>
+  <button class="btn small" style="height:30px;">下发命令块（FC16 D320–D335）</button>
+</div>
+
+</body>
+</html>

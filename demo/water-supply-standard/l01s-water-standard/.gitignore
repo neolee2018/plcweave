@@ -1,0 +1,4 @@
+# Runtime outputs of the demo scripts (sim/HIL evidence stays local)
+evidence/
+__pycache__/
+*.log

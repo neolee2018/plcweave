@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<title>S1 主画面 — 休眠态</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+
+<div class="top">
+  <span class="title">恒压供水<div class="ver" style="display:inline">V005 · 批量接口</div></span>
+  <div class="right">
+    <span class="clock">10:31  11/11/2026</span>
+    <span class="chip big sleep">休眠中</span>
+  </div>
+</div>
+
+<div style="position:absolute; top:52px; left:0; right:0; bottom:56px; display:flex; gap:12px; padding:14px;">
+
+  <!-- 压力 -->
+  <div class="card" style="width:250px; padding:14px; display:flex; flex-direction:column;">
+    <div class="grp-title">管网压力（D308）</div>
+    <div style="display:flex; flex:1; gap:12px; align-items:stretch;">
+      <div class="tank" style="width:50px;">
+        <div class="fill" style="height:32.5%;"></div>
+        <div class="marks">
+          <span class="sv"   style="bottom:37.5%;"></span>
+          <span class="wake" style="bottom:31.9%;"></span>
+        </div>
+      </div>
+      <div style="flex:1; display:flex; flex-direction:column; justify-content:center; gap:4px;">
+        <div style="font-size:46px; font-weight:800; color:#2563EB; font-variant-numeric:tabular-nums; line-height:1;">5.20</div>
+        <div style="font-size:15px; color:#64748B; font-weight:600;">bar &nbsp;·&nbsp; ≥ SV → 休眠资格</div>
+        <div style="display:flex; align-items:center; gap:8px; margin-top:8px;">
+          <span style="width:10px; height:0; border-top:2px dashed #DC2626;"></span>
+          <span style="font-size:11.5px; color:#64748B;">设定 SV 6.00 bar（D309）</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="width:10px; height:0; border-top:2px dashed #16A34A;"></span>
+          <span style="font-size:11.5px; color:#64748B;">唤醒压力 5.10 bar（D310）</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 中列 -->
+  <div style="width:220px; display:flex; flex-direction:column; gap:12px;">
+    <div class="card" style="flex:1; padding:12px; display:flex; flex-direction:column; justify-content:center; gap:6px;">
+      <div class="grp-title">输出频率（D311）</div>
+      <div style="font-size:30px; font-weight:800; color:#64748B;" class="mono">0.00<span style="font-size:14px; color:#64748B; font-weight:600;"> Hz</span></div>
+      <div style="font-size:11.5px; color:#94A3B8;">休眠中强制为 0，PI 积分清零</div>
+    </div>
+    <div class="card" style="flex:1; padding:12px; display:flex; flex-direction:column; justify-content:center; gap:6px;">
+      <div class="grp-title">AO0 模拟量（D312）</div>
+      <div style="font-size:30px; font-weight:800; color:#64748B;" class="mono">0<span style="font-size:14px; color:#64748B; font-weight:600;"> counts</span></div>
+      <div style="font-size:11.5px; color:#94A3B8;">休眠中强制为 0</div>
+    </div>
+  </div>
+
+  <!-- 右列 -->
+  <div style="flex:1; display:flex; flex-direction:column; gap:12px;">
+    <div class="card" style="flex:1.2; padding:12px; display:flex; gap:10px; align-items:center;">
+      <div style="flex:1; text-align:center;">
+        <span class="lamp run"></span>
+        <div class="st-name">运行 M0</div>
+        <div class="st-state run">保持运行</div>
+      </div>
+      <div style="flex:1; text-align:center;">
+        <span class="lamp sleep"></span>
+        <div class="st-name">休眠 M11</div>
+        <div class="st-state sleep">休眠锁定</div>
+      </div>
+      <div style="flex:1; text-align:center;">
+        <span class="lamp stop"></span>
+        <div class="st-name">输出 Y0</div>
+        <div class="st-state stop">已断开</div>
+      </div>
+    </div>
+    <div class="card" style="padding:12px; display:flex; flex-direction:column; gap:8px;">
+      <div class="row"><span class="lbl">休眠计时 D314</span><span class="val mono">100 / 100</span><span class="unit">tick</span></div>
+      <div class="row"><span class="lbl">唤醒计时 D315</span><span class="val mono">0 / 30</span><span class="unit">tick</span></div>
+      <div class="row"><span class="lbl">PI 积分 D319</span><span class="val mono">0</span><span class="unit">—</span></div>
+    </div>
+    <div style="display:flex; gap:10px;">
+      <button class="btn gray" style="flex:1;">启动（D320=1）</button>
+      <button class="btn gray" style="flex:1;">停止（D321=1）</button>
+    </div>
+  </div>
+</div>
+
+<div class="nav">
+  <div class="navbtn active">主画面</div>
+  <div class="navbtn">参数设置</div>
+  <div class="navbtn">诊断</div>
+  <span style="flex:1;"></span>
+  <span class="note">唤醒条件：PV 严格低于 D310 持续 D328×100ms；PV ≥ 唤醒压力（死区）保持休眠</span>
+</div>
+
+</body>
+</html>

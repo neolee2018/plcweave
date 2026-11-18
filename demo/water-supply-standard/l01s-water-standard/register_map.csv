@@ -1,0 +1,77 @@
+device,modbus_space,offset_decimal,offset_hex,permission,data_type,unit,first_scan_default,range_or_encoding,description,mapping_status
+M0,coil,0,0x0,RO,bit,boolean,0,0/1,Application running latch; remains on during sleep,Frozen Mn=coil offset n; reverify on target
+M1,coil,1,0x1,RO,bit,boolean,computed; see source,0/1,Valid source mode; zero or one only,Frozen Mn=coil offset n; reverify on target
+M2,coil,2,0x2,RO,bit,boolean,computed; see source,0/1,Global rising edge of 100 ms clock; evaluated unconditionally,Frozen Mn=coil offset n; reverify on target
+M3,coil,3,0x3,RO,bit,boolean,0,0/1,Previous scan 100 ms clock image; reset on first scan,Frozen Mn=coil offset n; reverify on target
+M10,coil,10,0xa,RO,bit,boolean,0,0/1,"Pre-sleep state; 20.00 Hz, integral cleared",Frozen Mn=coil offset n; reverify on target
+M11,coil,11,0xb,RO,bit,boolean,0,0/1,Latched sleep state; frequency and physical outputs zero,Frozen Mn=coil offset n; reverify on target
+M12,coil,12,0xc,RO,bit,boolean,0,0/1,Invalid-mode restart inhibit; release start in valid mode,Frozen Mn=coil offset n; reverify on target
+M14,coil,14,0xe,RO,bit,boolean,computed; see source,0/1,"PV full-scale diagnostic; level, follows T2; raw input 3997 to 4003 held for 30 min",Frozen Mn=coil offset n; reverify on target
+M20,coil,20,0x14,RO,bit,boolean,computed; see source,0/1,Normal state at scan entry; excludes transition scan from PI,Frozen Mn=coil offset n; reverify on target
+M21,coil,21,0x15,RO,bit,boolean,computed; see source,0/1,Final normal state after command and timer processing,Frozen Mn=coil offset n; reverify on target
+M8000,unverified,,,RO,bit,boolean,computed; see source,0/1,PLC RUN monitor; system owned,Confirm model manual and read-only on first connection
+M8002,unverified,,,RO,bit,boolean,computed; see source,0/1,First-scan pulse; system owned,Confirm model manual and read-only on first connection
+M8012,unverified,,,RO,bit,boolean,computed; see source,0/1,100 ms clock; system owned,Confirm model manual and read-only on first connection
+M8125,unverified,,,RO,bit,boolean,1,0/1,Serial communication mode enable; initialized one,Confirm model manual and read-only on first connection
+M8196,unverified,,,RO,bit,boolean,1,0/1,Serial peripheral setting enable; initialized one,Confirm model manual and read-only on first connection
+T0,unverified,,,RO,timer/contact,100 ms,0; preset 50,0/1,"Continuous pre-sleep delay; 100 ms base, preset 50",Confirm model manual and read-only on first connection; Legacy V002 residual; unused in V006 source; referenced by S2-implementation.md and hmi/registers.md
+T1,unverified,,,RO,timer/contact,100 ms,0; preset 30,0/1,"Continuous wake delay; 100 ms base, preset 30",Confirm model manual and read-only on first connection; Legacy V002 residual; unused in V006 source; referenced by S2-implementation.md and hmi/registers.md
+T2,unverified,,,RO,timer/contact,100 ms,0; preset 18000,0/1,"PV full-scale qualifying timer; K18000 = 1800 s; auto-reset when raw input leaves 3997 to 4003",Confirm model manual and read-only on first connection
+Y0,coil,13056,0x3300,RO,bit,boolean,0,0/1,Physical route run output; exact D193 enable required,Previous sample/manual mapping; reverify read-only
+D100,holding,100,0x64,RO,signed16,0.1 bar,computed; see source,0..160,"Clamped scaled pressure; 0.1 bar, 0 to 160",Frozen Dn=holding offset n; reverify on target
+D102,holding,102,0x66,RW,signed16,0.1 bar,validated D261 or 60,10..160,"Active pressure setting; 0.1 bar, 10 to 160",Frozen Dn=holding offset n; reverify on target
+D110,holding,110,0x6e,RO,signed16,integer,computed; see source,0..4000,"Selected signed raw input, clamped 0 to 4000",Frozen Dn=holding offset n; reverify on target
+D111,holding,111,0x6f,RO,signed16,integer,computed; see source,signed16,Rounded scaling numerator; raw plus 12,Frozen Dn=holding offset n; reverify on target
+D112,holding,112,0x70,RO,signed16,integer,computed; see source,signed16,Pressure scaling DIV quotient,Frozen Dn=holding offset n; reverify on target
+D113,holding,113,0x71,RO,signed16,integer,computed; see source,signed16,Pressure scaling DIV remainder; paired with D112,Frozen Dn=holding offset n; reverify on target
+D114,holding,114,0x72,RO,signed16,integer,computed; see source,signed16,Wake threshold MUL low word; setting times 85,Frozen Dn=holding offset n; reverify on target; Legacy V002 residual; unused in V006 source; source uses D167/D168; referenced by S2-implementation.md and hmi/registers.md
+D115,holding,115,0x73,RO,signed16,integer,computed; see source,signed16,Wake threshold MUL high word; paired with D114,Frozen Dn=holding offset n; reverify on target; Legacy V002 residual; unused in V006 source; source uses D167/D168; referenced by S2-implementation.md and hmi/registers.md
+D116,holding,116,0x74,RO,signed16,integer,computed; see source,signed16,Wake threshold DIV quotient,Frozen Dn=holding offset n; reverify on target
+D117,holding,117,0x75,RO,signed16,integer,computed; see source,signed16,Wake threshold DIV remainder; paired with D116,Frozen Dn=holding offset n; reverify on target
+D120,holding,120,0x78,RO,signed16,integer,0,0..30000,Integer PI accumulator; 0 to 30000,Frozen Dn=holding offset n; reverify on target
+D121,holding,121,0x79,RO,signed16,integer,computed; see source,signed16,Signed PI error; active setting minus pressure,Frozen Dn=holding offset n; reverify on target
+D122,holding,122,0x7a,RO,signed16,integer,computed; see source,signed16,Proportional MUL low word; error times 10,Frozen Dn=holding offset n; reverify on target
+D123,holding,123,0x7b,RO,signed16,integer,computed; see source,signed16,Proportional MUL high word; paired with D122,Frozen Dn=holding offset n; reverify on target
+D124,holding,124,0x7c,RO,signed16,integer,computed; see source,signed16,Integral DIV quotient; accumulator divided by 10,Frozen Dn=holding offset n; reverify on target
+D125,holding,125,0x7d,RO,signed16,integer,computed; see source,signed16,Integral DIV remainder; paired with D124,Frozen Dn=holding offset n; reverify on target
+D126,holding,126,0x7e,RO,signed16,integer,computed; see source,0..3000,Clamped PI increment; 0 to 3000,Frozen Dn=holding offset n; reverify on target
+D130,holding,130,0x82,RO,signed16,integer,computed; see source,signed16,Analog route MUL low word; frequency times 4,Frozen Dn=holding offset n; reverify on target
+D131,holding,131,0x83,RO,signed16,integer,computed; see source,signed16,Analog route MUL high word; paired with D130,Frozen Dn=holding offset n; reverify on target
+D132,holding,132,0x84,RO,signed16,integer,computed; see source,signed16,Analog route DIV quotient; product divided by 5,Frozen Dn=holding offset n; reverify on target
+D133,holding,133,0x85,RO,signed16,integer,computed; see source,signed16,Analog route DIV remainder; paired with D132,Frozen Dn=holding offset n; reverify on target
+D154,holding,154,0x9a,RO,signed16,0.01 Hz,0,0 or 2000..5000,"Frequency command; 0.01 Hz, zero or 2000 to 5000",Frozen Dn=holding offset n; reverify on target
+D190,holding,190,0xbe,RW,signed16,integer,1,0 or 1 valid; otherwise inhibited,"Source mode; 1 test input, 0 hardware AI0",Frozen Dn=holding offset n; reverify on target
+D191,holding,191,0xbf,RW,signed16,integer,0,1 asserted; other values false,Start level request; only value 1 asserted,Frozen Dn=holding offset n; reverify on target
+D192,holding,192,0xc0,RW,signed16,integer,0,1 asserted; other values false,Stop level request; only value 1 asserted; stop wins,Frozen Dn=holding offset n; reverify on target
+D193,holding,193,0xc1,RW,signed16,integer,0,1 asserted; other values false,Physical route enable; only value 1 asserted; defaults zero,Frozen Dn=holding offset n; reverify on target
+D194,holding,194,0xc2,RW,signed16,integer,0,signed16,Diagnostic external echo request,Frozen Dn=holding offset n; reverify on target
+D195,holding,195,0xc3,RO,signed16,integer,0,signed16,Diagnostic echo response; copied each executed scan,Frozen Dn=holding offset n; reverify on target
+D196,holding,196,0xc4,RO,signed16,integer,2,signed16,Program version word; 2,Frozen Dn=holding offset n; reverify on target
+D197,holding,197,0xc5,RO,signed16,integer,31,signed16,Edition word; 31,Frozen Dn=holding offset n; reverify on target
+D198,holding,198,0xc6,RO,signed16,100 ms edge count,0 then edge count,signed16,Heartbeat edge counter; signed word wrap,Frozen Dn=holding offset n; reverify on target
+D199,holding,199,0xc7,RO,signed16,scan count,0 then increment each scan,signed16,Scan counter; signed word wrap,Frozen Dn=holding offset n; reverify on target
+D200,holding,200,0xc8,RO,signed16,integer,manifest fingerprint_words[0],signed16,Canonical instruction fingerprint word 0; signed little endian,Frozen Dn=holding offset n; reverify on target
+D201,holding,201,0xc9,RO,signed16,integer,manifest fingerprint_words[1],signed16,Canonical instruction fingerprint word 1; signed little endian,Frozen Dn=holding offset n; reverify on target
+D202,holding,202,0xca,RO,signed16,integer,2,signed16,Test suite version word; 2,Frozen Dn=holding offset n; reverify on target
+D260,holding,260,0x104,RO,signed16,0.1 bar,computed; see source,8..158,Inclusive pre-sleep pressure threshold; active setting minus 2,Frozen Dn=holding offset n; reverify on target
+D261,holding,261,0x105,RW,signed16,0.1 bar,retain valid 10..160; else 60,accepted 10..160 at first scan,Saved pressure setting; validated only first scan,Frozen Dn=holding offset n; reverify on target
+D262,holding,262,0x106,RO,signed16,0.1 bar,computed; see source,8..136,Inclusive wake threshold; floor active setting times 85 divided by 100,Frozen Dn=holding offset n; reverify on target
+D307,holding,307,0x133,RO,signed16,integer,computed; see source,0..127,"Status bitmap; bit0 run bit1 sleep bit2 sleep-timing bit3 wake-timing bit4 test bit5 enable bit6 PV full-scale diagnostic; host must not assume bit6 is always 0",Frozen Dn=holding offset n; reverify on target
+D1056,holding,1056,0x420,RW,signed16,raw counts,external; not overwritten,signed16,External simulated raw AI0 input; signed word,Frozen Dn=holding offset n; reverify on target
+D8030,holding,8030,0x1f5e,RO,signed16,raw counts,hardware; not overwritten,signed16,Hardware AI0 raw input; never written by application,Frozen Dn=holding offset n; reverify on target
+D8031,holding,8031,0x1f5f,RO,signed16,raw counts,hardware; unused,signed16,Hardware AI1 unused; never read or written,Frozen Dn=holding offset n; reverify on target
+D8032,holding,8032,0x1f60,RO,signed16,raw counts,hardware; unused,signed16,Hardware AI2 unused; never read or written,Frozen Dn=holding offset n; reverify on target
+D8033,holding,8033,0x1f61,RO,signed16,raw counts,hardware; unused,signed16,Hardware AI3 unused; never read or written,Frozen Dn=holding offset n; reverify on target
+D8050,holding,8050,0x1f72,RO,signed16,raw counts,0,0..4000,Analog output 0 register route; 0 to 4000,Frozen Dn=holding offset n; reverify on target
+D8051,holding,8051,0x1f73,RO,signed16,raw counts,0,0,Analog output 1; always zero,Frozen Dn=holding offset n; reverify on target
+D8120,holding,8120,0x1fb8,RO,signed16,integer,-8063 (HE081),signed16,"Serial format image; HE081, signed -8063",Frozen Dn=holding offset n; reverify on target
+D8121,holding,8121,0x1fb9,RO,signed16,integer,1,signed16,Serial station image; 1,Frozen Dn=holding offset n; reverify on target
+D300,holding,300,0x12C,RO,signed16,int,6,0..65535,program version,V006 batch block
+D301,holding,301,0x12D,RO,signed16,int,31,0..65535,edition,V006 batch block
+D302,holding,302,0x12E,RO,signed16,int,-7313,0..65535,fingerprint word 0 (V006),V006 batch block
+D303,holding,303,0x12F,RO,signed16,int,-11960,0..65535,fingerprint word 1 (V006),V006 batch block
+D304,holding,304,0x130,RO,signed16,int,6,0..65535,test suite word (STD-006),V006 batch block
+D307,holding,307,0x133,RO,bitfield,bits,0,0..65535,bit0 run bit1 sleep bit2/3 timing bit4 test bit5 enable bit6 full-scale bit7 overpressure,V006 batch block
+D316,holding,316,0x13C,RO,0.1 bar,int,80,0..65535,max pressure in effect (D175 mirror, V006),V006 batch block
+D326,holding,326,0x146,RW,0.1 bar,int,40,0..65535,wake pressure (V006 first scan 4.0 bar),V006 batch block
+D336,holding,336,0x150,RW,0.1 bar,int,80,0..65535,max pressure setting (V006),V006 batch block

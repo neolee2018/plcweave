@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<title>S3 诊断与身份</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+
+<div class="top">
+  <span class="title">诊断与身份</span>
+  <div class="right">
+    <span class="chip run">身份一致</span>
+    <span class="clock">10:24  11/11/2026</span>
+  </div>
+</div>
+
+<div style="position:absolute; top:52px; left:0; right:0; bottom:56px; display:flex; gap:12px; padding:14px;">
+
+  <!-- 程序身份 -->
+  <div class="card" style="flex:1.1; padding:12px;">
+    <div class="grp-title">程序身份（FC03 状态块头）</div>
+    <table class="io">
+      <tr><th>寄存器</th><th>含义</th><th>当前值</th><th>期望</th></tr>
+      <tr><td class="mono">D300</td><td>程序版本</td><td class="num">5</td><td class="num">5</td></tr>
+      <tr><td class="mono">D301</td><td>版次</td><td class="num">31</td><td class="num">31</td></tr>
+      <tr><td class="mono">D302</td><td>指纹字 0</td><td class="num">-10264</td><td class="num">-10264</td></tr>
+      <tr><td class="mono">D303</td><td>指纹字 1</td><td class="num">-21461</td><td class="num">-21461</td></tr>
+      <tr><td class="mono">D304</td><td>测试套件字</td><td class="num">5</td><td class="num">5</td></tr>
+    </table>
+    <div style="margin-top:8px;" class="note">期望值来自 build_identity.json；不一致时禁止任何写入。</div>
+  </div>
+
+  <!-- 通讯与计数 -->
+  <div class="card" style="flex:1; padding:12px;">
+    <div class="grp-title">通讯与计数</div>
+    <div class="row"><span class="lbl">心跳 D305</span><span class="val mono">41207</span><span class="unit">前进</span></div>
+    <div class="row"><span class="lbl">扫描计数 D306</span><span class="val mono">58834</span><span class="unit">回绕</span></div>
+    <div class="row"><span class="lbl">串口格式 D8120</span><span class="val mono">-8063</span><span class="unit">0xE081</span></div>
+    <div class="row"><span class="lbl">站号 D8121</span><span class="val mono">1</span><span class="unit">—</span></div>
+    <div class="row"><span class="lbl">回显请求 D333 → 响应 D317</span><span class="val mono">12345</span><span class="unit">一致</span></div>
+    <div style="margin-top:8px;" class="note">心跳/扫描字持续前进 = 程序在扫描；回显逐扫描复制，用于链路验证。</div>
+  </div>
+
+  <!-- 状态位图与接口 -->
+  <div class="card" style="flex:1; padding:12px;">
+    <div class="grp-title">状态位图 D307</div>
+    <table class="io">
+      <tr><th>位</th><th>含义</th><th>当前</th></tr>
+      <tr><td class="mono">bit0</td><td>运行</td><td class="num">1</td></tr>
+      <tr><td class="mono">bit1</td><td>休眠</td><td class="num">0</td></tr>
+      <tr><td class="mono">bit2</td><td>休眠计时</td><td class="num">0</td></tr>
+      <tr><td class="mono">bit3</td><td>唤醒计时</td><td class="num">0</td></tr>
+      <tr><td class="mono">bit4</td><td>测试模式</td><td class="num">0</td></tr>
+      <tr><td class="mono">bit5</td><td>路由使能</td><td class="num">1</td></tr>
+    </table>
+    <div style="margin-top:8px;" class="note">接口约定：一轮刷新 = FC03 读 D300–D319 + FC16 写 D320–D335（各一帧，原子下发）。</div>
+  </div>
+</div>
+
+<div class="nav">
+  <div class="navbtn">主画面</div>
+  <div class="navbtn">参数设置</div>
+  <div class="navbtn active">诊断</div>
+  <span style="flex:1;"></span>
+  <span class="note">详细寄存器语义：hmi/registers.md（V005 批量接口段）</span>
+</div>
+
+</body>
+</html>

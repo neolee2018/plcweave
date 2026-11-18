@@ -1,0 +1,247 @@
+{
+  "environment": "local_instruction_simulator",
+  "source_csv": "lab-tests/V006/runtime.csv",
+  "steps": [
+    {
+      "case": "first_scan",
+      "D100": 0,
+      "D154": 0,
+      "D307": 16,
+      "D316": 80,
+      "D326": 40,
+      "D336": 80,
+      "D175": 80,
+      "D176": 75,
+      "D8050": 0,
+      "M0": false,
+      "M40": false,
+      "Y0": false
+    },
+    {
+      "case": "running_4bar",
+      "D100": 40,
+      "D154": 2000,
+      "D307": 53,
+      "D316": 80,
+      "D326": 40,
+      "D336": 80,
+      "D175": 80,
+      "D176": 75,
+      "D8050": 1600,
+      "M0": true,
+      "M40": false,
+      "Y0": true
+    },
+    {
+      "case": "pv_8.1bar_trip",
+      "D100": 81,
+      "D154": 0,
+      "D307": 181,
+      "D316": 80,
+      "D326": 40,
+      "D336": 80,
+      "D175": 80,
+      "D176": 75,
+      "D8050": 0,
+      "M0": true,
+      "M40": true,
+      "Y0": false
+    },
+    {
+      "case": "pv_8.0bar_edge",
+      "D100": 80,
+      "D154": 0,
+      "D307": 181,
+      "D316": 80,
+      "D326": 40,
+      "D336": 80,
+      "D175": 80,
+      "D176": 75,
+      "D8050": 0,
+      "M0": true,
+      "M40": true,
+      "Y0": false
+    },
+    {
+      "case": "pv_7.4bar_release",
+      "D100": 74,
+      "D154": 2000,
+      "D307": 53,
+      "D316": 80,
+      "D326": 40,
+      "D336": 80,
+      "D175": 80,
+      "D176": 75,
+      "D8050": 1600,
+      "M0": true,
+      "M40": false,
+      "Y0": true
+    },
+    {
+      "case": "max_setting_0",
+      "D100": 74,
+      "D154": 0,
+      "D307": 181,
+      "D316": 10,
+      "D326": 40,
+      "D336": 0,
+      "D175": 10,
+      "D176": 5,
+      "D8050": 0,
+      "M0": true,
+      "M40": true,
+      "Y0": false
+    },
+    {
+      "case": "max_setting_200",
+      "D100": 74,
+      "D154": 2000,
+      "D307": 53,
+      "D316": 160,
+      "D326": 40,
+      "D336": 200,
+      "D175": 160,
+      "D176": 155,
+      "D8050": 1600,
+      "M0": true,
+      "M40": false,
+      "Y0": true
+    }
+  ],
+  "checks": [
+    {
+      "name": "first scan D326 (wake 4.0 bar)",
+      "actual": 40,
+      "expected": 40,
+      "status": "PASS"
+    },
+    {
+      "name": "first scan D336 (max 8.0 bar)",
+      "actual": 80,
+      "expected": 80,
+      "status": "PASS"
+    },
+    {
+      "name": "mirror D316 = clamped max",
+      "actual": 80,
+      "expected": 80,
+      "status": "PASS"
+    },
+    {
+      "name": "release threshold D176 = max-5",
+      "actual": 75,
+      "expected": 75,
+      "status": "PASS"
+    },
+    {
+      "name": "running M0",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "running frequency > 0",
+      "actual": 2000,
+      "expected": ">0",
+      "status": "PASS"
+    },
+    {
+      "name": "running Y0 on",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "running no overpressure bit",
+      "actual": 53,
+      "expected": "bit7=0",
+      "status": "PASS"
+    },
+    {
+      "name": "trip: PV 81",
+      "actual": 81,
+      "expected": 81,
+      "status": "PASS"
+    },
+    {
+      "name": "trip: M40 set",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "trip: frequency zero",
+      "actual": 0,
+      "expected": 0,
+      "status": "PASS"
+    },
+    {
+      "name": "trip: Y0 off",
+      "actual": false,
+      "expected": false,
+      "status": "PASS"
+    },
+    {
+      "name": "trip: AO0 zero",
+      "actual": 0,
+      "expected": 0,
+      "status": "PASS"
+    },
+    {
+      "name": "trip: D307 bit7 set",
+      "actual": 181,
+      "expected": "bit7=1",
+      "status": "PASS"
+    },
+    {
+      "name": "edge: PV 80 keeps trip (release needs <=75)",
+      "actual": true,
+      "expected": true,
+      "status": "PASS"
+    },
+    {
+      "name": "release: PV 74",
+      "actual": 74,
+      "expected": 74,
+      "status": "PASS"
+    },
+    {
+      "name": "release: M40 cleared",
+      "actual": false,
+      "expected": false,
+      "status": "PASS"
+    },
+    {
+      "name": "release: frequency restored",
+      "actual": 2000,
+      "expected": ">0",
+      "status": "PASS"
+    },
+    {
+      "name": "release: D307 bit7 cleared",
+      "actual": 53,
+      "expected": "bit7=0",
+      "status": "PASS"
+    },
+    {
+      "name": "clamp low D175",
+      "actual": 10,
+      "expected": 10,
+      "status": "PASS"
+    },
+    {
+      "name": "clamp low mirror D316",
+      "actual": 10,
+      "expected": 10,
+      "status": "PASS"
+    },
+    {
+      "name": "clamp high D175",
+      "actual": 160,
+      "expected": 160,
+      "status": "PASS"
+    }
+  ],
+  "status": "PASS",
+  "note": "Local instruction-level simulation only; not GX Works, not PLC hardware, not HMI verified."
+}
