@@ -174,9 +174,13 @@ class ScriptController:
         self.report_status = None
         if adapter:
             self.engine.customer_watches.clear()
+            names_en = adapter.get("watch_names_en", {})
             for address, name, access, low, high in adapter["watches"]:
-                self.engine.set_customer_watch(address, name, access, low, high)
+                self.engine.set_customer_watch(address, name, access, low, high,
+                                               name_en=names_en.get(address))
         self.engine.customer_notes = dict(adapter.get("watch_notes", {}))
+        self.engine.customer_notes_en = dict(adapter.get("watch_notes_en", {}))
+        self.engine.io_labels = dict(adapter.get("io", {}))
         self.connection = None
         self.mapping = input_mapping(script)
         self.command_count = 0

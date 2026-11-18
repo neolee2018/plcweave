@@ -176,6 +176,11 @@ class BenchEngine:
         self.customer_watches: dict[int, str] = {}
         # 工程适配器提供的注释/归一化：地址 -> (单位量程注释, 归一化类型)
         self.customer_notes: dict[int, tuple[str, str]] = {}
+        # 界面英文显示（适配器可选提供）；中文仍是记录/CSV 的唯一权威
+        self.customer_names_en: dict[int, str] = {}
+        self.customer_notes_en: dict[int, str] = {}
+        # 本次脚本启用的点位与功能（X0/AD0/Y0/DA0…→ 双语标签），仅界面展示
+        self.io_labels: dict[str, dict[str, str]] = {}
         self.customer_samples: dict[int, dict] = {}
         self.manual_inputs: dict[str, dict] = {}
         self.manual_identity: tuple[tuple[int, int], ...] = ()
@@ -475,6 +480,44 @@ class BenchEngine:
         self.log_op("user", "手动测试", "确认后手动接管")
         self._emit("state", state=self.state)
 
+    def start_project_manual(self, inputs: dict, identity: tuple = ()) -> None:
+        """工程适配器项目的手动接管：跳过接口档案组提交，按适配器映射注入。
+
+        批量接口工程（如 V006）没有会话握手寄存器，"开始仿真"的组提交路径
+        不适用；开始按钮在该类工程上直接进入 MANUAL，X/AD 按适配器 inputs
+        映射写注入寄存器。identity 为程序身份（D300..），接管时在线核对。
+        """
+        if self.state not in (State.DISCONNECTED, State.CONNECTED):
+            raise PermissionError(f"当前状态 {self.state} 不允许手动接管")
+        self.manual_identity = tuple(identity)
+        self.manual_inputs = {k: dict(v) for k, v in inputs.items()}
+        if self.state == State.DISCONNECTED:
+            self.record and self.record("start", {**self._session_snapshot_config(),
+                                                  "source": "project_manual"})
+            self._recording = True
+            try:
+                self.connect()
+            except (OSError, ModbusError, ValueError):
+                self.record and self.record("end", {"status": "启动失败",
+                                                    "end_reason": "手动连接失败"})
+                self._recording = False
+                raise
+        else:
+            # 已连接：直接切换状态，日志同样要有会话开始记录
+            self.record and self.record("start", {**self._session_snapshot_config(),
+                                                  "source": "project_manual"})
+            self._recording = True
+        self.session_token = self.session_token % 65535 + 1
+        self.state = State.MANUAL
+        try:
+            self._check_online_identity()
+            self._read_manual_inputs(update_targets=True)
+        except (ModbusError, PermissionError) as exc:
+            self._enter_fault(str(exc))
+            raise
+        self.log_op("user", "手动测试", "工程手动接管")
+        self._emit("state", state=self.state)
+
     def start_simulation(self) -> None:
         """一键开始：未连接则自动连接；复用现有连接；失败即记录并退出启动流程。
 
@@ -766,7 +809,8 @@ class BenchEngine:
         self._emit("customer_values", rows=rows)
 
     def set_customer_watch(self, address: int, name: str, access: str = "读写",
-                           minimum: int | None = None, maximum: int | None = None) -> None:
+                           minimum: int | None = None, maximum: int | None = None,
+                           name_en: str | None = None) -> None:
         if type(address) is not int or not 0 <= address <= D_MAX:
             raise ValueError(f"监控地址须在 D0–D{D_MAX}")
         if access not in CUSTOMER_ACCESS_MODES:
@@ -782,6 +826,12 @@ class BenchEngine:
             name or f"D{address}", access,
             None if minimum is None else int(minimum),
             None if maximum is None else int(maximum))
+        # 英文显示名只在非中文界面使用；不给就等于"用户手工条目不译"，
+        # 顺带丢掉旧英文名，避免改中文名后仍显示上一次的译文。
+        if name_en:
+            self.customer_names_en[address] = name_en
+        else:
+            self.customer_names_en.pop(address, None)
         self._emit_customer_values()
 
     def remove_customer_watch(self, address: int) -> None:
@@ -789,6 +839,8 @@ class BenchEngine:
             self.log_op("user", f"D{address}", "移除寄存器监控")
             del self.customer_watches[address]
             self.customer_samples.pop(address, None)
+            self.customer_names_en.pop(address, None)
+            self.customer_notes_en.pop(address, None)
             self._emit_customer_values()
 
     def import_customer_watches_csv(self, text: str) -> dict:

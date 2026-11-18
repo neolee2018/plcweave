@@ -571,7 +571,7 @@ def test_language_switch_updates_widgets_and_persists(app):
     assert app.script_start_btn.cget("text") == "Start script test"
     assert list(app.x_mode_combo["values"])[0] == "Toggle"
     assert list(app.watch_access_combo["values"]) == ["RO", "WO", "RW"]
-    assert app.x_leds[2].text.cget("text") == "Unknown"
+    assert app.x_leds[2].text.cget("text") == "N/A"
     saved = json.loads(bench_app.UI_CONFIG_PATH.read_text(encoding="utf-8"))
     assert saved["language"] == "en"
     # X 模式当前显示值应已映射为英文，而引擎/配置仍持有中文原值
@@ -606,3 +606,110 @@ def test_language_persisted_config_restores_english(app, tmp_path, monkeypatch):
         instance.worker.stop()
         root.after_cancel(instance._event_job)
         root.destroy()
+
+
+def test_named_fonts_are_really_registered(app):
+    # 命名字体必须真正存在于 Tcl：Font 对象被回收会删掉同名 Tcl 字体，
+    # 控件里的 font="bench9" 就退化成 Tk 默认字体（宋体 12），整屏文字变大并被裁切。
+    # 注意：本模块为规避 Tk GC 崩溃禁用了自动回收，所以这里必须显式持有引用才复现真实运行。
+    from plcweave.bench.i18n import ui_family
+    actual = app.root.tk.call("font", "actual", "bench9")
+    spec = dict(zip(actual[::2], actual[1::2]))
+    assert spec["-family"] == ui_family()
+    assert int(spec["-size"]) == 9
+    assert set(app._fonts) >= {"bench7", "bench8", "bench9b", "bench12b"}
+
+
+def test_error_message_follows_language_switch(app):
+    # 状态栏错误按当前语言渲染：切语言后必须跟着变，不能留旧语种
+    from plcweave.bench.i18n import LANGUAGES
+    app.worker.submit(app.engine.set_customer_watch, 250, "probe", "bad-access")
+    pump(app, 0.6)
+    chinese = app._last_error_message
+    assert chinese and "权限" in chinese
+    app.lang_var.set(LANGUAGES["en"])
+    app._on_language()
+    pump(app, 0.3)
+    assert app._last_error_message == "Access must be RO / WO / RW"
+    app.lang_var.set(LANGUAGES["zh"])
+    app._on_language()
+    pump(app, 0.3)
+    assert app._last_error_message == chinese
+
+
+def test_script_io_labels_mark_used_points_and_follow_language(app):
+    # 适配器声明的脚本 I/O：启用点描边 + 点位下小字 + 卡片图例，切语言跟着变，清空后消失
+    from plcweave.bench.i18n import LANGUAGES
+    app.engine.io_labels = {
+        "X0": {"zh": "启动请求", "en": "Start", "tag_zh": "启动", "tag_en": "Start"},
+        "Y0": {"zh": "泵运行输出", "en": "Pump output", "tag_zh": "泵", "tag_en": "Pump"},
+    }
+    app._refresh_io_labels()
+    assert app.x_captions[0].cget("text") == "启动"
+    assert app.y_captions[0].cget("text") == "泵"
+    assert app.x_buttons[0].cget("highlightbackground") != app.x_buttons[2].cget("highlightbackground")
+    assert "X0 启动请求" in app.di_legend.cget("text")
+    assert "Y0 泵运行输出" in app.do_legend.cget("text")
+
+    app.lang_var.set(LANGUAGES["en"])
+    app._on_language()
+    pump(app, 0.2)
+    assert app.x_captions[0].cget("text") == "Start"
+    assert "X0 Start" in app.di_legend.cget("text")
+
+    app.engine.io_labels = {}
+    app._refresh_io_labels()
+    assert app.di_legend.cget("text") == ""
+    assert app.x_captions[0].cget("text") == ""
+
+
+def _relative_luminance(color: str) -> float:
+    def channel(value: int) -> float:
+        unit = value / 255
+        return unit / 12.92 if unit <= 0.04045 else ((unit + 0.055) / 1.055) ** 2.4
+    red, green, blue = (int(color.lstrip("#")[i:i + 2], 16) for i in (0, 2, 4))
+    return 0.2126 * channel(red) + 0.7152 * channel(green) + 0.0722 * channel(blue)
+
+
+def _contrast(foreground: str, background: str) -> float:
+    first, second = sorted((_relative_luminance(foreground),
+                            _relative_luminance(background)), reverse=True)
+    return (first + 0.05) / (second + 0.05)
+
+
+def test_disabled_primary_button_text_is_readable(app):
+    # Tk 默认 disabledforeground 是系统灰，压在蓝色主按钮上对比度约 1:1（实测截图认不出字）
+    from plcweave.bench.i18n import LANGUAGES
+    app.lang_var.set(LANGUAGES["en"])
+    app._on_language()
+    app.engine.state = State.SCRIPT_RUNNING      # 脚本运行中：开始按钮被禁用
+    app.refresh_permissions()
+    pump(app, 0.2)
+    assert app.start_btn.cget("state") == tk.DISABLED
+    disabled_fg = app.start_btn.cget("disabledforeground")
+    assert disabled_fg and disabled_fg != "SystemDisabledText"
+    assert _contrast(disabled_fg, app.start_btn.cget("bg")) >= 3.0
+
+
+def test_english_register_names_and_unit_notes(app):
+    # 适配器带来的英文名/注释只在非中文界面替换；中文仍是记录与 CSV 的权威文本
+    from plcweave.bench.i18n import LANGUAGES
+    app.worker.submit(app.engine.set_customer_watch, 300, "程序版本", "只读",
+                      None, None, "Program version")
+    pump(app, 0.4)
+    app.engine.customer_notes[300] = ("版本 · 5", "")
+    app.engine.customer_notes_en[300] = "Version · 5"
+
+    app.lang_var.set(LANGUAGES["en"])
+    app._on_language()
+    pump(app, 0.4)
+    english = app.customer_tree.item("300", "values")
+    assert english[1] == "Program version"
+    assert english[3] == "Version · 5"
+
+    app.lang_var.set(LANGUAGES["zh"])
+    app._on_language()
+    pump(app, 0.4)
+    chinese = app.customer_tree.item("300", "values")
+    assert chinese[1] == "程序版本"
+    assert chinese[3] == "版本 · 5"

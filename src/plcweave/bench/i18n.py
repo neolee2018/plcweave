@@ -17,6 +17,7 @@
 """
 from __future__ import annotations
 
+import re
 import string
 
 # 语言注册表：代码 → 界面显示名。新增语言在此登记并补齐 STRINGS 译文。
@@ -115,92 +116,100 @@ STRINGS: dict[str, dict[str, str]] = {
                          "ar": "   المجموعة {group} بانتظار التأكيد"},
 
     # 小灯文字
+    # 灯下文字宽度只有约 26px（每卡 8 列），非中文必须用缩写，否则被裁切成半个词。
     "led.on": {"zh": "ON", "en": "ON", "fr": "ON", "pt": "ON", "es": "ON", "ar": "ON"},
     "led.off": {"zh": "OFF", "en": "OFF", "fr": "OFF", "pt": "OFF", "es": "OFF", "ar": "OFF"},
-    "led.unknown": {"zh": "未知", "en": "Unknown", "fr": "Inconnu", "pt": "Desconhecido",
-                    "es": "Desconocido", "ar": "غير معروف"},
-    "led.pending": {"zh": "待确认", "en": "Pending", "fr": "En attente", "pt": "Aguardando",
-                    "es": "Pendiente", "ar": "بانتظار التأكيد"},
-    "led.stale": {"zh": "过期", "en": "Stale", "fr": "Périmé", "pt": "Desatualizado",
-                  "es": "Desactualizado", "ar": "قديم"},
+    "led.unknown": {"zh": "未知", "en": "N/A", "fr": "n.d.", "pt": "n/d",
+                    "es": "n/d", "ar": "غ.م"},
+    "led.pending": {"zh": "待确认", "en": "TBC", "fr": "att.", "pt": "conf.",
+                    "es": "pend.", "ar": "انتظار"},
+    "led.stale": {"zh": "过期", "en": "OLD", "fr": "pér.", "pt": "velho",
+                  "es": "viejo", "ar": "قديم"},
 
     # 数字输入卡
     "di.title": {"zh": "数字输入  X0–X7", "en": "Digital inputs  X0–X7",
-                 "fr": "Entrées numériques  X0–X7", "pt": "Entradas digitais  X0–X7",
-                 "es": "Entradas digitales  X0–X7", "ar": "المدخلات الرقمية  X0–X7"},
+                 "fr": "Entrées TOR  X0–X7", "pt": "Entradas  X0–X7",
+                 "es": "Entradas  X0–X7", "ar": "مدخلات  X0–X7"},
     "di.interaction": {"zh": "交互", "en": "Mode", "fr": "Mode", "pt": "Modo",
                        "es": "Modo", "ar": "النمط"},
     "di.hint_layout": {"zh": "横向单排 · 下方小灯显示 PLC 确认的生效状态",
-                       "en": "One row · LED below shows the PLC-confirmed state",
-                       "fr": "Une rangée · la LED du dessous montre l'état confirmé par le PLC",
-                       "pt": "Uma fileira · o LED abaixo mostra o estado confirmado pelo PLC",
-                       "es": "Una fila · el LED inferior muestra el estado confirmado por el PLC",
-                       "ar": "صف واحد · يعرض المؤشر أسفله الحالة المؤكدة من PLC"},
+                       "en": "One row · LED shows the PLC-confirmed state",
+                       "fr": "Une rangée · LED = état confirmé par le PLC",
+                       "pt": "Uma fileira · LED = estado confirmado pelo PLC",
+                       "es": "Una fila · LED = estado confirmado por el PLC",
+                       "ar": "صف واحد · المؤشر = الحالة المؤكدة من PLC"},
     "di.hint_align": {"zh": "X0 与 Y0、X1 与 Y1 依次上下对齐；目标样式与状态灯分开",
-                      "en": "X0 aligns above Y0, X1 above Y1; target style and status LED are separate",
-                      "fr": "X0 est aligné au-dessus de Y0, X1 au-dessus de Y1 ; style cible et LED d'état séparés",
-                      "pt": "X0 alinha acima de Y0, X1 acima de Y1; estilo alvo e LED de estado separados",
-                      "es": "X0 alineado sobre Y0, X1 sobre Y1; estilo objetivo y LED de estado separados",
-                      "ar": "X0 فوق Y0 وX1 فوق Y1 بالترتيب؛ نمط الهدف ومؤشر الحالة منفصلان"},
-    "di.hw_expand": {"zh": "展开硬件原值", "en": "Show raw hardware X",
+                      "en": "X0 over Y0; target vs status LED separate",
+                      "fr": "X0 au-dessus de Y0 ; cible et LED séparées",
+                      "pt": "X0 acima de Y0; alvo e LED separados",
+                      "es": "X0 sobre Y0; objetivo y LED separados",
+                      "ar": "X0 فوق Y0؛ الهدف والمؤشر منفصلان"},
+    "io.legend": {"zh": "脚本启用：{items}", "en": "Script I/O: {items}",
+                  "fr": "E/S script : {items}", "pt": "E/S do script: {items}",
+                  "es": "E/S del script: {items}", "ar": "إدخال/إخراج السكربت: {items}"},
+    "di.hw_expand": {"zh": "展开硬件原值", "en": "Raw X",
                      "fr": "Valeurs X brutes", "pt": "Valores X brutos",
                      "es": "Valores X en bruto", "ar": "قيم X الخام"},
-    "di.hw_collapse": {"zh": "收起硬件原值", "en": "Hide raw hardware X",
+    "di.hw_collapse": {"zh": "收起硬件原值", "en": "Hide X",
                        "fr": "Masquer X bruts", "pt": "Ocultar X brutos",
                        "es": "Ocultar X en bruto", "ar": "إخفاء قيم X الخام"},
 
     # 模拟输入卡
     "ai.title": {"zh": "模拟输入  AD0–AD3", "en": "Analog inputs  AD0–AD3",
-                 "fr": "Entrées analogiques  AD0–AD3", "pt": "Entradas analógicas  AD0–AD3",
-                 "es": "Entradas analógicas  AD0–AD3", "ar": "المدخلات التناظرية  AD0–AD3"},
+                 "fr": "Entrées analog.  AD0–AD3", "pt": "Entradas analóg.  AD0–AD3",
+                 "es": "Entradas analóg.  AD0–AD3", "ar": "مدخلات تناظرية  AD0–AD3"},
     "ai.hint": {"zh": "每路竖直显示 · −/＋ 调节 · 滑条不可拖动 · 数值在滑条下方",
-                "en": "Vertical per channel · adjust with −/＋ · slider is read-only · value below",
-                "fr": "Vertical par voie · régler avec −/＋ · curseur en lecture seule · valeur en dessous",
-                "pt": "Vertical por canal · ajustar com −/＋ · barra somente leitura · valor abaixo",
-                "es": "Vertical por canal · ajustar con −/＋ · barra de solo lectura · valor abajo",
-                "ar": "عرض رأسي لكل قناة · ضبط بـ −/＋ · الشريط للقراءة فقط · القيمة في الأسفل"},
-    "ai.target_effective_none": {"zh": "目标 / 生效 —", "en": "Target / Effective —",
-                                 "fr": "Cible / Effective —", "pt": "Alvo / Efetivo —",
-                                 "es": "Objetivo / Efectivo —", "ar": "الهدف / الفعلي —"},
+                "en": "Vertical · adjust with −/＋ · slider read-only · value below",
+                "fr": "Vertical · −/＋ · curseur lecture seule · valeur dessous",
+                "pt": "Vertical · −/＋ · barra só leitura · valor abaixo",
+                "es": "Vertical · −/＋ · barra solo lectura · valor abajo",
+                "ar": "رأسي · −/＋ · شريط للقراءة فقط · القيمة أدناه"},
+    # 英文两行显示：AD 列宽约 78px，单行 "Target 0.00 / Effective 0.00" 会被裁切
+    "ai.target_effective_none": {"zh": "目标 / 生效 —", "en": "Tgt —\nEff —",
+                                 "fr": "Cible —\nEff —", "pt": "Alvo —\nEfet. —",
+                                 "es": "Obj. —\nEfec. —", "ar": "الهدف —\nالفعلي —"},
     "ai.target_effective": {"zh": "目标 {target} / 生效 {effective}",
-                            "en": "Target {target} / Effective {effective}",
-                            "fr": "Cible {target} / Effective {effective}",
-                            "pt": "Alvo {target} / Efetivo {effective}",
-                            "es": "Objetivo {target} / Efectivo {effective}",
-                            "ar": "الهدف {target} / الفعلي {effective}"},
+                            "en": "Tgt {target}\nEff {effective}",
+                            "fr": "Cible {target}\nEff {effective}",
+                            "pt": "Alvo {target}\nEfet. {effective}",
+                            "es": "Obj. {target}\nEfec. {effective}",
+                            "ar": "الهدف {target}\nالفعلي {effective}"},
     "ai.raw_over": {"zh": "raw {raw}（越量程）", "en": "raw {raw} (over range)",
                     "fr": "raw {raw} (hors plage)", "pt": "raw {raw} (fora da faixa)",
                     "es": "raw {raw} (fuera de rango)", "ar": "raw {raw} (خارج النطاق)"},
-    "btn.apply": {"zh": "应用", "en": "Apply", "fr": "Appliquer", "pt": "Aplicar",
-                  "es": "Aplicar", "ar": "تطبيق"},
+    "btn.apply": {"zh": "应用", "en": "OK", "fr": "OK", "pt": "OK",
+                  "es": "OK", "ar": "OK"},
+    # AD 加减按钮：全角 ＋ 在 Segoe UI（阿语字体）里缺字形、回退 CJK 字体后被裁
+    "btn.minus": {"zh": "−", "en": "-", "fr": "-", "pt": "-", "es": "-", "ar": "-"},
+    "btn.plus": {"zh": "＋", "en": "+", "fr": "+", "pt": "+", "es": "+", "ar": "+"},
 
     # 数字输出卡
     "do.title": {"zh": "数字输出  Y0–Y7", "en": "Digital outputs  Y0–Y7",
-                 "fr": "Sorties numériques  Y0–Y7", "pt": "Saídas digitais  Y0–Y7",
-                 "es": "Salidas digitales  Y0–Y7", "ar": "المخرجات الرقمية  Y0–Y7"},
+                 "fr": "Sorties TOR  Y0–Y7", "pt": "Saídas  Y0–Y7",
+                 "es": "Salidas  Y0–Y7", "ar": "مخرجات  Y0–Y7"},
     "do.hint": {"zh": "横向单排 · 下方小灯直接显示读取的 Y 状态 · 只读",
-                "en": "One row · LED shows the read Y state · read-only",
-                "fr": "Une rangée · la LED montre l'état Y lu · lecture seule",
-                "pt": "Uma fileira · o LED mostra o estado Y lido · somente leitura",
-                "es": "Una fila · el LED muestra el estado Y leído · solo lectura",
-                "ar": "صف واحد · يعرض المؤشر حالة Y المقروءة · للقراءة فقط"},
+                "en": "One row · LED shows read Y state · read-only",
+                "fr": "Une rangée · LED = état Y lu · lecture seule",
+                "pt": "Uma fileira · LED = estado Y lido · só leitura",
+                "es": "Una fila · LED = estado Y leído · solo lectura",
+                "ar": "صف واحد · المؤشر = حالة Y المقروءة · للقراءة فقط"},
     "do.note": {"zh": "点位牌不可点击强制输出；未知和过期状态另有文字标记",
-                "en": "Tiles cannot force output; unknown and stale states are labeled in text",
-                "fr": "Les tuiles ne forcent pas la sortie ; états inconnu/périmé signalés en texte",
-                "pt": "As placas não forçam saída; estados desconhecido/desatualizado indicados em texto",
-                "es": "Las placas no fuerzan salida; estados desconocido/desactualizado indicados en texto",
-                "ar": "لا يمكن النقر على البطاقات لفرض المخرجات؛ الحالات غير المعروفة والقديمة تُشار إليها نصيًا"},
+                "en": "Tiles cannot force output; states shown as text",
+                "fr": "Les tuiles ne forcent pas la sortie ; états affichés en texte",
+                "pt": "As placas não forçam saída; estados em texto",
+                "es": "Las placas no fuerzan salida; estados en texto",
+                "ar": "لا تفرض البطاقات المخرجات؛ الحالات نصيًا"},
 
     # 模拟输出卡
     "ao.title": {"zh": "模拟输出  DA1–DA2", "en": "Analog outputs  DA1–DA2",
-                 "fr": "Sorties analogiques  DA1–DA2", "pt": "Saídas analógicas  DA1–DA2",
-                 "es": "Salidas analógicas  DA1–DA2", "ar": "المخرجات التناظرية  DA1–DA2"},
+                 "fr": "Sorties analog.  DA1–DA2", "pt": "Saídas analóg.  DA1–DA2",
+                 "es": "Salidas analóg.  DA1–DA2", "ar": "مخرجات تناظرية  DA1–DA2"},
     "ao.hint": {"zh": "直接读取 D8050 / D8051 · 竖直只读滑条与下方数值 · 无加减",
-                "en": "Reads D8050/D8051 directly · vertical read-only bars · no adjust",
-                "fr": "Lecture directe de D8050/D8051 · curseurs verticaux en lecture seule · sans réglage",
-                "pt": "Lê D8050/D8051 diretamente · barras verticais somente leitura · sem ajuste",
-                "es": "Lee D8050/D8051 directamente · barras verticales de solo lectura · sin ajuste",
-                "ar": "قراءة مباشرة لـ D8050/D8051 · أشرطة رأسية للقراءة فقط · بدون ضبط"},
+                "en": "D8050/D8051 · read-only bars · no adjust",
+                "fr": "D8050/D8051 · curseurs lecture seule · sans réglage",
+                "pt": "D8050/D8051 · barras só leitura · sem ajuste",
+                "es": "D8050/D8051 · barras solo lectura · sin ajuste",
+                "ar": "D8050/D8051 · أشرطة للقراءة فقط · بدون ضبط"},
     "ao.alias0": {"zh": "手册 DA0 / D8050", "en": "Manual DA0 / D8050",
                   "fr": "Manuel DA0 / D8050", "pt": "Manual DA0 / D8050",
                   "es": "Manual DA0 / D8050", "ar": "الدليل DA0 / D8050"},
@@ -279,33 +288,33 @@ STRINGS: dict[str, dict[str, str]] = {
                         "es": "Acceso", "ar": "الصلاحية"},
     "cust.col.sample": {"zh": "采样", "en": "Sample", "fr": "Échant.", "pt": "Amostra",
                         "es": "Muestra", "ar": "العينة"},
-    "cust.label.watch_addr": {"zh": "监控地址", "en": "Watch addr", "fr": "Adresse",
+    "cust.label.watch_addr": {"zh": "监控地址", "en": "Address", "fr": "Adresse",
                               "pt": "Endereço", "es": "Dirección", "ar": "عنوان المراقبة"},
     "cust.label.name": {"zh": "名称", "en": "Name", "fr": "Nom", "pt": "Nome", "es": "Nombre",
                         "ar": "الاسم"},
     "cust.label.access": {"zh": "权限", "en": "Access", "fr": "Accès", "pt": "Acesso",
                           "es": "Acceso", "ar": "الصلاحية"},
-    "btn.add_watch": {"zh": "添加监控", "en": "Add watch", "fr": "Ajouter", "pt": "Adicionar",
+    "btn.add_watch": {"zh": "添加监控", "en": "Add", "fr": "Ajouter", "pt": "Adicionar",
                       "es": "Agregar", "ar": "إضافة"},
-    "btn.remove_watch": {"zh": "移除选中", "en": "Remove selected", "fr": "Supprimer sél.",
-                         "pt": "Remover seleção", "es": "Quitar selección", "ar": "إزالة المحدد"},
-    "btn.import_csv": {"zh": "导入CSV", "en": "Import CSV", "fr": "Importer CSV",
-                       "pt": "Importar CSV", "es": "Importar CSV", "ar": "استيراد CSV"},
-    "btn.export_csv": {"zh": "导出CSV", "en": "Export CSV", "fr": "Exporter CSV",
-                       "pt": "Exportar CSV", "es": "Exportar CSV", "ar": "تصدير CSV"},
+    "btn.remove_watch": {"zh": "移除选中", "en": "Remove", "fr": "Retirer",
+                         "pt": "Remover", "es": "Quitar", "ar": "إزالة"},
+    "btn.import_csv": {"zh": "导入CSV", "en": "Import", "fr": "Importer",
+                       "pt": "Importar", "es": "Importar", "ar": "استيراد"},
+    "btn.export_csv": {"zh": "导出CSV", "en": "Export", "fr": "Exporter",
+                       "pt": "Exportar", "es": "Exportar", "ar": "تصدير"},
     "cust.label.send_addr": {"zh": "发送地址", "en": "Send address", "fr": "Adresse d'envoi",
                              "pt": "Endereço de envio", "es": "Dirección de envío",
                              "ar": "عنوان الإرسال"},
-    "cust.label.send_value": {"zh": "整数值", "en": "Integer value", "fr": "Nombre entier",
-                              "pt": "Valor inteiro", "es": "Valor entero", "ar": "قيمة صحيحة"},
+    "cust.label.send_value": {"zh": "整数值", "en": "Integer value", "fr": "Entier",
+                              "pt": "Inteiro", "es": "Entero", "ar": "قيمة صحيحة"},
     "btn.send": {"zh": "发送", "en": "Send", "fr": "Envoyer", "pt": "Enviar", "es": "Enviar",
                  "ar": "إرسال"},
     "cust.status.hint": {"zh": "仿真中可发送权限含“写”的监控地址",
-                         "en": "During simulation you can send to watches whose access includes write",
-                         "fr": "En simulation, envoi possible vers les surveillances autorisées en écriture",
-                         "pt": "Na simulação, é possível enviar para monitorações com permissão de escrita",
-                         "es": "En simulación, se puede enviar a monitoreos con permiso de escrita",
-                         "ar": "أثناء المحاكاة يمكن الإرسال إلى العناوين التي تشمل صلاحيتها الكتابة"},
+                         "en": "Send to writable watches during simulation",
+                         "fr": "Envoi aux adresses inscriptibles",
+                         "pt": "Enviar para registos com escrita",
+                         "es": "Enviar a registros con escritura",
+                         "ar": "الإرسال إلى السجلات القابلة للكتابة"},
     "cust.err.addr_range": {"zh": "请输入 D0–D8511 内的监控地址",
                             "en": "Enter a watch address within D0–D8511",
                             "fr": "Saisissez une adresse de surveillance entre D0 et D8511",
@@ -748,6 +757,9 @@ STRINGS: dict[str, dict[str, str]] = {
                    "ar": "نمط تفاعل X"},
     "obj.session": {"zh": "会话", "en": "Session", "fr": "Session", "pt": "Sessão", "es": "Sesión",
                     "ar": "الجلسة"},
+    "obj.initial_inputs": {"zh": "初始输入组", "en": "Initial input group",
+                           "fr": "Groupe d'entrées initial", "pt": "Grupo de entradas inicial",
+                           "es": "Grupo de entradas inicial", "ar": "مجموعة المدخلات الأولية"},
 
     # 日志动作
     "act.read_version": {"zh": "读取程序版本", "en": "Read program version",
@@ -816,7 +828,7 @@ STRINGS: dict[str, dict[str, str]] = {
     "act.range_switch": {"zh": "量程切换", "en": "Range switch", "fr": "Changement de plage",
                          "pt": "Trocar faixa", "es": "Cambiar rango", "ar": "تغيير النطاق"},
     "act.switch": {"zh": "切换", "en": "Switch", "fr": "Changement", "pt": "Alterar",
-                   "es": "Cambiar", "ar": "تبديل"},
+                   "es": "Cambiar", "ar": "تبديل النمط"},
     "act.end_manual": {"zh": "结束手动测试", "en": "End manual test", "fr": "Fin de l'essai manuel",
                        "pt": "Encerrar teste manual", "es": "Terminar prueba manual",
                        "ar": "إنهاء الاختبار اليدوي"},
@@ -880,6 +892,14 @@ STRINGS: dict[str, dict[str, str]] = {
                       "es": "Efectivo", "ar": "مفعّل"},
     "res.read_back": {"zh": "已读回", "en": "Read back", "fr": "Relu", "pt": "Relido",
                       "es": "Releído", "ar": "تمت القراءة الرجعية"},
+    # 脚本测试日志：原始收发/读写的单步结果（script_bridge 产生）
+    "res.logged": {"zh": "已记录", "en": "Logged", "fr": "Enregistré", "pt": "Registado",
+                   "es": "Registrado", "ar": "مُسجَّل"},
+    "res.script_read": {"zh": "读回", "en": "Read", "fr": "Lire", "pt": "Ler",
+                        "es": "Leer", "ar": "تم القراءة"},
+    "res.script_write_response": {"zh": "写入响应", "en": "Write resp.",
+                                  "fr": "Rép. écriture", "pt": "Resp. escrita",
+                                  "es": "Resp. escritura", "ar": "رد الكتابة"},
     "res.pending_send": {"zh": "待发送", "en": "Pending send", "fr": "En attente d'envoi",
                          "pt": "Aguardando envio", "es": "Pendiente de envío", "ar": "بانتظار الإرسال"},
     "res.pending_apply": {"zh": "待应用", "en": "Pending apply", "fr": "En attente d'application",
@@ -1018,6 +1038,7 @@ DATA_KEYS: dict[str, str] = {
     "步长": "obj.step",
     "X交互模式": "obj.x_mode",
     "会话": "obj.session",
+    "初始输入组": "obj.initial_inputs",
     # 日志动作
     "读取程序版本": "act.read_version",
     "连接失败": "act.connect_failed",
@@ -1066,6 +1087,9 @@ DATA_KEYS: dict[str, str] = {
     "已发送（不读回）": "res.sent_no_readback",
     "已生效": "res.effective",
     "已读回": "res.read_back",
+    "已记录": "res.logged",
+    "读回": "res.script_read",
+    "写入响应": "res.script_write_response",
     "待发送": "res.pending_send",
     "待应用": "res.pending_apply",
     "未发送": "res.not_sent",
@@ -1176,6 +1200,232 @@ def validate() -> list[str]:
     if unknown:
         problems.append(f"DATA_KEYS 指向不存在的 key: {sorted(unknown)}")
     return problems
+
+
+# ---------------------------------------------------------------------------
+# 引擎/存储/脚本抛出的错误与记录文案。
+#
+# 中文是权威原文：异常里抛的中文、落盘的 end_reason 都不改，只在显示边界用 msg()
+# 翻译，所以旧记录、CSV、测试断言全部不受影响。
+# 维护中英两套；其余语言回退英文（技术错误文案宁可给英文，也不做半成品直译）。
+# ---------------------------------------------------------------------------
+MESSAGES: dict[str, str] = {
+    # ---- 连接与设置 ----
+    "未选择串口": "No serial port selected",
+    "从机地址必须为 1..247": "Station must be 1..247",
+    "从机地址必须为 1..247（不使用广播 0，不改写 PLC 站号）":
+        "Station must be 1..247 (no broadcast 0; the PLC station is never rewritten)",
+    "连接期间设置锁定；请先断开再修改": "Settings are locked while connected; disconnect first",
+    "版本寄存器必须是 D0–D8511 内的整数编号": "Version register must be an integer D0–D8511",
+    "版本寄存器未设置：须填写目标程序实际维护的版本地址":
+        "Version register not set: enter the address the target program maintains",
+    "实机连接需要安装 pyserial": "pyserial is required for real hardware",
+    "串口未打开": "Serial port is not open",
+    # ---- 接口档案 ----
+    "接口档案必须是 JSON 对象": "Interface profile must be a JSON object",
+    "接口档案不完整或校验失败，禁止注入": "Profile is incomplete or invalid; injection is refused",
+    "接口档案未经用户确认（confirmed=false），实机禁止写入":
+        "Profile not confirmed (confirmed=false); live writes are blocked",
+    "接口档案未确认，实机写入被禁止": "Profile not confirmed; live writes are blocked",
+    "实机会话地址须在 D0–D7999 用户区": "Live session registers must be in the D0–D7999 user area",
+    "版本地址与会话接口重叠": "Version register overlaps the session interface",
+    "实机档案须在 build_identity 中提供预期版本及独立构建标识":
+        "A live profile must declare the expected version and build id in build_identity",
+    "build_identity 须为零基 D 编号和预期整数值的对象":
+        "build_identity must map zero-based D numbers to expected integers",
+    "confirmed 必须为布尔值": "confirmed must be a boolean",
+    "customer_registers 须为列表": "customer_registers must be a list",
+    "客户寄存器须填写 address、minimum、maximum，可选 signed":
+        "Each customer register needs address, minimum and maximum (signed optional)",
+    "客户可写地址须在 D0–D7999": "Writable customer registers must be in D0–D7999",
+    "signed 必须为布尔值": "signed must be a boolean",
+    "演示模式必须注入回环传输层": "Demo mode needs an injected loopback transport",
+    # ---- 仿真会话 ----
+    "PLC 存活计数未变化": "PLC liveness counter did not change",
+    "PLC 程序版本已变化，请重新连接": "PLC program version changed; reconnect",
+    "PLC 仿真会话已变化，请重新连接": "PLC simulation session changed; reconnect",
+    "故障/断线状态需先重连": "Fault/disconnected: reconnect first",
+    "故障/断线状态需先重连再开始新会话":
+        "Fault/disconnected: reconnect before starting a new session",
+    "仿真已在进行或启动中，不能重复启动":
+        "A simulation is already running or starting; cannot start again",
+    "该点位需要原测试工程的输入映射":
+        "This point needs the original test project's input mapping",
+    "脚本输入地址超出用户区或与版本地址重叠":
+        "Script input address is outside the user area or overlaps the version register",
+    "手动写入限用户 D 区": "Manual writes are limited to the user D area",
+    "手动接管前需释放脚本连接": "Release the script connection before manual takeover",
+    "请在当前仿真会话就绪后发送": "Send once the current simulation session is ready",
+    "请输入整数寄存器值": "Enter an integer register value",
+    "请选择已添加监控的寄存器": "Select a register that is already being watched",
+    "该寄存器权限为只读，不能发送": "This register is read-only and cannot be sent",
+    "该地址是观察/接口保护寄存器，禁止经客户通道写入":
+        "This is an observation/interface register; the customer channel cannot write it",
+    "输入为空": "Input is empty",
+    "不是合法数字": "Not a valid number",
+    "已达量程边界，保持当前值": "Range boundary reached; value unchanged",
+    "步长必须为 1–10%": "Step must be 1–10%",
+    "步长必须为 1–10 的整数百分比": "Step must be an integer percentage from 1–10",
+    "未知量程": "Unknown range",
+    "未知模式": "Unknown mode",
+    "X 通道编号必须为 0..7": "X channel index must be 0..7",
+    "AD 通道编号必须为 0..3": "AD channel index must be 0..3",
+    "权限必须为 只读 / 只写 / 读写": "Access must be RO / WO / RW",
+    "寄存器名称最多 40 个字符": "Register name is limited to 40 characters",
+    "结束未确认": "End not confirmed",
+    "结束未确认，不虚构输出已归零": "End not confirmed; outputs are not assumed to be zero",
+    "结束未确认：已释放串口，请核对 PLC 状态后重连":
+        "End not confirmed: port released; verify the PLC state before reconnecting",
+    "通讯故障": "Communication fault",
+    "手动连接失败": "Manual connection failed",
+    "正常结束": "Normal end",
+    # ---- 协议层 ----
+    "FC06 回显不符": "FC06 echo mismatch",
+    "FC16 回显不符": "FC16 echo mismatch",
+    "响应 CRC 校验失败": "Response CRC check failed",
+    "响应功能码不符": "Response function code mismatch",
+    "异常响应功能码不符": "Exception response function code mismatch",
+    "响应字节数不符": "Response byte count mismatch",
+    "读位功能码必须为 1 或 2": "Bit read function must be 1 or 2",
+    "位读数量必须为 1..2000": "Bit read count must be 1..2000",
+    "字读数量必须为 1..125": "Register read count must be 1..125",
+    "多字写数量必须为 1..123": "Multi-register write count must be 1..123",
+    "写入值必须为 0..65535": "Written value must be 0..65535",
+    "虚拟设备无响应（静默丢帧）": "Virtual device did not respond (frame dropped silently)",
+    # ---- 绘制内存 / 脚本 ----
+    "会话附件需要有效记录和单一文件名":
+        "Session attachment needs an active record and one filename",
+    "脚本输出线程未退出，禁止手动接管":
+        "Script output thread has not exited; manual takeover is refused",
+    "脚本及其子进程仍未释放": "Script and its child processes are still running",
+    "请选择 Python .py 测试脚本": "Choose a Python .py test script",
+    "请先确认本次测试结束": "Confirm that the current test has ended first",
+    "脚本执行结束": "Script finished",
+    "用户关闭脚本测试": "Script test closed by the user",
+    "演示模式禁止打开物理串口": "Demo mode must not open a physical serial port",
+    "演示模式请选择内置脚本或使用 LoopbackTransport 的脚本":
+        "In demo mode choose a built-in script, or one using LoopbackTransport",
+    "演示脚本仅允许回环通讯，请切换实机模式执行硬件脚本":
+        "Demo scripts may only use loopback; switch to live mode for hardware scripts",
+    "压力工程源文件已变化，请更新脚本接管映射后再运行":
+        "Pressure project source changed; update the script mapping before running",
+}
+
+def _message_arg(text: str) -> str:
+    """模板里的内嵌词（状态、嵌套报错）：统一取英文，避免英文句子里混一个他语状态词。"""
+    key = DATA_KEYS.get(text)
+    if key:
+        return STRINGS[key].get("en") or text
+    return MESSAGES.get(text, text)
+
+
+# 带参数的文案：(正则, 渲染函数)。分组里的内嵌词先经 _message_arg() 统一成英文。
+MESSAGE_PATTERNS: tuple = (
+    (re.compile(r"当前状态 (.+) 不允许连接"),
+     lambda m: f"State {_message_arg(m.group(1))} does not allow connecting"),
+    (re.compile(r"当前状态 (.+) 不允许输入"),
+     lambda m: f"State {_message_arg(m.group(1))} does not allow input"),
+    (re.compile(r"当前状态 (.+) 不允许提交"),
+     lambda m: f"State {_message_arg(m.group(1))} does not allow committing"),
+    (re.compile(r"当前状态 (.+) 不允许复位"),
+     lambda m: f"State {_message_arg(m.group(1))} does not allow resetting"),
+    (re.compile(r"当前状态 (.+)，不能重复启动"),
+     lambda m: f"State {_message_arg(m.group(1))}: cannot start again"),
+    (re.compile(r"当前状态 (.+)，无可结束的仿真"),
+     lambda m: f"State {_message_arg(m.group(1))}: no simulation to end"),
+    (re.compile(r"当前状态 (.+)，仅本机记录不发送"),
+     lambda m: f"State {_message_arg(m.group(1))}: recorded locally only, nothing sent"),
+    (re.compile(r"允许范围 (.+)–(.+)"),
+     lambda m: f"Allowed range {m.group(1)}–{m.group(2)}"),
+    (re.compile(r"组 (\d+) 未收到消费确认"),
+     lambda m: f"Group {m.group(1)} was not consumption-confirmed"),
+    (re.compile(r"组 (\d+) 生效镜像与目标不一致"),
+     lambda m: f"Group {m.group(1)} effective mirror does not match the target"),
+    (re.compile(r"上一组（序号 ([^）]+)）尚未确认"),
+     lambda m: f"Previous group ({m.group(1)}) is still unconfirmed"),
+    (re.compile(r"会话 (.+) 不存在"), lambda m: f"Session {m.group(1)} does not exist"),
+    (re.compile(r"(\d+)s 内未收到结束确认"),
+     lambda m: f"No end confirmation within {m.group(1)}s"),
+    (re.compile(r"最多监控 (\d+) 个寄存器"),
+     lambda m: f"At most {m.group(1)} registers can be watched"),
+    (re.compile(r"监控地址须在 D0–D(\d+)"), lambda m: f"Watch address must be within D0–D{m.group(1)}"),
+    (re.compile(r"版本寄存器: (.+)"), lambda m: f"Version register: {_message_arg(m.group(1))}"),
+    (re.compile(r"连接失败: (.+)"), lambda m: f"Connection failed: {_message_arg(m.group(1))}"),
+    (re.compile(r"启动失败: (.+)"), lambda m: f"Start failed: {_message_arg(m.group(1))}"),
+    (re.compile(r"通讯失败: (.+)"), lambda m: f"Communication failed: {_message_arg(m.group(1))}"),
+    (re.compile(r"串口通讯失败: (.+)"), lambda m: f"Serial communication failed: {_message_arg(m.group(1))}"),
+    (re.compile(r"心跳发送失败: (.+)"), lambda m: f"Heartbeat send failed: {_message_arg(m.group(1))}"),
+    (re.compile(r"组提交失败: (.+)"), lambda m: f"Group commit failed: {_message_arg(m.group(1))}"),
+    (re.compile(r"结束过程通讯失败: (.+)"),
+     lambda m: f"Communication failed while ending: {_message_arg(m.group(1))}"),
+    (re.compile(r"日志故障: (.+)"), lambda m: f"Logging fault: {_message_arg(m.group(1))}"),
+    (re.compile(r"断开结束（(.+)）"), lambda m: f"Disconnect: {_message_arg(m.group(1))}"),
+    (re.compile(r"PLC 会话已失效（状态码 (\d+)）"),
+     lambda m: f"PLC session is invalid (state code {m.group(1)})"),
+    (re.compile(r"不支持的数据格式: (.+)（首版 RTU 仅 8 数据位）"),
+     lambda m: f"Unsupported data format: {m.group(1)} (RTU is 8 data bits only)"),
+    (re.compile(r"不支持的波特率: (.+)"), lambda m: f"Unsupported baud rate: {m.group(1)}"),
+    (re.compile(r"未知量程类型: (.+)"), lambda m: f"Unknown range type: {m.group(1)}"),
+    (re.compile(r"未知记录类型: (.+)"), lambda m: f"Unknown record type: {m.group(1)}"),
+    (re.compile(r"数值 (.+) 超出量程 (.+)"),
+     lambda m: f"Value {m.group(1)} is outside {_message_arg(m.group(2))}"),
+    (re.compile(r"未知响应功能码 (0x[0-9A-Fa-f]+)"),
+     lambda m: f"Unknown response function code {m.group(1)}"),
+    (re.compile(r"响应站号 (\d+) 与请求 (\d+) 不符"),
+     lambda m: f"Response station {m.group(1)} does not match request {m.group(2)}"),
+    (re.compile(r"响应不完整: 期望 (\d+) 字节, 收到 (\d+) 字节"),
+     lambda m: f"Incomplete response: expected {m.group(1)} bytes, got {m.group(2)}"),
+    (re.compile(r"响应不完整: 期望 (\d+) 字节, 缓冲 (\d+) 字节"),
+     lambda m: f"Incomplete response: expected {m.group(1)} bytes, buffered {m.group(2)}"),
+    (re.compile(r"数据长度 (\d+) 与请求数 (\d+) 不符"),
+     lambda m: f"Data length {m.group(1)} does not match the requested {m.group(2)}"),
+    (re.compile(r"D(\d+) 不允许作为仿真写入地址"),
+     lambda m: f"D{m.group(1)} cannot be used as a simulation write address"),
+    (re.compile(r"D(\d+) 构建标识与接口档案不符"),
+     lambda m: f"Build id at D{m.group(1)} does not match the profile"),
+    (re.compile(r"D(\d+) 写入范围无效"), lambda m: f"Invalid write range for D{m.group(1)}"),
+    (re.compile(r"地址 D(\d+) 不在接口档案写白名单内，拒绝写入"),
+     lambda m: f"D{m.group(1)} is not in the profile write whitelist; write refused"),
+    (re.compile(r"档案地址 D(\d+) 超出 D0–D(\d+) 范围"),
+     lambda m: f"Profile address D{m.group(1)} is outside D0–D{m.group(2)}"),
+    (re.compile(r"档案字段 (\S+) 必须为非空字符串"),
+     lambda m: f"Profile field {m.group(1)} must be a non-empty string"),
+    (re.compile(r"档案字段 (\S+) 必须为整数列表"),
+     lambda m: f"Profile field {m.group(1)} must be a list of integers"),
+    (re.compile(r"档案字段 (\S+) 必须为整数或 null"),
+     lambda m: f"Profile field {m.group(1)} must be an integer or null"),
+    (re.compile(r"接口档案不是有效 JSON: (.+)"),
+     lambda m: f"Profile is not valid JSON: {_message_arg(m.group(1))}"),
+    (re.compile(r"接口档案存在未知字段: (.+)"),
+     lambda m: f"Profile has unknown fields: {m.group(1)}"),
+    (re.compile(r"无法读取接口档案 (.+): (.+)"),
+     lambda m: f"Cannot read profile {m.group(1)}: {_message_arg(m.group(2))}"),
+    (re.compile(r"无法为 (.+) 生成不重复文件名"),
+     lambda m: f"Cannot generate a unique filename for {m.group(1)}"),
+)
+
+
+def msg(text: str | None) -> str:
+    """显示引擎/存储抛出的文案：数据词 → 词条 → 模板 → 原样。
+
+    中文界面直接返回原文（中文即权威）；其他语言无译文时依次回退英文、原文，
+    保证技术报错至少可读，不会出现半句翻译。
+    """
+    if text is None:
+        return ""
+    if not text or _language == "zh":
+        return text
+    key = DATA_KEYS.get(text)
+    if key:
+        return t(key)
+    translation = MESSAGES.get(text)
+    if translation:
+        return translation
+    for pattern, render in MESSAGE_PATTERNS:
+        match = pattern.fullmatch(text)
+        if match:
+            return render(match)
+    return text
 
 
 set_language(DEFAULT_LANGUAGE)

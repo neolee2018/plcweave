@@ -171,6 +171,21 @@ def test_legacy_priority_mapping_matches_frozen_source_and_uses_unique_output():
     assert prepare_arguments(PRIORITY, ["--output=custom"]) == ["--output=custom"]
 
 
+def test_priority_adapter_ships_english_labels_for_every_watch():
+    # 英文界面用适配器的 watch_names_en / watch_notes_en 替换 Name 与单位列；
+    # 少一条就会在英文界面露出中文，所以按地址逐条核对（含中文原文仍存在）。
+    adapter = project_adapter(PRIORITY)
+    watches = {row[0]: row[1] for row in adapter["watches"]}
+    assert watches[300] == "程序版本"                 # 中文仍是权威文本
+    assert adapter["watch_names_en"][300] == "Program version"
+    assert adapter["watch_notes_en"][308] == "bar · 0–16.0"
+    missing_names = set(watches) - set(adapter["watch_names_en"])
+    missing_notes = set(watches) - set(adapter["watch_notes_en"])
+    assert not missing_names and not missing_notes
+    assert all(adapter["watch_names_en"][addr].strip() for addr in watches)
+    assert all(adapter["watch_notes_en"][addr].strip() for addr in watches)
+
+
 def test_failed_station_probe_does_not_lock_live_values_or_handoff(tmp_path):
     engine = BenchEngine(profile=DEFAULT_DEMO_PROFILE)
     store = SessionStore(tmp_path)
@@ -254,6 +269,34 @@ def test_priority_manual_x_terminal_drives_start_stop_commands(tmp_path):
     engine.set_x(1, 1)                      # stop dominates
     assert device.registers[321] == 1 and engine.effective_x[1] == 1
     assert device.registers[0] == 0
+    engine.disconnect()
+
+
+def test_priority_project_manual_start_skips_profile_and_injects(tmp_path):
+    # V006 起批量接口工程没有会话握手寄存器：开始按钮在工程脚本上必须走
+    # start_project_manual（适配器映射直写），接口档案 confirmed 与与否都不拦。
+    adapter = project_adapter(PRIORITY)
+
+    class PVDevice(VirtualPLC):
+        def run_program(self):
+            if self.registers.get(322) == 1:
+                self.registers[110] = self.registers.get(330, 0)
+
+    device = PVDevice(DEFAULT_DEMO_PROFILE, version_value=6)
+    device.registers.update(dict(adapter["identity"]))
+    device.registers[322] = 1
+    engine = BenchEngine(profile=DEFAULT_DEMO_PROFILE, transport=LoopbackTransport(device))
+    engine.apply_settings(version_address=300)
+    BenchWorker(engine, SessionStore(tmp_path))
+    engine.start_project_manual({row["physical"]: dict(row) for row in adapter["inputs"]},
+                                tuple(adapter["identity"]))
+    assert engine.state == State.MANUAL
+    result = engine.set_x(0, 1)
+    assert result["result"] == "已读回"
+    assert device.registers[320] == 1 and engine.effective_x[0] == 1
+    result = engine.set_ad_eng(0, "5")        # 引擎 V10 量程：5V → raw 2000
+    assert result["result"] == "已读回"
+    assert device.registers[330] == 2000 and engine.effective_ad[0] == 2000
     engine.disconnect()
 
 

@@ -36,10 +36,10 @@ from .rtu import LoopbackTransport
 from .store import SessionStore, default_root
 from .virtual import VirtualPLC
 from .script_bridge import ScriptController
-from .i18n import (DEFAULT_LANGUAGE, LANGUAGES, get_language, set_language, t, tr,
-                   ui_family, untr)
+from .i18n import (DEFAULT_LANGUAGE, LANGUAGES, get_language, msg, set_language, t,
+                   tr, ui_family, untr)
 
-TOOL_VERSION = "0.6.2"
+TOOL_VERSION = "0.6.3"
 
 # 视觉规范（DESIGN_RULES：浅灰底 + 白卡片 + 蓝主色 + 绿/红状态色）
 BG = "#EEF1F6"
@@ -263,6 +263,8 @@ class BenchApp:
         self.store = store or SessionStore()
         self._stale = False
         self._last_error_message: str | None = None
+        # ("msg", 引擎原文) 或 ("key", i18n key)：切语言时按当前语言重算
+        self._error_raw: tuple[str, str] | None = None
         self._last_state = State.DISCONNECTED
         self._pending_ad_errors: dict[int, tk.Label] = {}
         self._customer_rows: list[dict] = []
@@ -277,7 +279,7 @@ class BenchApp:
                 self.profile = load_profile(self.ui_config["profile_path"])
                 self.engine.profile = self.profile
             except ValueError as exc:
-                self._last_error_message = str(exc)
+                self._set_error(str(exc))
         self._ensure_fonts()
         self._build_styles()
         self._build_ui()
@@ -340,27 +342,32 @@ class BenchApp:
 
     # ---- 样式 ----------------------------------------------------------------
     def _ensure_fonts(self) -> None:
-        """在当前 Tk 解释器注册命名字体（每个 root 独立注册，多窗口测试互不影响）。"""
+        """在当前 Tk 解释器注册命名字体（每个 root 独立注册，多窗口测试互不影响）。
+
+        必须持有 Font 对象：tkinter 在 Font 被回收时会删除同名 Tcl 命名字体，
+        引用一丢，控件里的 font="bench9" 就退化为 Tk 默认字体（宋体 12），
+        表现为全屏文字偏大、卡片内文案被裁切。
+        """
         family = ui_family()
+        self._fonts: dict[str, tkfont.Font] = {}
         for size in _FONT_SIZES:
             for bold in (False, True):
                 name = _bench_font_name(size, bold)
                 try:
-                    tkfont.Font(name=name, exists=True, root=self.root)
+                    self._fonts[name] = tkfont.Font(name=name, exists=True, root=self.root)
                 except tk.TclError:
-                    tkfont.Font(name=name, family=family, size=size,
-                                weight="bold" if bold else "normal", root=self.root)
+                    self._fonts[name] = tkfont.Font(
+                        name=name, family=family, size=size,
+                        weight="bold" if bold else "normal", root=self.root)
 
     def _apply_font_family(self) -> None:
         """切换命名字体 family：所有引用该字体的控件（含 ttk 样式）即时更新。"""
         family = ui_family()
-        for size in _FONT_SIZES:
-            for bold in (False, True):
-                try:
-                    tkfont.Font(name=_bench_font_name(size, bold), exists=True,
-                                root=self.root).configure(family=family)
-                except tk.TclError:
-                    continue
+        for font in getattr(self, "_fonts", {}).values():
+            try:
+                font.configure(family=family)
+            except tk.TclError:
+                continue
 
     def _build_styles(self) -> None:
         style = ttk.Style(self.root)
@@ -388,15 +395,19 @@ class BenchApp:
         return frame
 
     def _button(self, parent, text, command, *, primary=False, width=None,
-                state=tk.NORMAL) -> tk.Button:
+                state=tk.NORMAL, padx=10) -> tk.Button:
         bg = ACCENT if primary else "white"
         fg = "white" if primary else INK
         active = ACCENT_DARK if primary else "#F1F5F9"
+        # 禁用态必须显式给字色：Tk 默认 SystemDisabledText（灰）压在蓝底上，
+        # 实测对比度约 1:1，"Start simulation" 之类主按钮禁用后完全认不出字。
+        disabled_fg = "#F1F5F9" if primary else "#64748B"
         return tk.Button(parent, text=text, command=command, font="bench9",
                          bg=bg, fg=fg, activebackground=active, activeforeground=fg,
+                         disabledforeground=disabled_fg,
                          relief="flat", bd=1, highlightthickness=1,
                          highlightbackground=BORDER, cursor="hand2",
-                         state=state, width=width, padx=10, pady=3)
+                         state=state, width=width, padx=padx, pady=3)
 
     # ---- i18n 文案绑定 ----------------------------------------------------------
     def _bind_text(self, widget, key: str) -> None:
@@ -429,6 +440,9 @@ class BenchApp:
         self._update_status_line()
         self._render_customer_values()
         self._refresh_script_label()
+        self._refresh_error_text()
+        self._refresh_io_labels()
+        self._rebuild_log()
 
     def _on_language(self, _event=None) -> None:
         display = self.lang_var.get()
@@ -451,7 +465,9 @@ class BenchApp:
         self.root.title(t("app.title", version=TOOL_VERSION))
         self.root.configure(bg=BG)
         self.root.geometry("1600x860")
-        self.root.minsize(1530, 740)
+        # AD 列"目标/生效"改为两行显示（中文/英文都放得下），内容比旧版高约 14px，
+        # 最小高度从 740 提到 760，低于此高度卡片会被压扁导致输入框溢出。
+        self.root.minsize(1530, 760)
 
         self._build_topbar()
         self._build_log_area()
@@ -566,22 +582,15 @@ class BenchApp:
         card.grid(row=0, column=0, sticky="nsew", padx=(0, 5), pady=2)
         head = tk.Frame(card, bg=CARD)
         head.pack(fill="x", padx=12, pady=(8, 0))
+        # 标题独占表头：交互下拉移到卡片底部工具行。
+        # 表头塞"标题+交互+下拉"在法/西/葡/阿下必然挤爆（标题就 165~178px，
+        # 卡片只有约 287px），压扁下拉框比截标题更糟，索性腾到下方整行。
         di_title = tk.Label(head, text=t("di.title"), font="bench12b",
-                            bg=CARD, fg=INK)
+                            bg=CARD, fg=INK, anchor="w")
         di_title.pack(side="left")
         self._bind_text(di_title, "di.title")
-        self.x_mode_var = tk.StringVar(value=tr(self.engine.x_mode))
-        self.x_mode_combo = ttk.Combobox(head, textvariable=self.x_mode_var, width=10,
-                                         state="readonly",
-                                         values=[tr("保持开关"), tr("按住有效")])
-        self._bind_combo_values(self.x_mode_combo, ("保持开关", "按住有效"))
-        self.x_mode_combo.pack(side="right")
-        self.x_mode_combo.bind("<<ComboboxSelected>>", self._on_x_mode)
-        interact_label = tk.Label(head, text=t("di.interaction"), font="bench8",
-                                  bg=CARD, fg=SUB)
-        interact_label.pack(side="right", padx=(0, 4))
-        self._bind_text(interact_label, "di.interaction")
-        hint1 = tk.Label(card, text=t("di.hint_layout"), font="bench8", bg=CARD, fg=SUB)
+        hint1 = tk.Label(card, text=t("di.hint_layout"), font="bench8", bg=CARD, fg=SUB,
+                          anchor="w")
         hint1.pack(anchor="w", padx=12)
         self._bind_text(hint1, "di.hint_layout")
 
@@ -589,12 +598,13 @@ class BenchApp:
         tiles.pack(fill="x", padx=12, pady=(6, 0))
         self.x_buttons: list[tk.Button] = []
         self.x_leds: list[LedColumn] = []
+        self.x_captions: list[tk.Label] = []
         for index in range(8):
             column = tk.Frame(tiles, bg=CARD)
-            column.grid(row=0, column=index, padx=4, sticky="n")
+            column.grid(row=0, column=index, padx=3, sticky="n")
             tiles.columnconfigure(index, weight=1)
             button = tk.Button(column, text=f"X{index}", font="bench10b",
-                               width=5, relief="flat", bd=1, cursor="hand2",
+                               width=4, relief="flat", bd=1, cursor="hand2",
                                bg="#EFF6FF", fg=ACCENT_DARK, activebackground="#DBEAFE",
                                highlightthickness=1, highlightbackground=BORDER,
                                command=lambda i=index: self._on_x_click(i))
@@ -606,20 +616,46 @@ class BenchApp:
             led_column = LedColumn(column)
             led_column.pack(pady=(4, 0))
             self.x_leds.append(led_column)
+            caption = tk.Label(column, text="", font="bench7", bg=CARD, fg=ACCENT_DARK)
+            caption.pack()
+            self.x_captions.append(caption)
 
         note_row = tk.Frame(card, bg=CARD)
         note_row.pack(fill="x", padx=12, pady=(6, 0))
-        hint2 = tk.Label(note_row, text=t("di.hint_align"), font="bench8", bg=CARD, fg=SUB)
+        hint2 = tk.Label(note_row, text=t("di.hint_align"), font="bench8", bg=CARD, fg=SUB,
+                          anchor="w", wraplength=250, justify="left")
         hint2.pack(side="left")
         self._bind_text(hint2, "di.hint_align")
-        # 辅助诊断折叠区：硬件 X 原值
+        # 底部工具行：交互模式 + 硬件原值（诊断）折叠按钮
+        tools_row = tk.Frame(card, bg=CARD)
+        tools_row.pack(fill="x", padx=12, pady=(4, 0))
+        self.x_mode_var = tk.StringVar(value=tr(self.engine.x_mode))
+        self.x_mode_combo = ttk.Combobox(tools_row, textvariable=self.x_mode_var, width=8,
+                                         state="readonly",
+                                         values=[tr("保持开关"), tr("按住有效")])
+        self._bind_combo_values(self.x_mode_combo, ("保持开关", "按住有效"))
+        self._lang_binds.append(
+            lambda c=self.x_mode_combo: c.configure(
+                width={"zh": 8, "en": 7, "fr": 8, "pt": 8, "es": 8, "ar": 7}.get(
+                    get_language(), 8)))
+        interact_label = tk.Label(tools_row, text=t("di.interaction"), font="bench8",
+                                  bg=CARD, fg=SUB)
+        interact_label.pack(side="left", padx=(0, 4))
+        self._bind_text(interact_label, "di.interaction")
+        self.x_mode_combo.pack(side="left")
+        self.x_mode_combo.bind("<<ComboboxSelected>>", self._on_x_mode)
+        self.di_legend = tk.Label(card, text="", font="bench7", bg=CARD, fg=ACCENT_DARK,
+                                  anchor="w", wraplength=250, justify="left")
+        self.di_legend.pack(anchor="w", padx=12)
+
+        # 辅助诊断折叠区：硬件 X 原值（按钮同样放在工具行右侧，避免被提示文字挤成 0 宽）
         self.hw_x_visible = False
-        self.hw_x_btn = self._button(note_row, t("di.hw_expand"), self._toggle_hw_x, width=13)
+        self.hw_x_btn = self._button(tools_row, t("di.hw_expand"), self._toggle_hw_x, width=13)
         # 双态按钮：切换语言时按折叠状态取词，并按语言微调宽度
         self._lang_binds.append(
             lambda: self.hw_x_btn.configure(
                 text=t("di.hw_collapse" if self.hw_x_visible else "di.hw_expand"),
-                width={"zh": 13, "en": 21, "fr": 18, "pt": 18, "es": 20, "ar": 12}.get(get_language(), 13)))
+                width={"zh": 13, "en": 10, "fr": 18, "pt": 18, "es": 20, "ar": 12}.get(get_language(), 13)))
         self.hw_x_btn.pack(side="right")
         self.hw_x_frame = tk.Frame(card, bg=CARD)
         self.hw_x_labels = [tk.Label(self.hw_x_frame, text=f"X{i}: —",
@@ -647,10 +683,11 @@ class BenchApp:
         head = tk.Frame(card, bg=CARD)
         head.pack(fill="x", padx=12, pady=(4, 0))
         ai_title = tk.Label(head, text=t("ai.title"), font="bench12b",
-                            bg=CARD, fg=INK)
+                            bg=CARD, fg=INK, anchor="w")
         ai_title.pack(side="left")
         self._bind_text(ai_title, "ai.title")
-        ai_hint = tk.Label(card, text=t("ai.hint"), font="bench8", bg=CARD, fg=SUB)
+        ai_hint = tk.Label(card, text=t("ai.hint"), font="bench8", bg=CARD, fg=SUB,
+                           anchor="w")
         ai_hint.pack(anchor="w", padx=12)
         self._bind_text(ai_hint, "ai.hint")
 
@@ -683,13 +720,15 @@ class BenchApp:
 
             bar_row = tk.Frame(column, bg=CARD)
             bar_row.pack(pady=(2, 0))
-            minus = self._button(bar_row, "−", lambda i=index: self._on_ad_nudge(i, -1),
-                                 width=2)
+            minus = self._button(bar_row, t("btn.minus"),
+                                 lambda i=index: self._on_ad_nudge(i, -1), padx=1)
+            self._bind_text(minus, "btn.minus")
             minus.pack(side="left")
             bar = make_bar(bar_row)
-            bar.pack(side="left", padx=4)
-            plus = self._button(bar_row, "＋", lambda i=index: self._on_ad_nudge(i, +1),
-                                width=2)
+            bar.pack(side="left", padx=2)
+            plus = self._button(bar_row, t("btn.plus"),
+                                lambda i=index: self._on_ad_nudge(i, +1), padx=1)
+            self._bind_text(plus, "btn.plus")
             plus.pack(side="left")
             self.ad_bars.append(bar)
             self.ad_minus_buttons.append(minus)
@@ -700,26 +739,35 @@ class BenchApp:
             value_label.pack(pady=(3, 0))
             self.ad_value_labels.append(value_label)
             target_label = tk.Label(column, text=t("ai.target_effective_none"),
-                                    font="bench8", bg=CARD, fg=SUB)
+                                    font="bench8", bg=CARD, fg=SUB,
+                                    # 列宽约 77px：允许折行，否则中文"目标 0.00 / 生效 0.00"
+                                    # 会被居中裁掉首字（屏幕上只剩"标 0.00 …"）
+                                    wraplength=72, justify="center")
             target_label.pack()
             self.ad_target_labels.append(target_label)
 
             entry_row = tk.Frame(column, bg=CARD)
-            entry_row.pack(pady=(2, 0))
-            entry = tk.Entry(entry_row, width=7, font="bench9", relief="solid",
+            entry_row.pack(pady=(2, 0), fill="x")
+            # 按钮先占位（side=right），输入框再吃掉剩余宽度：
+            # 反过来打包时列宽不足会把按钮压到只剩半个字（法/葡/西最明显）
+            apply_button = self._button(entry_row, t("btn.apply"),
+                                        lambda i=index: self._on_ad_entry(i), width=4,
+                                        padx=4)
+            self._bind_button(apply_button, "btn.apply",
+                                 {"zh": 4, "en": 2, "fr": 2, "pt": 2, "es": 2, "ar": 2})
+            apply_button.pack(side="right")
+            entry = tk.Entry(entry_row, width=6, font="bench9", relief="solid",
                              bd=1, justify="center")
-            entry.pack(side="left")
+            entry.pack(side="left", fill="x", expand=True, padx=(0, 3))
             entry.bind("<Return>", lambda e, i=index: self._on_ad_entry(i))
             self.ad_entries.append(entry)
-            apply_button = self._button(entry_row, t("btn.apply"),
-                                        lambda i=index: self._on_ad_entry(i), width=4)
-            self._bind_button(apply_button, "btn.apply",
-                                 {"zh": 4, "en": 6, "fr": 9, "pt": 7, "es": 7, "ar": 6})
-            apply_button.pack(side="left", padx=(3, 0))
             self.ad_apply_buttons.append(apply_button)
             error_label = tk.Label(column, text="", font="bench7", bg=CARD, fg=RED,
                                    wraplength=110, justify="center")
             self._pending_ad_errors[index] = error_label
+        self.ad_legend = tk.Label(card, text="", font="bench7", bg=CARD, fg=ACCENT_DARK,
+                                  anchor="w", wraplength=340, justify="left")
+        self.ad_legend.pack(anchor="w", padx=12)
 
     # ---- 左下：数字输出 --------------------------------------------------------
     def _build_digital_output_card(self, parent) -> None:
@@ -728,22 +776,24 @@ class BenchApp:
         head = tk.Frame(card, bg=CARD)
         head.pack(fill="x", padx=12, pady=(8, 0))
         do_title = tk.Label(head, text=t("do.title"), font="bench12b",
-                            bg=CARD, fg=INK)
+                            bg=CARD, fg=INK, anchor="w")
         do_title.pack(side="left")
         self._bind_text(do_title, "do.title")
-        do_hint = tk.Label(card, text=t("do.hint"), font="bench8", bg=CARD, fg=SUB)
+        do_hint = tk.Label(card, text=t("do.hint"), font="bench8", bg=CARD, fg=SUB,
+                           anchor="w", wraplength=250, justify="left")
         do_hint.pack(anchor="w", padx=12)
         self._bind_text(do_hint, "do.hint")
         tiles = tk.Frame(card, bg=CARD)
         tiles.pack(fill="x", padx=12, pady=(6, 0))
         self.y_tiles: list[tk.Label] = []
         self.y_leds: list[LedColumn] = []
+        self.y_captions: list[tk.Label] = []
         for index in range(8):
             column = tk.Frame(tiles, bg=CARD)
-            column.grid(row=0, column=index, padx=4, sticky="n")
+            column.grid(row=0, column=index, padx=3, sticky="n")
             tiles.columnconfigure(index, weight=1)
             tile = tk.Label(column, text=f"Y{index}", font="bench10b",
-                            width=5, relief="flat", bg="#F1F5F9", fg=SUB,
+                            width=4, relief="flat", bg="#F1F5F9", fg=SUB,
                             borderwidth=1, highlightthickness=1,
                             highlightbackground=BORDER, anchor="center", pady=4)
             tile.pack()
@@ -751,8 +801,15 @@ class BenchApp:
             led_column = LedColumn(column)
             led_column.pack(pady=(4, 0))
             self.y_leds.append(led_column)
-        do_note = tk.Label(card, text=t("do.note"), font="bench8", bg=CARD, fg=SUB)
-        do_note.pack(anchor="w", padx=12, pady=(6, 8))
+            caption = tk.Label(column, text="", font="bench7", bg=CARD, fg=ACCENT_DARK)
+            caption.pack()
+            self.y_captions.append(caption)
+        self.do_legend = tk.Label(card, text="", font="bench7", bg=CARD, fg=ACCENT_DARK,
+                                  anchor="w", wraplength=250, justify="left")
+        self.do_legend.pack(anchor="w", padx=12, pady=(4, 0))
+        do_note = tk.Label(card, text=t("do.note"), font="bench8", bg=CARD, fg=SUB,
+                           anchor="w", wraplength=250, justify="left")
+        do_note.pack(anchor="w", padx=12, pady=(2, 8))
         self._bind_text(do_note, "do.note")
 
     # ---- 右下：模拟输出 --------------------------------------------------------
@@ -762,10 +819,11 @@ class BenchApp:
         head = tk.Frame(card, bg=CARD)
         head.pack(fill="x", padx=12, pady=(4, 0))
         ao_title = tk.Label(head, text=t("ao.title"), font="bench12b",
-                            bg=CARD, fg=INK)
+                            bg=CARD, fg=INK, anchor="w")
         ao_title.pack(side="left")
         self._bind_text(ao_title, "ao.title")
-        ao_hint = tk.Label(card, text=t("ao.hint"), font="bench8", bg=CARD, fg=SUB)
+        ao_hint = tk.Label(card, text=t("ao.hint"), font="bench8", bg=CARD, fg=SUB,
+                           anchor="w", wraplength=250, justify="left")
         ao_hint.pack(anchor="w", padx=12)
         self._bind_text(ao_hint, "ao.hint")
         columns = tk.Frame(card, bg=CARD)
@@ -801,6 +859,9 @@ class BenchApp:
                                  font="bench7", bg=CARD, fg=SUB)
             raw_label.pack(pady=(1, 0))
             self.da_raw_labels.append(raw_label)
+        self.da_legend = tk.Label(card, text="", font="bench7", bg=CARD, fg=ACCENT_DARK,
+                                  anchor="w", wraplength=250, justify="left")
+        self.da_legend.pack(anchor="w", padx=12)
 
     # ---- 底部操作栏 --------------------------------------------------------------
     def _build_bottom_bar(self) -> None:
@@ -901,9 +962,13 @@ class BenchApp:
         self.customer_tree = ttk.Treeview(table, columns=columns, show="headings", height=12)
         col_keys = ("cust.col.address", "cust.col.name", "cust.col.value",
                     "cust.col.unit", "cust.col.access", "cust.col.sample")
-        for key, key_i18n, width in zip(columns, col_keys, (52, 84, 80, 128, 52, 52)):
+        # 基准宽度只决定"申请宽度"（会影响左侧卡片分到的宽度），实际宽度靠 stretch
+        # 在 1600 窗口里均分（约 1.4 倍）：基准给小，展示反而更宽，卡片也不再被挤。
+        for key, key_i18n, width in zip(columns, col_keys,
+                                        (56, 140, 80, 170, 80, 90)):
             self.customer_tree.heading(key, text=t(key_i18n))
-            self.customer_tree.column(key, width=width, anchor="w", stretch=False)
+            self.customer_tree.column(key, width=width, minwidth=width, anchor="w",
+                                      stretch=True)
             self._bind_heading(self.customer_tree, key, key_i18n)
         scroll = ttk.Scrollbar(table, orient="vertical", command=self.customer_tree.yview)
         scroll.pack(side="right", fill="y")
@@ -918,8 +983,8 @@ class BenchApp:
         self.send_value = tk.StringVar()
         add = tk.Frame(area, bg=CARD)
         add.pack(fill="x", pady=(2, 0))
-        for key_i18n, variable, width in (("cust.label.watch_addr", self.watch_address, 9),
-                                          ("cust.label.name", self.watch_name, 20)):
+        for key_i18n, variable, width in (("cust.label.watch_addr", self.watch_address, 7),
+                                          ("cust.label.name", self.watch_name, 12)):
             label = tk.Label(add, text=t(key_i18n), bg=CARD)
             label.pack(side="left", padx=(0, 4))
             self._bind_text(label, key_i18n)
@@ -976,7 +1041,10 @@ class BenchApp:
                     access = entry[2] if len(entry) == 3 and entry[2] in (
                         "只读", "只写", "读写") else "读写"
                     self.worker.submit(self.engine.set_customer_watch,
-                                       entry[0], entry[1], access)
+                                       entry[0], entry[1], access,
+                                       # 演示档案的默认点位带英文显示名（数据不进记录）
+                                       name_en="Setpoint (demo)"
+                                       if self.demo and entry[1] == "设定压力（演示）" else None)
 
     def _add_customer_watch(self) -> None:
         address = self.watch_address.get().strip().upper().removeprefix("D")
@@ -1073,6 +1141,90 @@ class BenchApp:
             return f"{value / 10:.1f} s"
         return str(value)
 
+    def _set_error(self, text: str | None = None, *, key: str | None = None) -> None:
+        """记录错误原文（或 i18n key）；渲染时按当前语言翻译，切语言后提示不会留在旧语种。"""
+        if key:
+            self._error_raw = ("key", key)
+        elif text:
+            self._error_raw = ("msg", str(text))
+        else:
+            self._error_raw = None
+        self._refresh_error_text()
+
+    def _refresh_error_text(self) -> None:
+        if self._error_raw is None:
+            self._last_error_message = None
+            return
+        kind, value = self._error_raw
+        self._last_error_message = t(value) if kind == "key" else msg(value)
+
+    def _refresh_io_labels(self) -> None:
+        """标注本次脚本启用的点位：描边 + 点位下小字 + 卡片图例（无脚本映射时全部清空）。
+
+        映射来自工程适配器（engine.io_labels），中文/英文各一份；纯界面展示，
+        不影响写入与记录。
+        """
+        if not hasattr(self, "x_captions"):
+            return                     # 卡片尚未构建（__init__ 早期调用）
+        labels = getattr(self.engine, "io_labels", None) or {}
+
+        def info(point: str):
+            item = labels.get(point)
+            if not item:
+                return None
+            if get_language() == "zh":
+                return item.get("zh", ""), item.get("tag_zh", "")
+            return (item.get("en") or item.get("zh", ""),
+                    item.get("tag_en") or item.get("tag_zh", ""))
+
+        groups: dict[str, list[str]] = {"X": [], "Y": [], "AD": [], "DA": []}
+        for index, button in enumerate(self.x_buttons):
+            item = info(f"X{index}")
+            button.configure(highlightbackground=ACCENT if item else BORDER)
+            self.x_captions[index].configure(text=item[1] if item else "")
+            if item:
+                groups["X"].append(f"X{index} {item[0]}")
+        for index, tile in enumerate(self.y_tiles):
+            item = info(f"Y{index}")
+            tile.configure(highlightbackground=ACCENT if item else BORDER)
+            self.y_captions[index].configure(text=item[1] if item else "")
+            if item:
+                groups["Y"].append(f"Y{index} {item[0]}")
+        for index in range(4):
+            item = info(f"AD{index}")
+            if item:
+                groups["AD"].append(f"AD{index} {item[0]}")
+        for index in range(2):
+            item = info(f"DA{index}")
+            if item:
+                groups["DA"].append(f"DA{index + 1} {item[0]}")
+        for legend, key in ((self.di_legend, "X"), (self.do_legend, "Y"),
+                            (self.ad_legend, "AD"), (self.da_legend, "DA")):
+            entries = groups[key]
+            legend.configure(
+                text=t("io.legend", items=" · ".join(entries)) if entries else "")
+
+    def _project_adapter(self):
+        """加载的测试脚本若带工程适配器（如压力工程），返回其映射；否则 None。"""
+        script = self._loaded_script()
+        if script is None:
+            return None
+        try:
+            from .script_projects import project_adapter
+            return project_adapter(script.resolve())
+        except (OSError, ValueError):
+            return None
+
+    def _project_manual_inputs(self):
+        adapter = self._project_adapter()
+        if not adapter:
+            return None
+        return {row["physical"]: dict(row) for row in adapter["inputs"]}
+
+    def _project_identity(self):
+        adapter = self._project_adapter()
+        return tuple(adapter.get("identity", ())) if adapter else ()
+
     def _render_customer_values(self) -> None:
         state = self.engine.state
         stale = state == State.FAULT
@@ -1090,6 +1242,11 @@ class BenchApp:
                 choices.append(f"D{key}")
             readable = "读" in access and not row.get("protected")
             note, kind = self.engine.customer_notes.get(row["address"], ("", ""))
+            name = row["name"]
+            # 非中文界面用适配器给的英文名/注释；缺译文回退中文原文
+            if get_language() != "zh":
+                name = self.engine.customer_names_en.get(row["address"], name)
+                note = self.engine.customer_notes_en.get(row["address"], note)
             value = self._customer_display(row.get("value", "—"), kind)
             status = row.get("wall", "")[11:19] or t("cust.status_pending")
             if state == State.DISCONNECTED:
@@ -1098,7 +1255,7 @@ class BenchApp:
                 value, status = "—", t("cust.status_write_only")
             elif stale or row.get("error"):
                 status = t("cust.status_stale", error=row.get("error") or tr(status))
-            values = (f"D{key}", row["name"], value, note, access_text, status)
+            values = (f"D{key}", name, value, note, access_text, status)
             if self.customer_tree.exists(key):
                 self.customer_tree.item(key, values=values)
             else:
@@ -1125,7 +1282,8 @@ class BenchApp:
         if config.get("version_address"):
             self.version_var.set(str(config["version_address"]))
         if config.get("x_mode"):
-            self.x_mode_var.set(tr(config["x_mode"]))
+            # 旧配置可能存过某语言的显示词：先还原引擎原值再按当前语言显示
+            self.x_mode_var.set(tr(untr(config["x_mode"])))
         self._refresh_script_label()
         self.worker.refresh_ms = config.get("refresh_ms", 250)
 
@@ -1167,7 +1325,7 @@ class BenchApp:
             return
         script = self._loaded_script()
         if script is None or not script.is_file():
-            self._last_error_message = t("script.err.select_first")
+            self._set_error(key="script.err.select_first")
             self._on_load_script()
             return
         self.start_script(script, self._script_args(script))
@@ -1206,14 +1364,15 @@ class BenchApp:
                                        station=data["station"],
                                        version_address=data["version_address"])
         except (ValueError, PermissionError) as exc:
-            self._last_error_message = str(exc)
+            self._set_error(str(exc))
             return False
         self._persist_config(data)
         return True
 
     def _persist_config(self, data: dict) -> None:
+        # ui_config 存引擎原值（中文），不能存下拉框显示词，否则换语言后回显错位
         self.ui_config.update({**data, "version_address": self.version_var.get().strip(),
-                               "x_mode": self.x_mode_var.get(),
+                               "x_mode": untr(self.x_mode_var.get()),
                                "refresh_ms": self.worker.refresh_ms})
         self._save_ui_config()
 
@@ -1236,6 +1395,14 @@ class BenchApp:
         if self.engine.state == State.DISCONNECTED:
             if not self._sync_settings_to_engine():
                 return
+        # 工程适配器项目：开始按钮直接进入"手动接管"，按适配器映射写注入寄存器。
+        # 这类批量接口工程没有会话握手寄存器，组提交路径（接口档案+confirmed）
+        # 不适用；未走本路由的（演示/无适配器）保持原有组提交行为。
+        inputs = self._project_manual_inputs()
+        if inputs is not None:
+            self.worker.submit(self.engine.start_project_manual, inputs,
+                               self._project_identity())
+            return
         self.worker.submit(self._safe_call, self.engine.start_simulation)
 
     # ---- 事件处理：输入 -------------------------------------------------------------
@@ -1311,16 +1478,16 @@ class BenchApp:
             messagebox.showinfo(t("export.done_title"), t("export.done", path=path),
                                 parent=self.root)
         except (OSError, ValueError) as exc:
-            messagebox.showerror(t("export.failed_title"), str(exc), parent=self.root)
+            messagebox.showerror(t("export.failed_title"), msg(str(exc)), parent=self.root)
 
     # ---- 对话框 -------------------------------------------------------------------
     def start_script(self, path: str | Path, args: list[str]) -> None:
         if self.engine.state in (State.SCRIPT_RUNNING, State.SCRIPT_CONFIRM):
             return
-        self._last_error_message = None
+        self._set_error()
         text = self.version_var.get().strip().upper().removeprefix("D")
         if text and (not text.isascii() or not text.isdecimal() or len(text) > 4):
-            self._last_error_message = t("script.err.addr_range")
+            self._set_error(key="script.err.addr_range")
             return
         self.worker.submit(self.worker.scripts.start, path, args, int(text) if text else None)
 
@@ -1461,6 +1628,7 @@ class BenchApp:
         elif kind == "state":
             self._last_state = event.get("state", self.engine.state)
             self.refresh_permissions()
+            self._refresh_io_labels()
             self._update_version_label(event)
             self._render_customer_values()
         elif kind == "customer_values":
@@ -1475,13 +1643,37 @@ class BenchApp:
             self._stale = bool(event.get("stale"))
             self.refresh_values()
         elif kind in ("error", "command_error", "store_error"):
-            self._last_error_message = event.get("message") or t("status.unknown_error")
+            message = event.get("message")
+            self._set_error(message) if message else self._set_error(key="status.unknown_error")
             self.customer_status.configure(text=self._last_error_message, fg=RED)
             if kind in ("command_error", "store_error"):
                 self._customer_pending = False
                 self._update_customer_send_state()
         else:
             pass
+
+    def _localize_value(self, value) -> str:
+        """目标/生效值里的中文监控名换成当前语言显示名；其余走数据词表 tr()。
+
+        引擎与落盘记录始终保存中文名，这里只在显示边界替换。
+        """
+        if not isinstance(value, str) or not value:
+            return "" if value is None else str(value)
+        if get_language() != "zh":
+            for address, english in self.engine.customer_names_en.items():
+                watch = self.engine.customer_watches.get(address)
+                name = getattr(watch, "name", watch)
+                if name == value:
+                    return english
+        return msg(value)
+
+    def _rebuild_log(self) -> None:
+        """语言切换后按当前译文重放日志（日志行是插入式，不重建就会留旧语言）。"""
+        if not hasattr(self, "log_tree"):
+            return
+        self.log_tree.delete(*self.log_tree.get_children())
+        for event in self.engine._events[-200:]:
+            self._append_log(event)
 
     def _append_log(self, event: dict) -> None:
         time_text = (event.get("wall") or "")[11:23]
@@ -1493,16 +1685,16 @@ class BenchApp:
         elif isinstance(target, float):
             target_text = f"{target:.2f}{unit}"
         else:
-            target_text = "—" if target is None else f"{target}{unit}"
+            target_text = "—" if target is None else self._localize_value(target) + unit
         if isinstance(effective, dict):
             effective_text = json.dumps(effective, ensure_ascii=False)
         elif isinstance(effective, float):
             effective_text = f"{effective:.2f}{unit}"
         else:
-            effective_text = "—" if effective is None else f"{effective}{unit}"
+            effective_text = "—" if effective is None else self._localize_value(effective) + unit
         result = event.get("result") or ""
         reason = event.get("reason")
-        result_text = tr(result) if not reason else f"{tr(result)} · {tr(reason)}"
+        result_text = msg(result) if not reason else f"{msg(result)} · {msg(reason)}"
         if isinstance(target, dict) or isinstance(effective, dict):
             value_text = f"{target_text} / {effective_text}"
         else:
@@ -1526,7 +1718,7 @@ class BenchApp:
             label = self._pending_ad_errors[index]
             if result in ("拒绝", "失败"):
                 # 非法值/超范围就地报错（PRD §6.3），不发送
-                label.configure(text=f"{tr(result)}: {tr(event.get('reason'))}"[:60])
+                label.configure(text=f"{tr(result)}: {msg(event.get('reason'))}"[:80])
                 label.pack()
             else:
                 label.configure(text="")
@@ -1857,14 +2049,14 @@ class SettingsDialog(tk.Toplevel):
             address = int(digits) if digits else None
             app.engine.apply_settings(version_address=address)
         except (ValueError, PermissionError) as exc:
-            messagebox.showerror(t("dlg.settings.err_version_title"), str(exc), parent=self)
+            messagebox.showerror(t("dlg.settings.err_version_title"), msg(str(exc)), parent=self)
             return
         path = self.profile_var.get().strip()
         if path:
             try:
                 profile = load_profile(path)
             except ValueError as exc:
-                messagebox.showerror(t("dlg.settings.err_profile_title"), str(exc), parent=self)
+                messagebox.showerror(t("dlg.settings.err_profile_title"), msg(str(exc)), parent=self)
                 return
             app.profile = profile
             app.engine.profile = profile
@@ -1883,7 +2075,7 @@ class SettingsDialog(tk.Toplevel):
         try:
             subprocess.Popen(["explorer", path])
         except OSError as exc:
-            messagebox.showerror(t("dlg.settings.err_open_title"), str(exc), parent=self)
+            messagebox.showerror(t("dlg.settings.err_open_title"), msg(str(exc)), parent=self)
 
 
 # ---------------------------------------------------------------------------
@@ -1895,16 +2087,17 @@ class RecordsDialog(tk.Toplevel):
         self.app = app
         self.title(t("dlg.records_title"))
         self.configure(bg=BG)
-        self.geometry("760x480")
+        self.geometry("880x480")
         self.transient(app.root)
         frame = tk.Frame(self, bg=CARD, highlightbackground=BORDER, highlightthickness=1)
         frame.pack(fill="both", expand=True, padx=10, pady=10)
 
         columns = ("id", "started", "ended", "status", "reason")
         self.tree = ttk.Treeview(frame, columns=columns, show="headings", height=14)
-        for key, key_i18n, width in (("id", "rec.col.id", 190), ("started", "rec.col.started", 150),
-                                     ("ended", "rec.col.ended", 150), ("status", "rec.col.status", 90),
-                                     ("reason", "rec.col.reason", 140)):
+        # reason 列放"断开结束（关闭窗口结束）"这类复合串的英文译文（最长约 42 字符）
+        for key, key_i18n, width in (("id", "rec.col.id", 190), ("started", "rec.col.started", 146),
+                                     ("ended", "rec.col.ended", 146), ("status", "rec.col.status", 80),
+                                     ("reason", "rec.col.reason", 255)):
             self.tree.heading(key, text=t(key_i18n))
             self.tree.column(key, width=width, anchor="w")
         self.tree.pack(fill="both", expand=True, padx=10, pady=(10, 4))
@@ -1927,7 +2120,7 @@ class RecordsDialog(tk.Toplevel):
             self.tree.insert("", "end", iid=summary["session_id"], values=(
                 summary["session_id"], (summary.get("started_wall") or "")[:19],
                 (summary.get("ended_wall") or "")[:19] or "—",
-                tr(summary.get("status")), tr(summary.get("end_reason")) or "—"))
+                msg(summary.get("status")), msg(summary.get("end_reason")) or "—"))
 
     def _selected(self) -> str | None:
         selection = self.tree.selection()
@@ -1952,7 +2145,7 @@ class RecordsDialog(tk.Toplevel):
             path = self.app.store.export_session(session_id, target)
             messagebox.showinfo(t("export.done_title"), t("export.done", path=path), parent=self)
         except (OSError, ValueError) as exc:
-            messagebox.showerror(t("export.failed_title"), str(exc), parent=self)
+            messagebox.showerror(t("export.failed_title"), msg(str(exc)), parent=self)
 
 
 class SessionDetailDialog(tk.Toplevel):
@@ -1967,7 +2160,7 @@ class SessionDetailDialog(tk.Toplevel):
         summary = next((item for item in app.store.list_sessions()
                         if item["session_id"] == session_id), {})
         info = "\n".join(
-            f"{key}: {tr(value) if isinstance(value, str) else value}" for key, value in summary.items()
+            f"{key}: {msg(value) if isinstance(value, str) else value}" for key, value in summary.items()
             if key in ("session_id", "status", "started_wall", "ended_wall",
                        "end_reason", "port", "baud", "format", "station",
                        "version_address", "version_value", "profile_name",
