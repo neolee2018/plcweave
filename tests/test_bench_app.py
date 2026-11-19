@@ -6,6 +6,7 @@ tkinter 在本机有显示环境；测试用真实窗口但立即泵事件，不
 """
 import gc
 import json
+import sys
 import time
 import tkinter as tk
 from pathlib import Path
@@ -17,6 +18,13 @@ from plcweave.bench.app import BenchApp, BenchWorker
 from plcweave.bench.contract import DEFAULT_DEMO_PROFILE
 from plcweave.bench.engine import State
 from plcweave.bench.store import SessionStore
+
+# Pixel-level layout checks were calibrated on Windows (Microsoft YaHei UI metrics). Other
+# platforms substitute fonts with different heights, so these assertions are Windows-only.
+windows_layout_only = pytest.mark.skipif(
+    sys.platform != "win32",
+    reason="pixel layout calibrated on Windows fonts (Microsoft YaHei UI)",
+)
 
 
 @pytest.fixture(scope="module", autouse=True)
@@ -230,6 +238,7 @@ def test_legacy_test_script_args_migrate_into_per_script_map(app, tmp_path, monk
 
 
 class TestLayout:
+    @windows_layout_only
     def test_default_window_shows_ad_settings_and_customer_commands(self, app):
         def check(widget):
             assert widget.winfo_viewable(), str(widget)
@@ -492,6 +501,7 @@ class TestCustomerAccessAndCsv:
 class TestCustomerCsvExportAndLayout:
     """V0.4.3：导出CSV按钮 + 按钮与输入框等高。"""
 
+    @windows_layout_only
     def test_buttons_align_with_entries(self, app):
         pump(app, 0.4)
         add_row = app.watch_access_combo.master
@@ -615,7 +625,10 @@ def test_named_fonts_are_really_registered(app):
     from plcweave.bench.i18n import ui_family
     actual = app.root.tk.call("font", "actual", "bench9")
     spec = dict(zip(actual[::2], actual[1::2]))
-    assert spec["-family"] == ui_family()
+    # Compare with the family Tk itself resolves for ui_family(): on hosts without that font
+    # (e.g. Linux without Microsoft YaHei UI) Tk substitutes one, and the named font must match it.
+    expected = app.root.tk.call("font", "actual", (ui_family(), 9), "-family")
+    assert spec["-family"] == expected
     assert int(spec["-size"]) == 9
     assert set(app._fonts) >= {"bench7", "bench8", "bench9b", "bench12b"}
 

@@ -18,7 +18,11 @@ from plcweave.bench.script_projects import project_adapter, prepare_arguments
 
 
 DEMO = Path(__file__).resolve().parents[1] / "demo/bench-script-demo.py"
-PRIORITY = DEMO.parent.parent / "project/l01s-water-standard/run_hil_v3.py"
+# Prefer the private customer project when present; a fresh public clone falls back to the
+# public copy shipped in demo/ so these tests never depend on ignored project/ contents.
+_PRIVATE_PRIORITY = DEMO.parent.parent / "project/l01s-water-standard/run_hil_v3.py"
+_PUBLIC_PRIORITY = DEMO.parent / "water-supply-standard/l01s-water-standard/run_hil_v3.py"
+PRIORITY = _PRIVATE_PRIORITY if _PRIVATE_PRIORITY.exists() else _PUBLIC_PRIORITY
 
 
 def process_events(process, timeout=15):
