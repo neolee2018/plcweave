@@ -1,7 +1,8 @@
-# 恒压供水演示项目（L01S Water Standard）
+# 恒压供水演示项目（L01S Water Standard）运行手册
 
-这是给**客户克隆仓库后直接使用**的恒压供水完整演示：离线脚本测试 → GX Works2 烧录 →
-实机测试 → 生产交付。把本 README 交给一个能在你电脑上执行终端命令的 AI Agent
+这是给**客户克隆仓库后直接使用**的恒压供水完整演示流程：离线脚本测试 → GX Works2 烧录 →
+实机测试 → 生产交付。项目本体在 [`project/l01s-water-standard/`](../../project/l01s-water-standard/README.md)，
+本 README 是它的三步走运行手册。把本手册交给一个能在你电脑上执行终端命令的 AI Agent
 （Codex CLI、Claude Code、Cursor、ZCode 等），按 Step 1 → 2 → 3 走完全程。
 
 - **控制对象**：L01S-16M-4AD2DA 恒压供水。压力变送器 AI0（0–16 bar）→ 固定点数字 PI
@@ -16,24 +17,24 @@
 并安装 `./vendor/gxwlib` 与 `-e ".[test]"`（实机测试再加 `.[hil]`）。也可以把根目录
 [PROMPT.md](../../PROMPT.md) 的**提示词一**交给 Agent，让它自动完成安装与自检。
 
-## 目录速览
+## 项目目录速览
 
 ```text
-demo/water-supply-standard/
-└── l01s-water-standard/          # 项目快照（目录名固定，台架 GUI 按它识别工程）
-    ├── requirements.md           # 需求（作者源）
-    ├── source.fxil               # V006 指令表源
-    ├── register_map.csv / io_map.csv
-    ├── lab-tests/V006/           # ★ 烧录材料：MAIN.csv + COMMENT.csv + 粘贴版指令表
-    ├── versions/V006/            # V006 冻结的用例套件 STD-006（test_cases + s1-freeze）
-    ├── verify_v006_behavior.py   # ★ Step 1：离线逐扫描行为验证（无需硬件）
-    ├── run_hil_v3.py             # ★ Step 2：实机在环测试脚本（台架命令块接口）
-    ├── check_build_identity.py   # 构建/源一致性核对
-    ├── Doc/  hmi/  delivery/V006-bench-kit/
-    └── ...
+project/l01s-water-standard/
+├── requirements.md               # 需求（作者源）
+├── source.fxil                   # V006 指令表源
+├── register_map.csv / io_map.csv
+├── lab-tests/V006/               # ★ 烧录材料：MAIN.csv + COMMENT.csv + 粘贴版指令表
+├── versions/V006/                # V006 冻结的用例套件 STD-006（test_cases + s1-freeze）
+├── verify_v006_behavior.py       # ★ Step 1：离线逐扫描行为验证（无需硬件）
+├── run_hil_v3.py                 # ★ Step 2：实机在环测试脚本（台架命令块接口）
+├── check_build_identity.py       # 构建/源一致性核对
+├── Doc/  hmi/  delivery/V006-bench-kit/  evidence/
+└── ...
 ```
 
-历史台架套件说明见 [l01s-water-standard/delivery/V006-bench-kit/README.md](l01s-water-standard/delivery/V006-bench-kit/README.md)。
+历史台架套件说明见
+[project/l01s-water-standard/delivery/V006-bench-kit/README.md](../../project/l01s-water-standard/delivery/V006-bench-kit/README.md)。
 
 ---
 
@@ -48,16 +49,17 @@ Agent 拿到本项目后的默认动作：
 2. **启动脚本测试**（离线逐扫描仿真，不接任何硬件）：
 
    ```powershell
-   ./.venv/Scripts/python.exe demo/water-supply-standard/l01s-water-standard/verify_v006_behavior.py
+   ./.venv/Scripts/python.exe project/l01s-water-standard/verify_v006_behavior.py
    ```
 
    期望输出：`{"status": "PASS", "checks": 22, "failed": []}`（首扫默认值、超压封锁、
    回差自动解锁、钳位与镜像、报警位共 22 项）。可选地再跑
    `check_build_identity.py` 核对源/构建身份一致。
 3. **汇报**：明确告诉用户——**恒压供水程序已经生成完毕**，并指出烧录材料位置：
-   `lab-tests/V006/`（`MAIN.csv`、`COMMENT.csv`、`Instruction-List-Paste.txt` 粘贴版）。
+   `project/l01s-water-standard/lab-tests/V006/`（`MAIN.csv`、`COMMENT.csv`、
+   `instruction-list-paste.txt` 粘贴版）。
 
-> 注意：不要对本项目根目录跑 `plcweave simulate`。仓库里的 62 用例 STD-005 回归套件是
+> 注意：不要对项目根目录跑 `plcweave simulate`。仓库里的 62 用例 STD-005 回归套件是
 > V005 时代的预期，V006 起休眠/唤醒预期已修订，跑旧套件只会得到一串假 FAIL。
 > V006 的验证体系是：离线 `verify_v006_behavior.py`（22 项行为断言）+
 > 实机冻结套件 `versions/V006/`（STD-006，7 条用例，由 `run_hil_v3.py` 执行）。
@@ -66,8 +68,8 @@ Agent 拿到本项目后的默认动作：
 
 **客户操作（烧录必须由客户本人完成）：**
 
-1. 打开 GX Works2 工程，导入 `lab-tests/V006/COMMENT.csv` 与 `lab-tests/V006/MAIN.csv`
-   （或在工程里粘贴 `instruction-list-paste.txt` 的 310 条指令）。
+1. 打开 GX Works2 工程，导入 `project/l01s-water-standard/lab-tests/V006/COMMENT.csv` 与
+   `MAIN.csv`（或在工程里粘贴 `instruction-list-paste.txt` 的 310 条指令）。
 2. **确认编译零错误后**下载到 PLC，并把 PLC 切到 RUN。
 3. 只读身份核对（可用任意 Modbus 主站或台架界面）：`D300=6`、`D301=31`、`D304=6`、
    `D302/D303 = -7313/-11960`，且 `D305` 心跳持续变化。
@@ -83,7 +85,7 @@ Agent 拿到本项目后的默认动作：
 
 ```powershell
 # V006 冻结套件 STD-006 共 7 条用例（STD6-001..007），必须带 --restart（真实 STOP/RUN 首扫）
-./.venv/Scripts/python.exe -m plcweave.bench --script demo/water-supply-standard/l01s-water-standard/run_hil_v3.py --script-args --restart --all
+./.venv/Scripts/python.exe -m plcweave.bench --script project/l01s-water-standard/run_hil_v3.py --script-args --restart --all
 # 也可只跑指定用例：--script-args --restart --cases STD6-001,STD6-003
 ```
 

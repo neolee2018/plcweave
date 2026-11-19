@@ -1,0 +1,18 @@
+{
+  "task_id": "PW-20261022-V002-HIL02",
+  "owner": "independent-s6-review",
+  "frozen_at": "2026-10-22T10:26:06.973964+00:00",
+  "status": "RED_FIXTURES_AND_CAPTURE_POLICY_FROZEN_BEFORE_IMPLEMENTATION",
+  "files": {
+    "tests\\test_saturation_deadline.py": "f3754eeeb0b9fbf49cb80e9b3163ab7a0394f5c3cd9d6f14e64f4cb78e679366",
+    "private\\l01s-water-standard\\evidence\\hil02\\S6-deadline-capture-addendum.json": "ca0e0a893d151c40c995f0b057d788e599c639c5afa862c4b8ae0eeec919c6ba",
+    "private\\l01s-water-standard\\evidence\\hil02\\S6-deadline-capture-addendum.md": "9e9b4cd33e735e0090745197098bf905be9f1f238fc4a9361efaaae1d08650aa",
+    "private\\l01s-water-standard\\evidence\\hil02\\S6-deadline-fixtures-red.json": "434090704c956573b3b8fd32cbfbfe2424e1057dc689b0a77bdea8faea65278a"
+  },
+  "unchanged_original_qualification_freeze_sha256": "940bc937eeafae9c8ef802551bea2e8aceb2eb2431ea28c721d869fc39f0b38d",
+  "baseline_runner_sha256": "3e5fe84ff72c3e2e1c72530f803bbff2a2cee677ba444f48adafbb59debce86c",
+  "run01_report_sha256": "63edaaf2c3dd2c4f10067c43e9a6b2c6006d5697fd56b4e9af76700cadbda6b1",
+  "red_exit_code": 1,
+  "red_summary": "1 failed, 4 passed",
+  "scope": "capture-only refinement; no expectation/tolerance changes"
+}

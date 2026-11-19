@@ -1,0 +1,35 @@
+{
+  "schema": "plcweave-s6-deadline-capture-addendum-1",
+  "task_id": "PW-20261022-V002-HIL02",
+  "owner": "independent-s6-review",
+  "at": "2026-10-22T10:26:06.973446+00:00",
+  "scope": "capture strategy only, no PLC behavior, S1 expectation, supplemental procedure expectation or tolerance modification",
+  "prerequisite": "Original qualification freeze and all candidate bindings remain unchanged; preserve run01 as immutable prior evidence",
+  "applies_to": "Executor.saturation integral_by_deadline evidence in future run02",
+  "capture_start": "Continue using earliest trigger request + 50200 - 150 ms as the near-deadline capture anchor. Additional earlier observation is unnecessary.",
+  "hard_deadline": "Earliest triggering write request + existing final_expected_by_ms=50200; never borrow effective-trigger acquisition latency",
+  "read_policy": [
+    "Read D120 as a single word repeatedly near the deadline, preserving each complete request/response interval and returned value.",
+    "After every read use the latest two complete, chronological, nonoverlapping D120 observations; never combine across missing/error observations or select an older matching pair.",
+    "PASS is positive proof only: latest two values both 30000 and both response timestamps no later than earliest trigger + 50200ms.",
+    "Stop when such a qualified pair is collected, or when the hard deadline is reached. An in-flight bounded read crossing the deadline may be logged but cannot qualify.",
+    "If the pair is missing, changing, non-cap, late, or otherwise insufficient, integral_by_deadline remains UNVERIFIED. An early 29940 value never proves a deadline failure.",
+    "Preserve all raw reads and sequence references in the result; any communication error retains TEST_INFRA_ERROR handling.",
+    "Keep post-deadline plateau demonstration separate and keep all 55 original cases and scan relationships UNVERIFIED.",
+    "No change to 39800..40200ms first-frequency event, 4900..5100ms sleep, 2900..3100ms wake, the frozen 28 procedures, or hardware inputs/reset/cleanup."
+  ],
+  "fixtures": {
+    "path": "tests/test_saturation_deadline.py",
+    "count": 5,
+    "cases": [
+      "third valid cap sample can supply previously missing second cap",
+      "already stable cap still requires two complete observations",
+      "one cap sample by deadline cannot qualify",
+      "cap after earliest deadline cannot borrow effective-trigger latency",
+      "no cap remains UNVERIFIED and polling bounded"
+    ]
+  },
+  "red_evidence": "S6-deadline-fixtures-red.json",
+  "red_summary": "1 failed, 4 passed: current runner stops after only two cap reads and misses a legal third complete read",
+  "cleanup": "No hardware connection, GUI, background process, lock or temporary files created."
+}

@@ -1,0 +1,333 @@
+{
+  "task_id": "PW-20261022-V002-HIL02",
+  "owner": "independent-s6-review",
+  "at": "2026-10-22T10:34:47.798120+00:00",
+  "decision": "ACCEPT_SCOPED_BENCH_EVIDENCE",
+  "scope": "Raw-file audit only; reviewer did not open COM5/COM7 or alter frozen expectations",
+  "run": "run02",
+  "sha256": {
+    "report": "b0282613593b85b39e9ac436c4ae898249ed9878d7f617255ddca64dee41f45c",
+    "trace": "a5fefe0202757bccf8cef6702056fa8427e55664ee38bf39b20eb9093784ad1d",
+    "runner": "d2877c6410ff22ff91146392fbbe762fefb3be661944ad103eb7d2f8f11a1fdd",
+    "capture_policy": "ca0e0a893d151c40c995f0b057d788e599c639c5afa862c4b8ae0eeec919c6ba",
+    "capture_freeze": "b19b6a0fbb67e7e0239ff7a9d42cadec711d2dfaba03cfc7fb6d53f128de8076"
+  },
+  "trace_rows": 8269,
+  "audit_counts": {
+    "transactions": 5311,
+    "verified_writes": 394,
+    "reconstructed_reads": 2477,
+    "cpu_forces": 192,
+    "cpu_restarts": 27,
+    "stable_observations": 121,
+    "scalar_assertions_recomputed": 933,
+    "timing_events_recomputed": 7
+  },
+  "errors": [],
+  "supplemental": {
+    "actual_executed": 28,
+    "status_counts": {
+      "PASS": 24,
+      "UNVERIFIED": 4
+    },
+    "procedures": [
+      {
+        "id": "SUP-INIT-001",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-INIT-002",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-INIT-003",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-INIT-004",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-INIT-005",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-INIT-006",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-INIT-007",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-INIT-008",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-INIT-009",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-INIT-010",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-STEADY-STD-016",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-STEADY-STD-024",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-STEADY-STD-025",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-STEADY-STD-048",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-COMMAND-STD-011",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-COMMAND-STD-012",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-COMMAND-STD-013",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-COMMAND-STD-014",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-COMMAND-STD-015",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-COMMAND-STD-019",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-COMMAND-STD-020",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-COMMAND-STD-021",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-COMMAND-STD-022",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-ZERO-SATURATION",
+        "status": "UNVERIFIED"
+      },
+      {
+        "id": "SUP-GATE-PLATEAU",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-TIMER-TWO-CYCLES",
+        "status": "UNVERIFIED"
+      },
+      {
+        "id": "SUP-TIMER-CANCEL",
+        "status": "UNVERIFIED"
+      },
+      {
+        "id": "SUP-JITTER-ACTUAL-SCHEDULE",
+        "status": "UNVERIFIED"
+      }
+    ]
+  },
+  "original_suite": {
+    "count": 55,
+    "bench": 52,
+    "local_only": 3,
+    "hardware_waveforms_replayed": false,
+    "case_status": "ALL_UNVERIFIED",
+    "scalar_assertions": 2473,
+    "global_assertions": 715,
+    "relationship_assertions": 496,
+    "evaluated_scans": 0
+  },
+  "events": [
+    {
+      "procedure": "SUP-ZERO-SATURATION",
+      "id": "first_full_frequency",
+      "elapsed_ms": [
+        40012.80259998748,
+        40158.055100007914
+      ],
+      "expected_ms": {
+        "min": 39800,
+        "max": 40200
+      },
+      "independent_status": "PASS"
+    },
+    {
+      "procedure": "SUP-TIMER-TWO-CYCLES",
+      "id": "sleep-1",
+      "elapsed_ms": [
+        4816.67730002664,
+        4992.276199976914
+      ],
+      "expected_ms": {
+        "min": 4900,
+        "max": 5100
+      },
+      "independent_status": "UNVERIFIED"
+    },
+    {
+      "procedure": "SUP-TIMER-TWO-CYCLES",
+      "id": "wake-1",
+      "elapsed_ms": [
+        2788.406799954828,
+        2961.6314999875613
+      ],
+      "expected_ms": {
+        "min": 2900,
+        "max": 3100
+      },
+      "independent_status": "UNVERIFIED"
+    },
+    {
+      "procedure": "SUP-TIMER-TWO-CYCLES",
+      "id": "sleep-2",
+      "elapsed_ms": [
+        4817.035100015346,
+        4991.102400003001
+      ],
+      "expected_ms": {
+        "min": 4900,
+        "max": 5100
+      },
+      "independent_status": "UNVERIFIED"
+    },
+    {
+      "procedure": "SUP-TIMER-TWO-CYCLES",
+      "id": "wake-2",
+      "elapsed_ms": [
+        2775.309099990409,
+        2948.247899999842
+      ],
+      "expected_ms": {
+        "min": 2900,
+        "max": 3100
+      },
+      "independent_status": "UNVERIFIED"
+    },
+    {
+      "procedure": "SUP-TIMER-CANCEL",
+      "id": "sleep-after-cancel",
+      "elapsed_ms": [
+        4838.5725999833085,
+        5010.37480001105
+      ],
+      "expected_ms": {
+        "min": 4900,
+        "max": 5100
+      },
+      "independent_status": "UNVERIFIED"
+    },
+    {
+      "procedure": "SUP-TIMER-CANCEL",
+      "id": "wake-after-cancel",
+      "elapsed_ms": [
+        2799.9854999943636,
+        2973.4919000184163
+      ],
+      "expected_ms": {
+        "min": 2900,
+        "max": 3100
+      },
+      "independent_status": "UNVERIFIED"
+    }
+  ],
+  "cap_capture": {
+    "observations": [
+      {
+        "sequence": 5900,
+        "D120": 29940,
+        "request_elapsed_ms": 50050.4435999901,
+        "response_elapsed_ms": 50079.9084000173,
+        "complete_before_deadline": true
+      },
+      {
+        "sequence": 5902,
+        "D120": 29940,
+        "request_elapsed_ms": 50079.932200023904,
+        "response_elapsed_ms": 50109.225400025025,
+        "complete_before_deadline": true
+      },
+      {
+        "sequence": 5904,
+        "D120": 29940,
+        "request_elapsed_ms": 50109.249700035434,
+        "response_elapsed_ms": 50137.58919999236,
+        "complete_before_deadline": true
+      },
+      {
+        "sequence": 5906,
+        "D120": 29940,
+        "request_elapsed_ms": 50137.61350000277,
+        "response_elapsed_ms": 50166.36169998674,
+        "complete_before_deadline": true
+      },
+      {
+        "sequence": 5908,
+        "D120": 30000,
+        "request_elapsed_ms": 50166.38599999715,
+        "response_elapsed_ms": 50196.37740001781,
+        "complete_before_deadline": true
+      },
+      {
+        "sequence": 5910,
+        "D120": 30000,
+        "request_elapsed_ms": 50196.486000029836,
+        "response_elapsed_ms": 50226.21990001062,
+        "complete_before_deadline": false
+      }
+    ],
+    "independent_status": "UNVERIFIED",
+    "interpretation": "A first complete 30000 response before deadline and a second response after deadline do not form a qualifying pair. UNVERIFIED is correct. No tolerance widened and no further rerun requested."
+  },
+  "run01_history": {
+    "unchanged_report_sha256": "63edaaf2c3dd2c4f10067c43e9a6b2c6006d5697fd56b4e9af76700cadbda6b1",
+    "independent_review_retained": true
+  },
+  "cleanup": {
+    "independent_zero_scalar_recheck": "PASS",
+    "cpu_run": 1,
+    "control_flags_restored": true,
+    "serial_closed_reported": true,
+    "owned_lock_absent": true,
+    "reviewer_resources": "No ports, GUI, background process, lock or temporary files created.",
+    "subsequent_read_only_exit_audit": {
+      "status": "PASS",
+      "writes": 0,
+      "trace_rows": 17,
+      "snapshot_reconstructed_from_raw_transactions": true,
+      "native_identity_decoded_and_checksum_verified": true,
+      "cpu_run": 1,
+      "application_stop_request": 1,
+      "output_enable": 0,
+      "all_stopped_outputs_zero": true,
+      "native_closed_reported": true,
+      "modbus_closed_reported": true,
+      "lock_absent": true,
+      "report_sha256": "91e8169597ce262aa4ee8b7899088bfa988cfd8f787bb00173fada99d77d83c9",
+      "trace_sha256": "2e951bcb185fbdb8e845c31a473521117a19f396c2c9d51ae8e39a3569ec8106"
+    }
+  },
+  "limits": [
+    "Four supplemental procedures remain UNVERIFIED: zero saturation deadline qualification, two timer procedures, exact jitter waveform",
+    "No original 55-case hardware execution or full-scan safety/PI recurrence proof",
+    "No complete HARDWARE_PASS, electrical, plant, power-loss retention or binary-readback attestation"
+  ]
+}

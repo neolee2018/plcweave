@@ -1,0 +1,18 @@
+{
+  "reason": "Separate private customer integration tests from public toolkit; original files retained byte-for-byte",
+  "files": [
+    {
+      "path": "tests/test_saturation_deadline.py",
+      "original_sha256": "2b35c9568e5424b0313d45aa916d47e23cc6597933eb0b7f8dee38e7775fdbae",
+      "archived_at": "project\\l01s-water-standard\\migration\\github-publication-20261022\\test_saturation_deadline.py"
+    },
+    {
+      "path": "tests/test_sampled_backend.py",
+      "original_sha256": "3010490c04913a38644cf99b83f06bc3bedae328b37ed6277a52a5ddbdb54d4b",
+      "archived_at": "project\\l01s-water-standard\\migration\\github-publication-20261022\\test_sampled_backend.py"
+    }
+  ],
+  "active_customer_tests": "../../tests",
+  "path_adjustment": "active moved tests resolve project root using parents[1]; no test expectations changed",
+  "public_replacement": "synthetic scan-level UNVERIFIED fixture"
+}

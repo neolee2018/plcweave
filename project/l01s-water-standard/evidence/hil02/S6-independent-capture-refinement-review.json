@@ -1,0 +1,56 @@
+{
+  "task_id": "PW-20261022-V002-HIL02",
+  "owner": "independent-s6-review",
+  "at": "2026-10-22T10:27:22.220169+00:00",
+  "decision": "CAPTURE_ONLY_REFINEMENT_ACCEPTED_FOR_RUN02",
+  "freeze_checks": [
+    {
+      "file": "private\\l01s-water-standard\\evidence\\hil02\\S6-qualification-plan.json",
+      "match": true,
+      "actual": "d09a6298935138492fcd485831c069a29f9561f10cea1a69008916e3dbb96313"
+    },
+    {
+      "file": "private\\l01s-water-standard\\evidence\\hil02\\S6-qualification-plan.md",
+      "match": true,
+      "actual": "47125ba7ab6c5c1cf7ae32242de696e79a29e9f3f74f41bc9f069fdf75d34139"
+    },
+    {
+      "file": "tests\\test_sampled_backend.py",
+      "match": true,
+      "actual": "19e41236900bdcdb95beeb5d7417d951a8f77877c4adefb24347d0e1402d8958"
+    },
+    {
+      "file": "tests\\test_cpu_v2_identity.py",
+      "match": true,
+      "actual": "692b4d5a5febfe58a8c775f0d3b9e359d44327d6a24bb036398a4b2eae50fd47"
+    },
+    {
+      "file": "tests\\test_saturation_deadline.py",
+      "match": true,
+      "actual": "f3754eeeb0b9fbf49cb80e9b3163ab7a0394f5c3cd9d6f14e64f4cb78e679366"
+    },
+    {
+      "file": "private\\l01s-water-standard\\evidence\\hil02\\S6-deadline-capture-addendum.json",
+      "match": true,
+      "actual": "ca0e0a893d151c40c995f0b057d788e599c639c5afa862c4b8ae0eeec919c6ba"
+    },
+    {
+      "file": "private\\l01s-water-standard\\evidence\\hil02\\S6-deadline-capture-addendum.md",
+      "match": true,
+      "actual": "9e9b4cd33e735e0090745197098bf905be9f1f238fc4a9361efaaae1d08650aa"
+    },
+    {
+      "file": "private\\l01s-water-standard\\evidence\\hil02\\S6-deadline-fixtures-red.json",
+      "match": true,
+      "actual": "434090704c956573b3b8fd32cbfbfe2424e1057dc689b0a77bdea8faea65278a"
+    }
+  ],
+  "runner_sha256": "d2877c6410ff22ff91146392fbbe762fefb3be661944ad103eb7d2f8f11a1fdd",
+  "review": "Near-deadline anchor and earliest-trigger deadline unchanged. Only repeated single D120 reads were added, requiring latest two complete nonoverlapping 30000 values ending by 50200ms. Success or deadline terminates polling; late/missing/changing observations remain UNVERIFIED. All capture sequences retained; new policy/fixture hashes bound before and after run.",
+  "cleanup": "No hardware, GUI, lock or background process created.",
+  "independent_software_run": {
+    "command": "PYTHONPATH=src .venv/Scripts/python.exe -m pytest -q tests/test_saturation_deadline.py tests/test_sampled_backend.py",
+    "exit_code": 0,
+    "result": "32 passed in 0.08s"
+  }
+}

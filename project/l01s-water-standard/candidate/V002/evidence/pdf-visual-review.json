@@ -1,0 +1,78 @@
+{
+  "status": "PASS",
+  "reviewer": "visual independent judge / pdf_visual_check",
+  "version": "V002 candidate",
+  "pages_checked": 37,
+  "pdf_sha256": {
+    "Blackbox-Test-Cases_EN.pdf": "38e226e56d0c9f74d41ff48376e41cfaa4d303e4d53264b67b694bbac30a5954",
+    "L01S-Water-PI-il-annotated_EN.pdf": "48eed5b8145a7f1de05d1fd31e38f7696e54370f3f564087534f3bf853475202"
+  },
+  "page_counts": {
+    "Blackbox-Test-Cases_EN.pdf": 31,
+    "L01S-Water-PI-il-annotated_EN.pdf": 6
+  },
+  "pages_checked_by_pdf": {
+    "Blackbox-Test-Cases_EN.pdf": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31
+    ],
+    "L01S-Water-PI-il-annotated_EN.pdf": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ]
+  },
+  "method": "Individually viewed all 37 current 100-dpi rendered PNG pages using view_image; independently checked file SHA256 against reviewed revision.",
+  "findings": [],
+  "resolved_initial_findings": [
+    "Register-map continuation headings are present in explicit table blocks.",
+    "Case titles and metadata remain with their first step tables; short cases are grouped.",
+    "Step/Apply/Duration column widths are readable and timing values remain intact."
+  ],
+  "checks_passed": [
+    "No visible clipping, overflow, garbled characters, split table rows, or isolated headings.",
+    "Continuation tables retain column headings.",
+    "All page footers show correct page/total: 1-31 and 1-6.",
+    "Both front pages state Candidate V002 and hardware/physical I/O UNVERIFIED; local logic scope and new manual download requirement remain visible.",
+    "Text and tables are legible at the reviewed page render size."
+  ],
+  "limitations": [
+    "Visual/text-layout review only; this PASS is not a functional, compiler, simulation, serial, hardware, physical I/O, or safety acceptance result.",
+    "No binary/source attestation or numerical test-oracle audit was performed.",
+    "Long cases and explanatory paragraphs may span pages while retaining readable headings and unbroken rows."
+  ],
+  "initial_review": "pdf-visual-initial-review.json retained separately with FAIL for the superseded 34-page layout.",
+  "cleanup": "No serial/browser connections, persistent processes, or temporary files created by reviewer."
+}

@@ -1,0 +1,15 @@
+{
+  "task_id": "PW-20261022-V002-HIL02",
+  "owner": "codex",
+  "at": "2026-10-22T10:41:25.358270+00:00",
+  "status": "CLEANUP_PASS",
+  "owned_process_count": 0,
+  "owned_temporary_profile_count": 0,
+  "serial_lock_exists": false,
+  "serial_ports": "COM5/COM7 reopened read-only, verified identity/zero outputs and closed",
+  "cpu": "RUN, original M8035/M8036/M8037 flags restored",
+  "application": "STOP, D1930, M0/M10/M11/D120/D154/Y0/AO0/AO1 register zero",
+  "reviewers": "file-only; no resource ownership",
+  "memory_save": "completed; helper exited",
+  "user_apps": "none closed"
+}

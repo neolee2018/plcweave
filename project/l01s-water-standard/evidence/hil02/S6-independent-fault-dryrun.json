@@ -1,0 +1,27 @@
+{
+  "task_id": "PW-20261022-V002-HIL02",
+  "owner": "independent-s6-review",
+  "at": "2026-10-22T10:13:28.371911+00:00",
+  "runner_sha256": "100737db16d1d5d79e7be43859cd8f523a28a9ae81b19b118258621e690d3e92",
+  "scope": "No hardware. Fake bench/controller and temporary output directory; all temporary outputs removed.",
+  "checks": [
+    {
+      "injection": "identity_failure",
+      "status": "PASS",
+      "actual_executed_count": 0,
+      "attempted_count": 0,
+      "unexecuted_count": 28,
+      "cleanup": "No verified identity, no cleanup writes permitted"
+    },
+    {
+      "injection": "first_procedure_reset_failure",
+      "status": "PASS",
+      "actual_executed_count": 0,
+      "attempted_count": 1,
+      "unexecuted_count": 27,
+      "cleanup": "RUN retained, original control flags restored, application stopped/output disabled/zero readback"
+    }
+  ],
+  "status": "PASS",
+  "cleanup": "No real serial client created, no ports, GUI or locks retained."
+}

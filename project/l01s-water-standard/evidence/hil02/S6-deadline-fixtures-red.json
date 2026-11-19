@@ -1,0 +1,11 @@
+{
+  "task_id": "PW-20261022-V002-HIL02",
+  "owner": "independent-s6-review",
+  "at": "2026-10-22T10:26:06.972658+00:00",
+  "scope": "deterministic fake clock/transport only; no serial or PLC source read",
+  "command": "PYTHONPATH=src .venv/Scripts/python.exe -m pytest -q tests/test_saturation_deadline.py",
+  "exit_code": 1,
+  "output": "F....                                                                    [100%]\n================================== FAILURES ===================================\n_ test_third_complete_read_before_deadline_can_supply_the_missing_second_cap __\n\nrunner = <module 's6_deadline_fixture_runner' from 'F:\\\\000-HBDTECH-Neo\\\\103-plcweave\\\\private\\\\l01s-water-standard\\\\run_hil02.py'>\n\n    def test_third_complete_read_before_deadline_can_supply_the_missing_second_cap(runner):\n        # Reproduces run01's early 29940 followed by one 30000; a third read fits.\n        result, executor = exercise(runner, cap_at_ms=50100)\n>       assert len(executor.cap_reads) >= 3\nE       AssertionError: assert 2 >= 3\nE        +  where 2 = len([{'sequence': 1335, 'start_ms': 50090, 'end_ms': 50120, 'values': {'D120': 29940}}, {'sequence': 1336, 'start_ms': 50120, 'end_ms': 50150, 'values': {'D120': 30000}}])\nE        +    where [{'sequence': 1335, 'start_ms': 50090, 'end_ms': 50120, 'values': {'D120': 29940}}, {'sequence': 1336, 'start_ms': 50120, 'end_ms': 50150, 'values': {'D120': 30000}}] = <test_saturation_deadline.exercise.<locals>.FakeExecutor object at 0x0000018960FC8EC0>.cap_reads\n\ntests\\test_saturation_deadline.py:109: AssertionError\n=========================== short test summary info ===========================\nFAILED tests/test_saturation_deadline.py::test_third_complete_read_before_deadline_can_supply_the_missing_second_cap\n1 failed, 4 passed in 0.08s\n",
+  "runner_sha256": "3e5fe84ff72c3e2e1c72530f803bbff2a2cee677ba444f48adafbb59debce86c",
+  "fixture_sha256": "f3754eeeb0b9fbf49cb80e9b3163ab7a0394f5c3cd9d6f14e64f4cb78e679366"
+}

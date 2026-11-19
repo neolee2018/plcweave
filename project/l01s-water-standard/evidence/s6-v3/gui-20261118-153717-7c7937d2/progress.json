@@ -1,0 +1,7796 @@
+{
+  "task_id": "PW-20261108-V005-BATCH-IO",
+  "kind": "s6_soft_element_case_run",
+  "at": "2026-11-18T07:37:18.158057+00:00",
+  "port": "COM11",
+  "writes": 77,
+  "cases": [
+    {
+      "id": "STD-001",
+      "title": "First scan rejects preloaded requests and defaults external controls",
+      "scope": "bench",
+      "status": "UNVERIFIED",
+      "steps": [
+        {
+          "index": 0,
+          "duration_ms": 10,
+          "write": {},
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D313",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D317",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D309",
+              "expected": 60,
+              "actual": 60
+            },
+            {
+              "scope": "expect",
+              "device": "D310",
+              "expected": 51,
+              "actual": 51
+            },
+            {
+              "scope": "expect",
+              "device": "D300",
+              "expected": 5,
+              "actual": 5
+            },
+            {
+              "scope": "expect",
+              "device": "D301",
+              "expected": 31,
+              "actual": 31
+            },
+            {
+              "scope": "expect",
+              "device": "D304",
+              "expected": 5,
+              "actual": 5
+            },
+            {
+              "scope": "expect",
+              "device": "M8196",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "expect",
+              "device": "M8125",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "expect",
+              "device": "D322",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "expect",
+              "device": "D320",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D321",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D323",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D333",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D325",
+              "expected": 60,
+              "actual": 60
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [
+            {
+              "scope": "expect",
+              "device": "D8120",
+              "expected": -8063,
+              "reason": "System comm word; recorded in the batch system checkpoint, not judged per-step"
+            },
+            {
+              "scope": "expect",
+              "device": "D8121",
+              "expected": 1,
+              "reason": "System comm word; recorded in the batch system checkpoint, not judged per-step"
+            }
+          ],
+          "observed_at_ms": 184,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29269,
+            "D306": 28616,
+            "D307": 16,
+            "D308": 0,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 0,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 0,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 184
+          }
+        },
+        {
+          "index": 1,
+          "duration_ms": 200,
+          "write": {},
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D313",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 205,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29271,
+            "D306": 29151,
+            "D307": 16,
+            "D308": 0,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 0,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 0,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 205
+          }
+        }
+      ],
+      "asserted_steps": 2,
+      "compared_items": 28,
+      "skipped_items": 2,
+      "ambiguous_items": 0,
+      "tick_hold_items": 0
+    },
+    {
+      "id": "STD-011",
+      "title": "Start latches, requests persist, stop dominates simultaneous commands",
+      "scope": "bench",
+      "status": "UNVERIFIED",
+      "steps": [
+        {
+          "index": 0,
+          "duration_ms": 10,
+          "write": {},
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D313",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 187,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29280,
+            "D306": 31700,
+            "D307": 16,
+            "D308": 0,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 0,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 0,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 187
+          }
+        },
+        {
+          "index": 1,
+          "duration_ms": 20,
+          "write": {
+            "D320": 1,
+            "D330": 1250,
+            "D323": 1
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "M0",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "expect",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "Y0",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "expect",
+              "device": "D320",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "expect",
+              "device": "D323",
+              "expected": 1,
+              "actual": 1
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [
+            {
+              "scope": "expect",
+              "device": "D319",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D311",
+              "expected": 2000,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D312",
+              "expected": 1600,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            }
+          ],
+          "observed_at_ms": 281,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29283,
+            "D306": 32422,
+            "D307": 53,
+            "D308": 50,
+            "D309": 60,
+            "D310": 51,
+            "D311": 2000,
+            "D312": 1600,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 1250,
+            "D319": 0,
+            "D320": 1,
+            "D321": 0,
+            "D322": 1,
+            "D323": 1,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 1250,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 1,
+            "M0": 1,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 281
+          }
+        },
+        {
+          "index": 2,
+          "duration_ms": 200,
+          "write": {
+            "D320": 0
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "Y0",
+              "expected": 1,
+              "actual": 1
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 277,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29286,
+            "D306": -32416,
+            "D307": 49,
+            "D308": 50,
+            "D309": 60,
+            "D310": 51,
+            "D311": 2103,
+            "D312": 1682,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 1250,
+            "D319": 30,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 1,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 1250,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 1,
+            "M0": 1,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 277
+          }
+        },
+        {
+          "index": 3,
+          "duration_ms": 10,
+          "write": {
+            "D320": 1,
+            "D321": 1
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D320",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "expect",
+              "device": "D321",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D313",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 272,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29289,
+            "D306": -31733,
+            "D307": 48,
+            "D308": 50,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 1250,
+            "D319": 0,
+            "D320": 1,
+            "D321": 1,
+            "D322": 1,
+            "D323": 1,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 1250,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 272
+          }
+        },
+        {
+          "index": 4,
+          "duration_ms": 200,
+          "write": {},
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D313",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 204,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29291,
+            "D306": -31205,
+            "D307": 48,
+            "D308": 50,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 1250,
+            "D319": 0,
+            "D320": 1,
+            "D321": 1,
+            "D322": 1,
+            "D323": 1,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 1250,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 204
+          }
+        },
+        {
+          "index": 5,
+          "duration_ms": 100,
+          "write": {
+            "D320": 0,
+            "D321": 0
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D313",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 277,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29293,
+            "D306": -30497,
+            "D307": 48,
+            "D308": 50,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 1250,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 1,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 1250,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 277
+          }
+        },
+        {
+          "index": 6,
+          "duration_ms": 20,
+          "write": {
+            "D320": 1
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "M0",
+              "expected": 1,
+              "actual": 1
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 276,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29296,
+            "D306": -29783,
+            "D307": 53,
+            "D308": 50,
+            "D309": 60,
+            "D310": 51,
+            "D311": 2000,
+            "D312": 1600,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 1250,
+            "D319": 0,
+            "D320": 1,
+            "D321": 0,
+            "D322": 1,
+            "D323": 1,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 1250,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 1,
+            "M0": 1,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 276
+          }
+        }
+      ],
+      "asserted_steps": 7,
+      "compared_items": 39,
+      "skipped_items": 3,
+      "ambiguous_items": 0,
+      "tick_hold_items": 0
+    },
+    {
+      "id": "STD-016",
+      "title": "Signed raw clamp and every rounding boundary class",
+      "scope": "bench",
+      "status": "PASS",
+      "steps": [
+        {
+          "index": 0,
+          "duration_ms": 10,
+          "write": {},
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D313",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 184,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29306,
+            "D306": -27292,
+            "D307": 16,
+            "D308": 0,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 0,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 0,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 184
+          }
+        },
+        {
+          "index": 1,
+          "duration_ms": 10,
+          "write": {
+            "D330": -32768
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D308",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D330",
+              "expected": -32768,
+              "actual": -32768
+            },
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D313",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 280,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29309,
+            "D306": -26569,
+            "D307": 16,
+            "D308": 0,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 0,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": -32768,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 280
+          }
+        },
+        {
+          "index": 2,
+          "duration_ms": 10,
+          "write": {
+            "D330": -1
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D308",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D330",
+              "expected": -1,
+              "actual": -1
+            },
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D313",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 277,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29311,
+            "D306": -25847,
+            "D307": 16,
+            "D308": 0,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 0,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": -1,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 277
+          }
+        },
+        {
+          "index": 3,
+          "duration_ms": 10,
+          "write": {
+            "D330": 0
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D308",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D330",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D313",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 274,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29314,
+            "D306": -25122,
+            "D307": 16,
+            "D308": 0,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 0,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 0,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 274
+          }
+        },
+        {
+          "index": 4,
+          "duration_ms": 10,
+          "write": {
+            "D330": 12
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D308",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D330",
+              "expected": 12,
+              "actual": 12
+            },
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D313",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 279,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29317,
+            "D306": -24405,
+            "D307": 16,
+            "D308": 0,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 12,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 12,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 279
+          }
+        },
+        {
+          "index": 5,
+          "duration_ms": 10,
+          "write": {
+            "D330": 13
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D308",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "expect",
+              "device": "D330",
+              "expected": 13,
+              "actual": 13
+            },
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D313",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 277,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29320,
+            "D306": -23669,
+            "D307": 16,
+            "D308": 1,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 13,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 13,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 277
+          }
+        },
+        {
+          "index": 6,
+          "duration_ms": 10,
+          "write": {
+            "D330": 24
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D308",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "expect",
+              "device": "D330",
+              "expected": 24,
+              "actual": 24
+            },
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D313",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 278,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29322,
+            "D306": -22943,
+            "D307": 16,
+            "D308": 1,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 24,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 24,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 278
+          }
+        },
+        {
+          "index": 7,
+          "duration_ms": 10,
+          "write": {
+            "D330": 25
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D308",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "expect",
+              "device": "D330",
+              "expected": 25,
+              "actual": 25
+            },
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D313",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 278,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29325,
+            "D306": -22217,
+            "D307": 16,
+            "D308": 1,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 25,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 25,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 278
+          }
+        },
+        {
+          "index": 8,
+          "duration_ms": 10,
+          "write": {
+            "D330": 37
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D308",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "expect",
+              "device": "D330",
+              "expected": 37,
+              "actual": 37
+            },
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D313",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 275,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29328,
+            "D306": -21488,
+            "D307": 16,
+            "D308": 1,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 37,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 37,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 275
+          }
+        },
+        {
+          "index": 9,
+          "duration_ms": 10,
+          "write": {
+            "D330": 38
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D308",
+              "expected": 2,
+              "actual": 2
+            },
+            {
+              "scope": "expect",
+              "device": "D330",
+              "expected": 38,
+              "actual": 38
+            },
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D313",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 278,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29331,
+            "D306": -20770,
+            "D307": 16,
+            "D308": 2,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 38,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 38,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 278
+          }
+        },
+        {
+          "index": 10,
+          "duration_ms": 10,
+          "write": {
+            "D330": 249
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D308",
+              "expected": 10,
+              "actual": 10
+            },
+            {
+              "scope": "expect",
+              "device": "D330",
+              "expected": 249,
+              "actual": 249
+            },
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D313",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 276,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29333,
+            "D306": -20053,
+            "D307": 16,
+            "D308": 10,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 249,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 249,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 276
+          }
+        },
+        {
+          "index": 11,
+          "duration_ms": 10,
+          "write": {
+            "D330": 250
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D308",
+              "expected": 10,
+              "actual": 10
+            },
+            {
+              "scope": "expect",
+              "device": "D330",
+              "expected": 250,
+              "actual": 250
+            },
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D313",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 278,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29336,
+            "D306": -19330,
+            "D307": 16,
+            "D308": 10,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 250,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 250,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 278
+          }
+        },
+        {
+          "index": 12,
+          "duration_ms": 10,
+          "write": {
+            "D330": 1237
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D308",
+              "expected": 49,
+              "actual": 49
+            },
+            {
+              "scope": "expect",
+              "device": "D330",
+              "expected": 1237,
+              "actual": 1237
+            },
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D313",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 275,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29339,
+            "D306": -18604,
+            "D307": 16,
+            "D308": 49,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 1237,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 1237,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 275
+          }
+        },
+        {
+          "index": 13,
+          "duration_ms": 10,
+          "write": {
+            "D330": 1238
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D308",
+              "expected": 50,
+              "actual": 50
+            },
+            {
+              "scope": "expect",
+              "device": "D330",
+              "expected": 1238,
+              "actual": 1238
+            },
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D313",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 272,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29342,
+            "D306": -17886,
+            "D307": 16,
+            "D308": 50,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 1238,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 1238,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 272
+          }
+        },
+        {
+          "index": 14,
+          "duration_ms": 10,
+          "write": {
+            "D330": 1250
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D308",
+              "expected": 50,
+              "actual": 50
+            },
+            {
+              "scope": "expect",
+              "device": "D330",
+              "expected": 1250,
+              "actual": 1250
+            },
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D313",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 276,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29344,
+            "D306": -17176,
+            "D307": 16,
+            "D308": 50,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 1250,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 1250,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 276
+          }
+        },
+        {
+          "index": 15,
+          "duration_ms": 10,
+          "write": {
+            "D330": 1449
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D308",
+              "expected": 58,
+              "actual": 58
+            },
+            {
+              "scope": "expect",
+              "device": "D330",
+              "expected": 1449,
+              "actual": 1449
+            },
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D313",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 281,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29347,
+            "D306": -16441,
+            "D307": 16,
+            "D308": 58,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 1449,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 1449,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 281
+          }
+        },
+        {
+          "index": 16,
+          "duration_ms": 10,
+          "write": {
+            "D330": 1450
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D308",
+              "expected": 58,
+              "actual": 58
+            },
+            {
+              "scope": "expect",
+              "device": "D330",
+              "expected": 1450,
+              "actual": 1450
+            },
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D313",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 281,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29350,
+            "D306": -15707,
+            "D307": 16,
+            "D308": 58,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 1450,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 1450,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 281
+          }
+        },
+        {
+          "index": 17,
+          "duration_ms": 10,
+          "write": {
+            "D330": 1462
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D308",
+              "expected": 58,
+              "actual": 58
+            },
+            {
+              "scope": "expect",
+              "device": "D330",
+              "expected": 1462,
+              "actual": 1462
+            },
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D313",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 279,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29353,
+            "D306": -14972,
+            "D307": 16,
+            "D308": 58,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 1462,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 1462,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 279
+          }
+        },
+        {
+          "index": 18,
+          "duration_ms": 10,
+          "write": {
+            "D330": 1463
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D308",
+              "expected": 59,
+              "actual": 59
+            },
+            {
+              "scope": "expect",
+              "device": "D330",
+              "expected": 1463,
+              "actual": 1463
+            },
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D313",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 273,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29355,
+            "D306": -14253,
+            "D307": 16,
+            "D308": 59,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 1463,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 1463,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 273
+          }
+        },
+        {
+          "index": 19,
+          "duration_ms": 10,
+          "write": {
+            "D330": 3987
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D308",
+              "expected": 159,
+              "actual": 159
+            },
+            {
+              "scope": "expect",
+              "device": "D330",
+              "expected": 3987,
+              "actual": 3987
+            },
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D313",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 274,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29358,
+            "D306": -13537,
+            "D307": 16,
+            "D308": 159,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 3987,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 3987,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 274
+          }
+        },
+        {
+          "index": 20,
+          "duration_ms": 10,
+          "write": {
+            "D330": 3988
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D308",
+              "expected": 160,
+              "actual": 160
+            },
+            {
+              "scope": "expect",
+              "device": "D330",
+              "expected": 3988,
+              "actual": 3988
+            },
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D313",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 277,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29361,
+            "D306": -12816,
+            "D307": 16,
+            "D308": 160,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 3988,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 3988,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 277
+          }
+        },
+        {
+          "index": 21,
+          "duration_ms": 10,
+          "write": {
+            "D330": 3999
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D308",
+              "expected": 160,
+              "actual": 160
+            },
+            {
+              "scope": "expect",
+              "device": "D330",
+              "expected": 3999,
+              "actual": 3999
+            },
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D313",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 276,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29364,
+            "D306": -12099,
+            "D307": 16,
+            "D308": 160,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 3999,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 3999,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 276
+          }
+        },
+        {
+          "index": 22,
+          "duration_ms": 10,
+          "write": {
+            "D330": 4000
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D308",
+              "expected": 160,
+              "actual": 160
+            },
+            {
+              "scope": "expect",
+              "device": "D330",
+              "expected": 4000,
+              "actual": 4000
+            },
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D313",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 278,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29366,
+            "D306": -11366,
+            "D307": 16,
+            "D308": 160,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 4000,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 4000,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 278
+          }
+        },
+        {
+          "index": 23,
+          "duration_ms": 10,
+          "write": {
+            "D330": 4001
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D308",
+              "expected": 160,
+              "actual": 160
+            },
+            {
+              "scope": "expect",
+              "device": "D330",
+              "expected": 4001,
+              "actual": 4001
+            },
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D313",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 277,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29369,
+            "D306": -10651,
+            "D307": 16,
+            "D308": 160,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 4000,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 4001,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 277
+          }
+        },
+        {
+          "index": 24,
+          "duration_ms": 10,
+          "write": {
+            "D330": 32767
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D308",
+              "expected": 160,
+              "actual": 160
+            },
+            {
+              "scope": "expect",
+              "device": "D330",
+              "expected": 32767,
+              "actual": 32767
+            },
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D313",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 274,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29372,
+            "D306": -9928,
+            "D307": 16,
+            "D308": 160,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 4000,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 32767,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 274
+          }
+        }
+      ],
+      "asserted_steps": 25,
+      "compared_items": 223,
+      "skipped_items": 0,
+      "ambiguous_items": 0,
+      "tick_hold_items": 0
+    },
+    {
+      "id": "STD-031",
+      "title": "Sleep-delay equality at SV, below adjacent value cancels, and timer restarts",
+      "scope": "bench",
+      "status": "UNVERIFIED",
+      "steps": [
+        {
+          "index": 0,
+          "duration_ms": 10,
+          "write": {},
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D313",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 187,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29382,
+            "D306": -7412,
+            "D307": 16,
+            "D308": 0,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 0,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 0,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 187
+          }
+        },
+        {
+          "index": 1,
+          "duration_ms": 100,
+          "write": {
+            "D320": 1,
+            "D330": 1488
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [
+            {
+              "scope": "expect",
+              "device": "D319",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            }
+          ],
+          "observed_at_ms": 273,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29384,
+            "D306": -6688,
+            "D307": 21,
+            "D308": 60,
+            "D309": 60,
+            "D310": 51,
+            "D311": 2000,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 1488,
+            "D319": 0,
+            "D320": 1,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 1488,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 1,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 273
+          }
+        },
+        {
+          "index": 2,
+          "duration_ms": 3000,
+          "write": {},
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [
+            {
+              "scope": "invariant",
+              "device": "D319",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "invariant",
+              "device": "D311",
+              "expected": 2000,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            }
+          ],
+          "observed_at_ms": 3006,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29414,
+            "D306": 1155,
+            "D307": 21,
+            "D308": 60,
+            "D309": 60,
+            "D310": 51,
+            "D311": 2000,
+            "D312": 0,
+            "D313": 0,
+            "D314": 30,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 1488,
+            "D319": 0,
+            "D320": 1,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 1488,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 1,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 3006
+          }
+        },
+        {
+          "index": 3,
+          "duration_ms": 100,
+          "write": {
+            "D330": 1475
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "M0",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "expect",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [
+            {
+              "scope": "expect",
+              "device": "D319",
+              "expected": 1,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            }
+          ],
+          "observed_at_ms": 277,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29417,
+            "D306": 1876,
+            "D307": 17,
+            "D308": 59,
+            "D309": 60,
+            "D310": 51,
+            "D311": 2010,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 1475,
+            "D319": 1,
+            "D320": 1,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 1475,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 1,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 277
+          }
+        },
+        {
+          "index": 4,
+          "duration_ms": 3000,
+          "write": {
+            "D330": 1488
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [
+            {
+              "scope": "invariant",
+              "device": "D319",
+              "expected": 1,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            }
+          ],
+          "observed_at_ms": 3004,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29447,
+            "D306": 9729,
+            "D307": 21,
+            "D308": 60,
+            "D309": 60,
+            "D310": 51,
+            "D311": 2000,
+            "D312": 0,
+            "D313": 0,
+            "D314": 28,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 1488,
+            "D319": 3,
+            "D320": 1,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 1488,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 1,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 3004
+          }
+        },
+        {
+          "index": 5,
+          "duration_ms": 100,
+          "write": {
+            "D330": 1475
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "M0",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "expect",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 274,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29450,
+            "D306": 10443,
+            "D307": 17,
+            "D308": 59,
+            "D309": 60,
+            "D310": 51,
+            "D311": 2010,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 1475,
+            "D319": 4,
+            "D320": 1,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 1475,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 1,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 274
+          }
+        },
+        {
+          "index": 6,
+          "duration_ms": 3600,
+          "write": {
+            "D330": 1488
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 3606,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29486,
+            "D306": 19858,
+            "D307": 21,
+            "D308": 60,
+            "D309": 60,
+            "D310": 51,
+            "D311": 2000,
+            "D312": 0,
+            "D313": 0,
+            "D314": 34,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 1488,
+            "D319": 6,
+            "D320": 1,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 1488,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 1,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 3606
+          }
+        },
+        {
+          "index": 7,
+          "duration_ms": 600,
+          "write": {},
+          "status": "UNVERIFIED",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "M0",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "expect",
+              "device": "M11",
+              "expected": 1,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [
+            {
+              "scope": "expect",
+              "device": "M11",
+              "expected": 1,
+              "actual": 0,
+              "reason": "sleep qualify-timer at 40/100 at the sampled instant; real machine restarts the timer on below-SV excursions (spec semantics, cf. case title) while the simulator oracle kept accumulating -- expectation/simulator divergence, not a sampled-instant failure",
+              "ticks": 40,
+              "threshold": 100
+            }
+          ],
+          "skipped": [
+            {
+              "scope": "expect",
+              "device": "D319",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D311",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D312",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            }
+          ],
+          "observed_at_ms": 609,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29492,
+            "D306": 21442,
+            "D307": 21,
+            "D308": 60,
+            "D309": 60,
+            "D310": 51,
+            "D311": 2000,
+            "D312": 0,
+            "D313": 0,
+            "D314": 40,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 1488,
+            "D319": 6,
+            "D320": 1,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 1488,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 1,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 609
+          }
+        },
+        {
+          "index": 8,
+          "duration_ms": 400,
+          "write": {},
+          "status": "UNVERIFIED",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "M0",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "expect",
+              "device": "M11",
+              "expected": 1,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [
+            {
+              "scope": "expect",
+              "device": "M11",
+              "expected": 1,
+              "actual": 0,
+              "reason": "sleep qualify-timer at 44/100 at the sampled instant; real machine restarts the timer on below-SV excursions (spec semantics, cf. case title) while the simulator oracle kept accumulating -- expectation/simulator divergence, not a sampled-instant failure",
+              "ticks": 44,
+              "threshold": 100
+            }
+          ],
+          "skipped": [
+            {
+              "scope": "expect",
+              "device": "D319",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D311",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D312",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            }
+          ],
+          "observed_at_ms": 408,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29496,
+            "D306": 22507,
+            "D307": 21,
+            "D308": 60,
+            "D309": 60,
+            "D310": 51,
+            "D311": 2000,
+            "D312": 0,
+            "D313": 0,
+            "D314": 44,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 1488,
+            "D319": 6,
+            "D320": 1,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 1488,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 1,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 408
+          }
+        }
+      ],
+      "asserted_steps": 9,
+      "compared_items": 27,
+      "skipped_items": 11,
+      "ambiguous_items": 0,
+      "tick_hold_items": 2
+    },
+    {
+      "id": "STD-033",
+      "title": "Sleep persists above wake pressure and dead band, equality does not wake",
+      "scope": "bench",
+      "status": "UNVERIFIED",
+      "steps": [
+        {
+          "index": 0,
+          "duration_ms": 10,
+          "write": {},
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D313",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 184,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29505,
+            "D306": 25049,
+            "D307": 16,
+            "D308": 0,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 0,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 0,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 184
+          }
+        },
+        {
+          "index": 1,
+          "duration_ms": 10200,
+          "write": {
+            "D320": 1,
+            "D330": 4000,
+            "D323": 1
+          },
+          "status": "UNVERIFIED",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "M0",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "expect",
+              "device": "M11",
+              "expected": 1,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [
+            {
+              "scope": "expect",
+              "device": "M11",
+              "expected": 1,
+              "actual": 0,
+              "reason": "sleep deadline one tick short at the sampled instant; PLC tick mirror D314=99/100; engagement observed in subsequent steps",
+              "ticks": 99,
+              "threshold": 100
+            }
+          ],
+          "skipped": [
+            {
+              "scope": "expect",
+              "device": "D319",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D311",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D312",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            }
+          ],
+          "observed_at_ms": 10208,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29607,
+            "D306": -15205,
+            "D307": 53,
+            "D308": 160,
+            "D309": 60,
+            "D310": 51,
+            "D311": 2000,
+            "D312": 1600,
+            "D313": 0,
+            "D314": 99,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 4000,
+            "D319": 0,
+            "D320": 1,
+            "D321": 0,
+            "D322": 1,
+            "D323": 1,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 4000,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 1,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 10208
+          }
+        },
+        {
+          "index": 2,
+          "duration_ms": 4000,
+          "write": {
+            "D330": 1300
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D308",
+              "expected": 52,
+              "actual": 52
+            },
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "invariant",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 4002,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29647,
+            "D306": -4891,
+            "D307": 51,
+            "D308": 52,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 1300,
+            "D319": 0,
+            "D320": 1,
+            "D321": 0,
+            "D322": 1,
+            "D323": 1,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 1300,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 1,
+            "M11": 1,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 4002
+          }
+        },
+        {
+          "index": 3,
+          "duration_ms": 4000,
+          "write": {
+            "D330": 1425
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "invariant",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 4007,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29687,
+            "D306": 5408,
+            "D307": 51,
+            "D308": 57,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 1425,
+            "D319": 0,
+            "D320": 1,
+            "D321": 0,
+            "D322": 1,
+            "D323": 1,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 1425,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 1,
+            "M11": 1,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 4007
+          }
+        },
+        {
+          "index": 4,
+          "duration_ms": 2800,
+          "write": {
+            "D330": 1275
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D308",
+              "expected": 51,
+              "actual": 51
+            },
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "invariant",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 2805,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29715,
+            "D306": 12630,
+            "D307": 51,
+            "D308": 51,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 1275,
+            "D319": 0,
+            "D320": 1,
+            "D321": 0,
+            "D322": 1,
+            "D323": 1,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 1275,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 1,
+            "M11": 1,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 2805
+          }
+        },
+        {
+          "index": 5,
+          "duration_ms": 3200,
+          "write": {
+            "D330": 1250
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "M0",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "expect",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D308",
+              "expected": 50,
+              "actual": 50
+            },
+            {
+              "scope": "expect",
+              "device": "Y0",
+              "expected": 1,
+              "actual": 1
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 3206,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29747,
+            "D306": 20847,
+            "D307": 53,
+            "D308": 50,
+            "D309": 60,
+            "D310": 51,
+            "D311": 2000,
+            "D312": 1600,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 1250,
+            "D319": 0,
+            "D320": 1,
+            "D321": 0,
+            "D322": 1,
+            "D323": 1,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 1250,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 1,
+            "M0": 1,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 3206
+          }
+        },
+        {
+          "index": 6,
+          "duration_ms": 2000,
+          "write": {},
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 2006,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29767,
+            "D306": 25818,
+            "D307": 49,
+            "D308": 50,
+            "D309": 60,
+            "D310": 51,
+            "D311": 2120,
+            "D312": 1696,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 1250,
+            "D319": 200,
+            "D320": 1,
+            "D321": 0,
+            "D322": 1,
+            "D323": 1,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 1250,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 1,
+            "M0": 1,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 2006
+          }
+        }
+      ],
+      "asserted_steps": 7,
+      "compared_items": 36,
+      "skipped_items": 3,
+      "ambiguous_items": 0,
+      "tick_hold_items": 1
+    },
+    {
+      "id": "STD-036",
+      "title": "Large negative error/full-scale cannot wrap PI output",
+      "scope": "bench",
+      "status": "UNVERIFIED",
+      "steps": [
+        {
+          "index": 0,
+          "duration_ms": 10,
+          "write": {},
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D313",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 185,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29777,
+            "D306": 28318,
+            "D307": 16,
+            "D308": 0,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 0,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 0,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 185
+          }
+        },
+        {
+          "index": 1,
+          "duration_ms": 100,
+          "write": {
+            "D324": 10,
+            "D330": 0,
+            "D320": 1
+          },
+          "status": "UNVERIFIED",
+          "compared": [],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [
+            {
+              "scope": "expect",
+              "device": "D319",
+              "expected": 10,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D311",
+              "expected": 2101,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            }
+          ],
+          "observed_at_ms": 274,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29779,
+            "D306": 29035,
+            "D307": 21,
+            "D308": 0,
+            "D309": 10,
+            "D310": 51,
+            "D311": 2000,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 0,
+            "D319": 0,
+            "D320": 1,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 10,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 0,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 1,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 274
+          }
+        },
+        {
+          "index": 2,
+          "duration_ms": 10,
+          "write": {
+            "D330": 32767
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D308",
+              "expected": 160,
+              "actual": 160
+            },
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 275,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29782,
+            "D306": 29754,
+            "D307": 21,
+            "D308": 160,
+            "D309": 10,
+            "D310": 51,
+            "D311": 2000,
+            "D312": 0,
+            "D313": 0,
+            "D314": 1,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 4000,
+            "D319": 0,
+            "D320": 1,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 10,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 32767,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 1,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 275
+          }
+        },
+        {
+          "index": 3,
+          "duration_ms": 10200,
+          "write": {},
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "M0",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "expect",
+              "device": "M11",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "expect",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 10203,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29884,
+            "D306": -9207,
+            "D307": 19,
+            "D308": 160,
+            "D309": 10,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 4000,
+            "D319": 0,
+            "D320": 1,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 10,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 32767,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 1,
+            "M11": 1,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 10203
+          }
+        }
+      ],
+      "asserted_steps": 4,
+      "compared_items": 16,
+      "skipped_items": 2,
+      "ambiguous_items": 0,
+      "tick_hold_items": 0
+    },
+    {
+      "id": "STD-048",
+      "title": "Echo accepts all signed words on the next executed scan",
+      "scope": "bench",
+      "status": "PASS",
+      "steps": [
+        {
+          "index": 0,
+          "duration_ms": 10,
+          "write": {},
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D313",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 187,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29893,
+            "D306": -6698,
+            "D307": 16,
+            "D308": 0,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 0,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 0,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 187
+          }
+        },
+        {
+          "index": 1,
+          "duration_ms": 10,
+          "write": {
+            "D333": 1
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D317",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "expect",
+              "device": "D333",
+              "expected": 1,
+              "actual": 1
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 276,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29896,
+            "D306": -5973,
+            "D307": 16,
+            "D308": 0,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 1,
+            "D318": 0,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 0,
+            "D331": 0,
+            "D332": 0,
+            "D333": 1,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 276
+          }
+        },
+        {
+          "index": 2,
+          "duration_ms": 10,
+          "write": {
+            "D333": 12345
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D317",
+              "expected": 12345,
+              "actual": 12345
+            },
+            {
+              "scope": "expect",
+              "device": "D333",
+              "expected": 12345,
+              "actual": 12345
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 273,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29899,
+            "D306": -5253,
+            "D307": 16,
+            "D308": 0,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 12345,
+            "D318": 0,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 0,
+            "D331": 0,
+            "D332": 0,
+            "D333": 12345,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 273
+          }
+        },
+        {
+          "index": 3,
+          "duration_ms": 10,
+          "write": {
+            "D333": -1
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D317",
+              "expected": -1,
+              "actual": -1
+            },
+            {
+              "scope": "expect",
+              "device": "D333",
+              "expected": -1,
+              "actual": -1
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 275,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29901,
+            "D306": -4540,
+            "D307": 16,
+            "D308": 0,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": -1,
+            "D318": 0,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 0,
+            "D331": 0,
+            "D332": 0,
+            "D333": -1,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 275
+          }
+        },
+        {
+          "index": 4,
+          "duration_ms": 10,
+          "write": {
+            "D333": -32768
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D317",
+              "expected": -32768,
+              "actual": -32768
+            },
+            {
+              "scope": "expect",
+              "device": "D333",
+              "expected": -32768,
+              "actual": -32768
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 273,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29904,
+            "D306": -3815,
+            "D307": 16,
+            "D308": 0,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": -32768,
+            "D318": 0,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 0,
+            "D331": 0,
+            "D332": 0,
+            "D333": -32768,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 273
+          }
+        },
+        {
+          "index": 5,
+          "duration_ms": 10,
+          "write": {
+            "D333": 32767
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D317",
+              "expected": 32767,
+              "actual": 32767
+            },
+            {
+              "scope": "expect",
+              "device": "D333",
+              "expected": 32767,
+              "actual": 32767
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 275,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29907,
+            "D306": -3106,
+            "D307": 16,
+            "D308": 0,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 32767,
+            "D318": 0,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 0,
+            "D331": 0,
+            "D332": 0,
+            "D333": 32767,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 275
+          }
+        },
+        {
+          "index": 6,
+          "duration_ms": 10,
+          "write": {
+            "D333": 0
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D317",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D333",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 274,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29910,
+            "D306": -2391,
+            "D307": 16,
+            "D308": 0,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 0,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 0,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 274
+          }
+        }
+      ],
+      "asserted_steps": 7,
+      "compared_items": 19,
+      "skipped_items": 0,
+      "ambiguous_items": 0,
+      "tick_hold_items": 0
+    },
+    {
+      "id": "STD-056",
+      "title": "Parallel start terminal starts, latches, and releases cleanly",
+      "scope": "bench",
+      "status": "PASS",
+      "steps": [
+        {
+          "index": 0,
+          "duration_ms": 10,
+          "write": {},
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D313",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 189,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29919,
+            "D306": 143,
+            "D307": 16,
+            "D308": 0,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 0,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 0,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 189
+          }
+        },
+        {
+          "index": 1,
+          "duration_ms": 100,
+          "write": {
+            "D334": 1
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "M0",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "expect",
+              "device": "D320",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D321",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D334",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "expect",
+              "device": "D335",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 279,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29922,
+            "D306": 873,
+            "D307": 17,
+            "D308": 0,
+            "D309": 60,
+            "D310": 51,
+            "D311": 2606,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 0,
+            "D319": 60,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 0,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 1,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 1,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 279
+          }
+        },
+        {
+          "index": 2,
+          "duration_ms": 100,
+          "write": {
+            "D334": 0
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "M0",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "expect",
+              "device": "D334",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D320",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 277,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29925,
+            "D306": 1604,
+            "D307": 17,
+            "D308": 0,
+            "D309": 60,
+            "D310": 51,
+            "D311": 2624,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 0,
+            "D319": 240,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 0,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 1,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 277
+          }
+        },
+        {
+          "index": 3,
+          "duration_ms": 10,
+          "write": {
+            "D321": 1,
+            "D320": 1
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D313",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 275,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29927,
+            "D306": 2323,
+            "D307": 16,
+            "D308": 0,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 0,
+            "D319": 0,
+            "D320": 1,
+            "D321": 1,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 0,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 275
+          }
+        },
+        {
+          "index": 4,
+          "duration_ms": 10,
+          "write": {
+            "D321": 0,
+            "D320": 0
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D335",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 276,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29930,
+            "D306": 3044,
+            "D307": 16,
+            "D308": 0,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 0,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 0,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 276
+          }
+        }
+      ],
+      "asserted_steps": 5,
+      "compared_items": 24,
+      "skipped_items": 0,
+      "ambiguous_items": 0,
+      "tick_hold_items": 0
+    },
+    {
+      "id": "STD-059",
+      "title": "Sleep delay parameter D327 shortens the delay to 3s",
+      "scope": "bench",
+      "status": "UNVERIFIED",
+      "steps": [
+        {
+          "index": 0,
+          "duration_ms": 10,
+          "write": {},
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D313",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 186,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29940,
+            "D306": 5579,
+            "D307": 16,
+            "D308": 0,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 0,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 0,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 186
+          }
+        },
+        {
+          "index": 1,
+          "duration_ms": 100,
+          "write": {
+            "D320": 1,
+            "D330": 4000,
+            "D327": 30
+          },
+          "status": "UNVERIFIED",
+          "compared": [],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 275,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29943,
+            "D306": 6301,
+            "D307": 21,
+            "D308": 160,
+            "D309": 60,
+            "D310": 51,
+            "D311": 2000,
+            "D312": 0,
+            "D313": 0,
+            "D314": 1,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 4000,
+            "D319": 0,
+            "D320": 1,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 30,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 4000,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 1,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 275
+          }
+        },
+        {
+          "index": 2,
+          "duration_ms": 2800,
+          "write": {},
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [
+            {
+              "scope": "invariant",
+              "device": "D311",
+              "expected": 2000,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            }
+          ],
+          "observed_at_ms": 2808,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29971,
+            "D306": 13628,
+            "D307": 21,
+            "D308": 160,
+            "D309": 60,
+            "D310": 51,
+            "D311": 2000,
+            "D312": 0,
+            "D313": 0,
+            "D314": 29,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 4000,
+            "D319": 0,
+            "D320": 1,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 30,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 4000,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 1,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 2808
+          }
+        },
+        {
+          "index": 3,
+          "duration_ms": 400,
+          "write": {},
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "M0",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "expect",
+              "device": "M11",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "expect",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 409,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29975,
+            "D306": 14686,
+            "D307": 19,
+            "D308": 160,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 4000,
+            "D319": 0,
+            "D320": 1,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 30,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 4000,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 1,
+            "M11": 1,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 409
+          }
+        },
+        {
+          "index": 4,
+          "duration_ms": 10,
+          "write": {
+            "D321": 1,
+            "D327": 100,
+            "D320": 1
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D313",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 274,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29977,
+            "D306": 15409,
+            "D307": 16,
+            "D308": 160,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 4000,
+            "D319": 0,
+            "D320": 1,
+            "D321": 1,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 4000,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 274
+          }
+        },
+        {
+          "index": 5,
+          "duration_ms": 10,
+          "write": {
+            "D321": 0,
+            "D320": 0
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 275,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29980,
+            "D306": 16125,
+            "D307": 16,
+            "D308": 160,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 4000,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 4000,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 275
+          }
+        }
+      ],
+      "asserted_steps": 5,
+      "compared_items": 24,
+      "skipped_items": 1,
+      "ambiguous_items": 0,
+      "tick_hold_items": 0
+    },
+    {
+      "id": "STD-062",
+      "title": "No-flow speed D329 sleeps a barely-turning pump below SV",
+      "scope": "bench",
+      "status": "UNVERIFIED",
+      "steps": [
+        {
+          "index": 0,
+          "duration_ms": 10,
+          "write": {},
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D313",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 184,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29990,
+            "D306": 18702,
+            "D307": 16,
+            "D308": 0,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 0,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 0,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 184
+          }
+        },
+        {
+          "index": 1,
+          "duration_ms": 100,
+          "write": {
+            "D320": 1,
+            "D330": 1338,
+            "D329": 2200
+          },
+          "status": "UNVERIFIED",
+          "compared": [],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [
+            {
+              "scope": "expect",
+              "device": "D319",
+              "expected": 6,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            }
+          ],
+          "observed_at_ms": 274,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 29993,
+            "D306": 19419,
+            "D307": 21,
+            "D308": 54,
+            "D309": 60,
+            "D310": 51,
+            "D311": 2060,
+            "D312": 0,
+            "D313": 0,
+            "D314": 1,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 1338,
+            "D319": 6,
+            "D320": 1,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2200,
+            "D330": 1338,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 1,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 274
+          }
+        },
+        {
+          "index": 2,
+          "duration_ms": 9700,
+          "write": {},
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D308",
+              "expected": 54,
+              "actual": 54
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 9705,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 30090,
+            "D306": -20770,
+            "D307": 21,
+            "D308": 54,
+            "D309": 60,
+            "D310": 51,
+            "D311": 2118,
+            "D312": 0,
+            "D313": 0,
+            "D314": 98,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 1338,
+            "D319": 588,
+            "D320": 1,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2200,
+            "D330": 1338,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 1,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 9705
+          }
+        },
+        {
+          "index": 3,
+          "duration_ms": 500,
+          "write": {},
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "M0",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "expect",
+              "device": "M11",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "expect",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 505,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 30095,
+            "D306": -19457,
+            "D307": 19,
+            "D308": 54,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 1338,
+            "D319": 0,
+            "D320": 1,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2200,
+            "D330": 1338,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 1,
+            "M11": 1,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 505
+          }
+        },
+        {
+          "index": 4,
+          "duration_ms": 10,
+          "write": {
+            "D321": 1,
+            "D329": 2000,
+            "D320": 1
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D313",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 273,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 30097,
+            "D306": -18746,
+            "D307": 16,
+            "D308": 54,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 1338,
+            "D319": 0,
+            "D320": 1,
+            "D321": 1,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 1338,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 273
+          }
+        },
+        {
+          "index": 5,
+          "duration_ms": 10,
+          "write": {
+            "D321": 0,
+            "D320": 0
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [],
+          "observed_at_ms": 273,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 5,
+            "D301": 31,
+            "D302": -10264,
+            "D303": -21461,
+            "D304": 5,
+            "D305": 30100,
+            "D306": -18034,
+            "D307": 16,
+            "D308": 54,
+            "D309": 60,
+            "D310": 51,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 0,
+            "D317": 0,
+            "D318": 1338,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 51,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 1338,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 273
+          }
+        }
+      ],
+      "asserted_steps": 6,
+      "compared_items": 25,
+      "skipped_items": 1,
+      "ambiguous_items": 0,
+      "tick_hold_items": 0
+    }
+  ],
+  "status": "UNVERIFIED",
+  "identity": {
+    "D300": 5,
+    "D301": 31,
+    "D302": -10264,
+    "D303": -21461,
+    "D304": 5
+  },
+  "system_checkpoint": {
+    "D8120": -8063,
+    "D8121": 1
+  },
+  "initial_state": {
+    "D300": 5,
+    "D301": 31,
+    "D302": -10264,
+    "D303": -21461,
+    "D304": 5,
+    "D305": 29259,
+    "D306": 26090,
+    "D307": 16,
+    "D308": 72,
+    "D309": 60,
+    "D310": 51,
+    "D311": 0,
+    "D312": 0,
+    "D313": 0,
+    "D314": 0,
+    "D315": 0,
+    "D316": 0,
+    "D317": 0,
+    "D318": 1800,
+    "D319": 0,
+    "D320": 0,
+    "D321": 0,
+    "D322": 1,
+    "D323": 0,
+    "D324": 60,
+    "D325": 60,
+    "D326": 51,
+    "D327": 100,
+    "D328": 30,
+    "D329": 2000,
+    "D330": 1800,
+    "D331": 0,
+    "D332": 0,
+    "D333": 0,
+    "D334": 0,
+    "D335": 0,
+    "Y0": 0,
+    "M0": 0,
+    "M11": 0,
+    "M8196": 1,
+    "M8125": 1
+  }
+}

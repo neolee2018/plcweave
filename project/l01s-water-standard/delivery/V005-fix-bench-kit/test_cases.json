@@ -1,0 +1,7760 @@
+{
+ "suite_version": "STD-005",
+ "schema_version": "plcweave-case-v1-with-independent-oracles",
+ "requirements_sha256": "b170bc942ed4ce455d7363f7a4ab99b48ff62dfab7dd0e510c2ee7929290fc02",
+ "scan_ms": 10,
+ "watch": [
+  "M0",
+  "M11",
+  "M8012",
+  "Y0",
+  "M8196",
+  "M8125",
+  "D300",
+  "D301",
+  "D302",
+  "D303",
+  "D304",
+  "D305",
+  "D306",
+  "D307",
+  "D308",
+  "D309",
+  "D310",
+  "D311",
+  "D312",
+  "D313",
+  "D314",
+  "D315",
+  "D317",
+  "D318",
+  "D319",
+  "D320",
+  "D321",
+  "D322",
+  "D323",
+  "D324",
+  "D325",
+  "D326",
+  "D327",
+  "D328",
+  "D329",
+  "D330",
+  "D331",
+  "D332",
+  "D333",
+  "D334",
+  "D335",
+  "D8030",
+  "D8031",
+  "D8032",
+  "D8033",
+  "D8050",
+  "D8051",
+  "D8120",
+  "D8121",
+  "D100",
+  "D102",
+  "D110",
+  "D120",
+  "D154",
+  "D160",
+  "D162",
+  "D163",
+  "D164",
+  "D165",
+  "D166"
+ ],
+ "global_invariants": {
+  "M0": {
+   "min": 0,
+   "max": 1
+  },
+  "M11": {
+   "min": 0,
+   "max": 1
+  },
+  "Y0": {
+   "min": 0,
+   "max": 1
+  },
+  "D100": {
+   "min": 0,
+   "max": 160
+  },
+  "D120": {
+   "min": 0,
+   "max": 30000
+  },
+  "D154": {
+   "min": 0,
+   "max": 5000
+  },
+  "D8050": {
+   "min": 0,
+   "max": 4000
+  },
+  "D8051": 0,
+  "D309": {
+   "min": 10,
+   "max": 160
+  },
+  "D300": 5,
+  "D301": 31,
+  "D304": 5
+ },
+ "relationship_invariants": [
+  {
+   "id": "REL-01",
+   "requirements": [
+    "R01",
+    "R02",
+    "R06"
+   ],
+   "scope": "every_scan",
+   "kind": "state_output_consistency",
+   "definition": "At each postscan sample: M11 cannot coexist with a normal frequency; if M0=0 or mode invalid, M0/M11/D120/D154/Y0/D8050/D8051 all 0. If M11=1 then M0=1, D120=D154=Y0=D8050=0. If M0=1 and M11=0 then 2000<=D154<=5000. Invalid D322 always implies stopped vector that same scan."
+  },
+  {
+   "id": "REL-02",
+   "requirements": [
+    "R08"
+   ],
+   "scope": "every_scan",
+   "kind": "physical_routing",
+   "definition": "enabled := D323==1 and M0==1 and D154>0. Y0=int(enabled); D8050=(D154*4)//5 if enabled else 0; D8051=0. Evaluate on each final scan image, including transitions, never endpoint-only."
+  },
+  {
+   "id": "REL-03",
+   "requirements": [
+    "R02",
+    "R03"
+   ],
+   "scope": "every_scan",
+   "kind": "scaling_settings",
+   "definition": "If D322 in{0,1}, raw = D330 if1 else (D331 if D332==1 else D8030); expectedPV=(clamp(signed16(raw),0,4000)+12)//25; D100==expectedPV, D308==D100. D102=clamp(D324,10,160); D309==D102. External request/input words persist unless explicitly written, except first-scan defaults (D325 invalid replaced 60, D326=floor(D325*85/100), D327=100, D328=30, D329=2000)."
+  },
+  {
+   "id": "REL-04",
+   "requirements": [
+    "R07"
+   ],
+   "scope": "every_scan",
+   "kind": "independent_pi_recurrence",
+   "definition": "Observe actual M8012 input image on every scan, including boot. Rising edge iff current1 and previous0; do not assume50ms phase (environment correction: initial high may begin t0). Track independent A starting0. Stop/pre-sleep/sleep force A0 and frequency respectively0/2000/0. Entering normal from stopped/pre-sleep/sleep sets A0,f2000; skip PI on transition scan, and update only on a subsequent rising edge. On eligible rising edge, e=D102-D100; A=clamp(A+e,0,30000); increment=clamp(10*e+A//10,0,3000); f=2000+increment. All other normal scans hold previous A,f even if input or SV changes. Assert D120==A and D154==f every scan. Read frozen requirements and this recurrence only; never execute/translate S2 source to obtain expected values.",
+   "params": {
+    "clock": "M8012",
+    "integral_min": 0,
+    "integral_max": 30000,
+    "proportional_factor": 10,
+    "integral_divisor": 10,
+    "increment_min": 0,
+    "increment_max": 3000,
+    "frequency_base": 2000,
+    "skip_transition_scan": true
+   }
+  },
+  {
+   "id": "REL-05",
+   "requirements": [
+    "R04",
+    "R05",
+    "R06"
+   ],
+   "scope": "every_scan_and_transition",
+   "kind": "continuous_timers",
+   "definition": "Independently accumulate continuous running-not-sleeping PV>=D260 duration, reset on any below-threshold scan/stop/invalid. Sleep transition permitted only elapsed4900..5100ms (scan timestamp uncertainty<=10ms), requires pre-sleep first. In sleep track continuous PV<=D262; reset on any above-threshold scan/stop/invalid. Wake transition permitted only elapsed2900..3100ms. Sleep must persist in dead band. A transition MUST occur by upper bound if continuously qualifying. Track both timers afresh for every cycle; include one-scan cancellations. Qualification uses current clamped settings. Detect wake event even when SV10 means wake/pre thresholds overlap; do not demand durable normal state at overlapping thresholds.",
+   "params": {
+    "tick_ms": 100,
+    "tolerance_ms": 100,
+    "clamp": {
+     "sleep_delay": [
+      10,
+      600
+     ],
+     "wake_delay": [
+      5,
+      300
+     ],
+     "wake_pressure": [
+      0,
+      160
+     ],
+     "no_flow": [
+      2000,
+      3000
+     ]
+    },
+    "timestamp_uncertainty_ms": 10
+   }
+  },
+  {
+   "id": "REL-06",
+   "requirements": [
+    "R06",
+    "R07"
+   ],
+   "kind": "first_crossing_and_monotonicity",
+   "definition": "Measure first D154==5000 relative to first started normal scan; 39800<=elapsed<=40200ms. Throughout uninterrupted PV0 normal operation D120,D154 never decrease; A never exceeds30000, frequency never exceeds5000; by50.2s A30000 and f5000. Low-pressure normal run cannot enter sleep/pre-sleep.",
+   "case_ids": [
+    "STD-029"
+   ],
+   "params": {
+    "first_full_frequency_ms": {
+     "min": 39800,
+     "max": 40200
+    },
+    "integral_saturated_by_ms": 50200
+   }
+  },
+  {
+   "id": "REL-07",
+   "requirements": [
+    "R09"
+   ],
+   "scope": "every_scan",
+   "kind": "diagnostics",
+   "definition": "From second observed postscan sample, signed16(D306_current-D306_previous)==1, including32767->-32768. Heartbeat D305 must change at100ms intervals (allow10ms timestamp quantization; no assumed numeric increment or initial value); no interval>110ms after initial startup. D317 equals externally supplied D333 on the next executed scan. D300=5,D301=31,D304=5 on every sample; D302/D303 remain stable.",
+   "params": {
+    "heartbeat_interval_ms": 100,
+    "timestamp_uncertainty_ms": 10,
+    "counter_width_bits": 16,
+    "counter_delta_per_scan": 1
+   }
+  },
+  {
+   "id": "REL-08",
+   "requirements": [
+    "R09"
+   ],
+   "scope": "build_and_initialization",
+   "kind": "independent_fingerprint",
+   "definition": "S3 independently obtains final instruction list excluding dedicated BEGIN_IDENTITY/END_IDENTITY block; normalize exactly documented canonical algorithm supplied by S2, hash SHA256 and decode first4 bytes as two little-endian uint16 then signed16. Compare observed D200/D201 to those values and externally record full source/test hashes. Require specification-compatible canonicalization; do not merely call/trust S2 fingerprint checker. No fingerprint value known to S1 because S2 has not started. Hardware identity must be read and match BEFORE any test writes; mismatch TEST_INFRA_ERROR, not PROGRAM_FAIL.",
+   "params": {
+    "fingerprint_words": [
+     "D302",
+     "D303"
+    ],
+    "hash": "sha256",
+    "bytes": 4,
+    "byteorder": "little",
+    "signed_word_width": 16,
+    "excluded_block": [
+     "BEGIN_IDENTITY",
+     "END_IDENTITY"
+    ]
+   }
+  },
+  {
+   "id": "REL-09",
+   "requirements": [
+    "R01",
+    "R02"
+   ],
+   "scope": "every_scan",
+   "kind": "command_state_oracle",
+   "definition": "Only signed word1 on either start source asserts start; only signed word1 on either stop source asserts stop. Start sources: D320, D334. Stop sources: D321, D335. Stop wins even with start held1 on any source; start latches run after every start source is released. Invalid mode clears run and latches restart inhibit. Inhibit clears only after a valid-mode scan observes D320=0 and D334=0; a subsequent start from either source can then begin. D320/D334 zero observed only during invalid mode does not clear inhibit. Valid-mode recovery while either start source remains1 must stay stopped. Stop and sleep outputs clear in the same applied scan. Do not use implementation state flags as oracle inputs."
+  },
+  {
+   "id": "REL-10",
+   "requirements": [
+    "R10"
+   ],
+   "scope": "first_scan_and_static_validation",
+   "kind": "serial_and_engine_gate",
+   "definition": "First scan M8196=M8125=1,D8120=signed16(0xE081)=-8063,D8121=1. S3 must verify static unknown instruction/address detection and independently run deliberate unsupported-instruction/address fixtures against the execution tool (not this candidate) to prove BLOCKED/UNSUPPORTED, never silent NOP. Missing serial observation or parser/engine capability is UNVERIFIED/TEST_INFRA_ERROR, cannot be called PASS. Physical serial protocol remains separate from register-image initialization."
+  },
+  {
+   "id": "REL-11",
+   "requirements": [
+    "R12"
+   ],
+   "scope": "every_scan",
+   "kind": "batch_mirror",
+   "definition": "Status block mirrors settle every executed scan: D308==D100, D309==D102, D311==D154, D312==D8050, D313=0, D318==D110, D319==D120, D310==clamp(D326,0,160), and D307 bits0/1/4/5 equal M0/M11/(D322==1)/(D323==1); bits2/3 are implementation-observed and not asserted here (mask 0x33)."
+  }
+ ],
+ "oracle_contract": {
+  "all_relationship_invariants": "MUST; missing implementation/observation yields UNVERIFIED and blocks SIM_PASS",
+  "trace": "Full postscan trace plus applied external input image and actual M8012 per scan; preserve transition order/timestamps. Dictionary endpoints alone are insufficient.",
+  "hardware": "bench labels permit only frozen bench write whitelist; all initial_words need isolated CPU initialization or verified reset. Hardware polling does not prove scan-level oracles, exact100ms tick counts, or one-scan outputs. Mark these assertions UNVERIFIED unless equivalent proven event capture exists. local_only ADC cases must never write physical ADC registers.",
+  "scope": "Logic/register bench only; electrical AO and sensors/pumps, real power-loss retention, GX checks remain unverified/not executed.",
+  "timing_phase": "Observe M8012; initial phase explicitly not frozen. Equal100ms intervals used for exact endpoints span one edge; first20ms after10ms boot is before next new rising edge under corrected initial-high environment."
+ },
+ "cases": [
+  {
+   "id": "STD-001",
+   "title": "First scan rejects preloaded requests and defaults external controls",
+   "priority": "MUST",
+   "requirements": [
+    "R01",
+    "R03",
+    "R08",
+    "R09",
+    "R10"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {
+    "D322": 0,
+    "D320": 1,
+    "D321": 1,
+    "D323": 1,
+    "D333": 123,
+    "D325": 0
+   },
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0,
+      "D317": 0,
+      "D309": 60,
+      "D310": 51,
+      "D300": 5,
+      "D301": 31,
+      "D304": 5,
+      "M8196": 1,
+      "M8125": 1,
+      "D8120": -8063,
+      "D8121": 1,
+      "D322": 1,
+      "D320": 0,
+      "D321": 0,
+      "D323": 0,
+      "D333": 0,
+      "D325": 60
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {},
+     "duration_ms": 200,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    }
+   ]
+  },
+  {
+   "id": "STD-002",
+   "title": "Saved SV first scan -32768",
+   "priority": "MUST",
+   "requirements": [
+    "R03"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {
+    "D325": -32768
+   },
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0,
+      "D309": 60,
+      "D310": 51,
+      "D325": 60
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {},
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D309": 60,
+      "D325": 60
+     }
+    }
+   ]
+  },
+  {
+   "id": "STD-003",
+   "title": "Saved SV first scan -1",
+   "priority": "MUST",
+   "requirements": [
+    "R03"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {
+    "D325": -1
+   },
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0,
+      "D309": 60,
+      "D310": 51,
+      "D325": 60
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {},
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D309": 60,
+      "D325": 60
+     }
+    }
+   ]
+  },
+  {
+   "id": "STD-004",
+   "title": "Saved SV first scan 9",
+   "priority": "MUST",
+   "requirements": [
+    "R03"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {
+    "D325": 9
+   },
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0,
+      "D309": 60,
+      "D310": 51,
+      "D325": 60
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {},
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D309": 60,
+      "D325": 60
+     }
+    }
+   ]
+  },
+  {
+   "id": "STD-005",
+   "title": "Saved SV first scan 10",
+   "priority": "MUST",
+   "requirements": [
+    "R03"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {
+    "D325": 10
+   },
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0,
+      "D309": 10,
+      "D310": 8,
+      "D325": 10
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {},
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D309": 10,
+      "D325": 10
+     }
+    }
+   ]
+  },
+  {
+   "id": "STD-006",
+   "title": "Saved SV first scan 11",
+   "priority": "MUST",
+   "requirements": [
+    "R03"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {
+    "D325": 11
+   },
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0,
+      "D309": 11,
+      "D310": 9,
+      "D325": 11
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {},
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D309": 11,
+      "D325": 11
+     }
+    }
+   ]
+  },
+  {
+   "id": "STD-007",
+   "title": "Saved SV first scan 159",
+   "priority": "MUST",
+   "requirements": [
+    "R03"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {
+    "D325": 159
+   },
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0,
+      "D309": 159,
+      "D310": 135,
+      "D325": 159
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {},
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D309": 159,
+      "D325": 159
+     }
+    }
+   ]
+  },
+  {
+   "id": "STD-008",
+   "title": "Saved SV first scan 160",
+   "priority": "MUST",
+   "requirements": [
+    "R03"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {
+    "D325": 160
+   },
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0,
+      "D309": 160,
+      "D310": 136,
+      "D325": 160
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {},
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D309": 160,
+      "D325": 160
+     }
+    }
+   ]
+  },
+  {
+   "id": "STD-009",
+   "title": "Saved SV first scan 161",
+   "priority": "MUST",
+   "requirements": [
+    "R03"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {
+    "D325": 161
+   },
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0,
+      "D309": 60,
+      "D310": 51,
+      "D325": 60
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {},
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D309": 60,
+      "D325": 60
+     }
+    }
+   ]
+  },
+  {
+   "id": "STD-010",
+   "title": "Saved SV first scan 32767",
+   "priority": "MUST",
+   "requirements": [
+    "R03"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {
+    "D325": 32767
+   },
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0,
+      "D309": 60,
+      "D310": 51,
+      "D325": 60
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {},
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D309": 60,
+      "D325": 60
+     }
+    }
+   ]
+  },
+  {
+   "id": "STD-011",
+   "title": "Start latches, requests persist, stop dominates simultaneous commands",
+   "priority": "MUST",
+   "requirements": [
+    "R01",
+    "R08"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D330": 1250,
+      "D323": 1
+     },
+     "duration_ms": 20,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 0,
+      "D319": 0,
+      "D311": 2000,
+      "Y0": 1,
+      "D312": 1600,
+      "D320": 1,
+      "D323": 1
+     }
+    },
+    {
+     "write": {
+      "D320": 0
+     },
+     "duration_ms": 200,
+     "invariant": {
+      "M0": 1,
+      "M11": 0,
+      "Y0": 1
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D321": 1
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D320": 1,
+      "D321": 1
+     }
+    },
+    {
+     "write": {},
+     "duration_ms": 200,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D320": 0,
+      "D321": 0
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D320": 1
+     },
+     "duration_ms": 20,
+     "invariant": {},
+     "expect": {
+      "M0": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "STD-012",
+   "title": "Non-one command words -32768 are unasserted",
+   "priority": "MUST",
+   "requirements": [
+    "R01"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D320": -32768,
+      "D321": -32768
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D320": -32768,
+      "D321": -32768
+     }
+    },
+    {
+     "write": {
+      "D320": 1
+     },
+     "duration_ms": 20,
+     "invariant": {},
+     "expect": {
+      "M0": 1
+     }
+    },
+    {
+     "write": {
+      "D320": 0
+     },
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 1
+     }
+    },
+    {
+     "write": {
+      "D321": -32768,
+      "D320": 1
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D321": 1,
+      "D320": 1
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    }
+   ]
+  },
+  {
+   "id": "STD-013",
+   "title": "Non-one command words -1 are unasserted",
+   "priority": "MUST",
+   "requirements": [
+    "R01"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D320": -1,
+      "D321": -1
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D320": -1,
+      "D321": -1
+     }
+    },
+    {
+     "write": {
+      "D320": 1
+     },
+     "duration_ms": 20,
+     "invariant": {},
+     "expect": {
+      "M0": 1
+     }
+    },
+    {
+     "write": {
+      "D320": 0
+     },
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 1
+     }
+    },
+    {
+     "write": {
+      "D321": -1,
+      "D320": 1
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D321": 1,
+      "D320": 1
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    }
+   ]
+  },
+  {
+   "id": "STD-014",
+   "title": "Non-one command words 2 are unasserted",
+   "priority": "MUST",
+   "requirements": [
+    "R01"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D320": 2,
+      "D321": 2
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D320": 2,
+      "D321": 2
+     }
+    },
+    {
+     "write": {
+      "D320": 1
+     },
+     "duration_ms": 20,
+     "invariant": {},
+     "expect": {
+      "M0": 1
+     }
+    },
+    {
+     "write": {
+      "D320": 0
+     },
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 1
+     }
+    },
+    {
+     "write": {
+      "D321": 2,
+      "D320": 1
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D321": 1,
+      "D320": 1
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    }
+   ]
+  },
+  {
+   "id": "STD-015",
+   "title": "Non-one command words 32767 are unasserted",
+   "priority": "MUST",
+   "requirements": [
+    "R01"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D320": 32767,
+      "D321": 32767
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D320": 32767,
+      "D321": 32767
+     }
+    },
+    {
+     "write": {
+      "D320": 1
+     },
+     "duration_ms": 20,
+     "invariant": {},
+     "expect": {
+      "M0": 1
+     }
+    },
+    {
+     "write": {
+      "D320": 0
+     },
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 1
+     }
+    },
+    {
+     "write": {
+      "D321": 32767,
+      "D320": 1
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D321": 1,
+      "D320": 1
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    }
+   ]
+  },
+  {
+   "id": "STD-016",
+   "title": "Signed raw clamp and every rounding boundary class",
+   "priority": "MUST",
+   "requirements": [
+    "R02"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D330": -32768
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 0,
+      "D330": -32768
+     }
+    },
+    {
+     "write": {
+      "D330": -1
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 0,
+      "D330": -1
+     }
+    },
+    {
+     "write": {
+      "D330": 0
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 0,
+      "D330": 0
+     }
+    },
+    {
+     "write": {
+      "D330": 12
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 0,
+      "D330": 12
+     }
+    },
+    {
+     "write": {
+      "D330": 13
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 1,
+      "D330": 13
+     }
+    },
+    {
+     "write": {
+      "D330": 24
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 1,
+      "D330": 24
+     }
+    },
+    {
+     "write": {
+      "D330": 25
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 1,
+      "D330": 25
+     }
+    },
+    {
+     "write": {
+      "D330": 37
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 1,
+      "D330": 37
+     }
+    },
+    {
+     "write": {
+      "D330": 38
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 2,
+      "D330": 38
+     }
+    },
+    {
+     "write": {
+      "D330": 249
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 10,
+      "D330": 249
+     }
+    },
+    {
+     "write": {
+      "D330": 250
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 10,
+      "D330": 250
+     }
+    },
+    {
+     "write": {
+      "D330": 1237
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 49,
+      "D330": 1237
+     }
+    },
+    {
+     "write": {
+      "D330": 1238
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 50,
+      "D330": 1238
+     }
+    },
+    {
+     "write": {
+      "D330": 1250
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 50,
+      "D330": 1250
+     }
+    },
+    {
+     "write": {
+      "D330": 1449
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 58,
+      "D330": 1449
+     }
+    },
+    {
+     "write": {
+      "D330": 1450
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 58,
+      "D330": 1450
+     }
+    },
+    {
+     "write": {
+      "D330": 1462
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 58,
+      "D330": 1462
+     }
+    },
+    {
+     "write": {
+      "D330": 1463
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 59,
+      "D330": 1463
+     }
+    },
+    {
+     "write": {
+      "D330": 3987
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 159,
+      "D330": 3987
+     }
+    },
+    {
+     "write": {
+      "D330": 3988
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 160,
+      "D330": 3988
+     }
+    },
+    {
+     "write": {
+      "D330": 3999
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 160,
+      "D330": 3999
+     }
+    },
+    {
+     "write": {
+      "D330": 4000
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 160,
+      "D330": 4000
+     }
+    },
+    {
+     "write": {
+      "D330": 4001
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 160,
+      "D330": 4001
+     }
+    },
+    {
+     "write": {
+      "D330": 32767
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 160,
+      "D330": 32767
+     }
+    }
+   ]
+  },
+  {
+   "id": "STD-017",
+   "title": "AI0 selected instead of conflicting test input, AI1..3 unused",
+   "priority": "MUST",
+   "requirements": [
+    "R02"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "local_only",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D322": 0,
+      "D332": 1,
+      "D331": 1250,
+      "D330": 4000,
+      "D320": 1
+     },
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D308": 50,
+      "M0": 1,
+      "M11": 0,
+      "D319": 10,
+      "D311": 2101
+     }
+    },
+    {
+     "write": {
+      "D330": 4000
+     },
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D308": 50,
+      "D319": 20,
+      "D311": 2102
+     }
+    },
+    {
+     "write": {
+      "D322": 1
+     },
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D308": 160,
+      "M0": 1,
+      "M11": 0,
+      "D319": 0,
+      "D311": 2000
+     }
+    },
+    {
+     "write": {
+      "D330": 1250,
+      "D331": 0
+     },
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D308": 50,
+      "M0": 1,
+      "M11": 0
+     }
+    }
+   ],
+   "expected_behavior_note": "V003: AI0 stimulus uses the parallel bench input D1070 with D1071=1; D1056 held 4000 to prove mode-0 isolation."
+  },
+  {
+   "id": "STD-018",
+   "title": "AI0 signed clamp/rounding independent of unused channels",
+   "priority": "MUST",
+   "requirements": [
+    "R02"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "local_only",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D322": 0,
+      "D332": 1,
+      "D331": -32768,
+      "D330": 4000
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 0
+     }
+    },
+    {
+     "write": {
+      "D322": 0,
+      "D332": 1,
+      "D331": -1,
+      "D330": 4000
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 0
+     }
+    },
+    {
+     "write": {
+      "D322": 0,
+      "D332": 1,
+      "D331": 0,
+      "D330": 4000
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 0
+     }
+    },
+    {
+     "write": {
+      "D322": 0,
+      "D332": 1,
+      "D331": 12,
+      "D330": 4000
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 0
+     }
+    },
+    {
+     "write": {
+      "D322": 0,
+      "D332": 1,
+      "D331": 13,
+      "D330": 4000
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 1
+     }
+    },
+    {
+     "write": {
+      "D322": 0,
+      "D332": 1,
+      "D331": 24,
+      "D330": 4000
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 1
+     }
+    },
+    {
+     "write": {
+      "D322": 0,
+      "D332": 1,
+      "D331": 25,
+      "D330": 4000
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 1
+     }
+    },
+    {
+     "write": {
+      "D322": 0,
+      "D332": 1,
+      "D331": 37,
+      "D330": 4000
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 1
+     }
+    },
+    {
+     "write": {
+      "D322": 0,
+      "D332": 1,
+      "D331": 38,
+      "D330": 4000
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 2
+     }
+    },
+    {
+     "write": {
+      "D322": 0,
+      "D332": 1,
+      "D331": 249,
+      "D330": 4000
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 10
+     }
+    },
+    {
+     "write": {
+      "D322": 0,
+      "D332": 1,
+      "D331": 250,
+      "D330": 4000
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 10
+     }
+    },
+    {
+     "write": {
+      "D322": 0,
+      "D332": 1,
+      "D331": 1237,
+      "D330": 4000
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 49
+     }
+    },
+    {
+     "write": {
+      "D322": 0,
+      "D332": 1,
+      "D331": 1238,
+      "D330": 4000
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 50
+     }
+    },
+    {
+     "write": {
+      "D322": 0,
+      "D332": 1,
+      "D331": 1250,
+      "D330": 4000
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 50
+     }
+    },
+    {
+     "write": {
+      "D322": 0,
+      "D332": 1,
+      "D331": 1449,
+      "D330": 4000
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 58
+     }
+    },
+    {
+     "write": {
+      "D322": 0,
+      "D332": 1,
+      "D331": 1450,
+      "D330": 4000
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 58
+     }
+    },
+    {
+     "write": {
+      "D322": 0,
+      "D332": 1,
+      "D331": 1462,
+      "D330": 4000
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 58
+     }
+    },
+    {
+     "write": {
+      "D322": 0,
+      "D332": 1,
+      "D331": 1463,
+      "D330": 4000
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 59
+     }
+    },
+    {
+     "write": {
+      "D322": 0,
+      "D332": 1,
+      "D331": 3987,
+      "D330": 4000
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 159
+     }
+    },
+    {
+     "write": {
+      "D322": 0,
+      "D332": 1,
+      "D331": 3988,
+      "D330": 4000
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 160
+     }
+    },
+    {
+     "write": {
+      "D322": 0,
+      "D332": 1,
+      "D331": 3999,
+      "D330": 4000
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 160
+     }
+    },
+    {
+     "write": {
+      "D322": 0,
+      "D332": 1,
+      "D331": 4000,
+      "D330": 4000
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 160
+     }
+    },
+    {
+     "write": {
+      "D322": 0,
+      "D332": 1,
+      "D331": 4001,
+      "D330": 4000
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 160
+     }
+    },
+    {
+     "write": {
+      "D322": 0,
+      "D332": 1,
+      "D331": 32767,
+      "D330": 4000
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D308": 160
+     }
+    }
+   ],
+   "expected_behavior_note": "V003: AI0 stimulus uses the parallel bench input D1070 with D1071=1; D1056 held 4000 to prove mode-0 isolation."
+  },
+  {
+   "id": "STD-019",
+   "title": "Invalid mode -32768 inhibits held-start recovery",
+   "priority": "MUST",
+   "requirements": [
+    "R01",
+    "R02",
+    "R08"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D330": 1250,
+      "D323": 1
+     },
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "Y0": 1
+     }
+    },
+    {
+     "write": {
+      "D322": -32768
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D322": -32768,
+      "D320": 1
+     }
+    },
+    {
+     "write": {
+      "D320": 0
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D322": 1
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D320": 0
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D320": 1
+     },
+     "duration_ms": 20,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 0,
+      "Y0": 1
+     }
+    }
+   ],
+   "expected_behavior_note": "D191=0 observed only in invalid mode cannot clear inhibit; valid-mode zero then later one is required by S0 revision 2."
+  },
+  {
+   "id": "STD-020",
+   "title": "Invalid mode -1 inhibits held-start recovery",
+   "priority": "MUST",
+   "requirements": [
+    "R01",
+    "R02",
+    "R08"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D330": 1250,
+      "D323": 1
+     },
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "Y0": 1
+     }
+    },
+    {
+     "write": {
+      "D322": -1
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D322": -1,
+      "D320": 1
+     }
+    },
+    {
+     "write": {
+      "D320": 0
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D322": 1
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D320": 0
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D320": 1
+     },
+     "duration_ms": 20,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 0,
+      "Y0": 1
+     }
+    }
+   ],
+   "expected_behavior_note": "D191=0 observed only in invalid mode cannot clear inhibit; valid-mode zero then later one is required by S0 revision 2."
+  },
+  {
+   "id": "STD-021",
+   "title": "Invalid mode 2 inhibits held-start recovery",
+   "priority": "MUST",
+   "requirements": [
+    "R01",
+    "R02",
+    "R08"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D330": 1250,
+      "D323": 1
+     },
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "Y0": 1
+     }
+    },
+    {
+     "write": {
+      "D322": 2
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D322": 2,
+      "D320": 1
+     }
+    },
+    {
+     "write": {
+      "D320": 0
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D322": 1
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D320": 0
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D320": 1
+     },
+     "duration_ms": 20,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 0,
+      "Y0": 1
+     }
+    }
+   ],
+   "expected_behavior_note": "D191=0 observed only in invalid mode cannot clear inhibit; valid-mode zero then later one is required by S0 revision 2."
+  },
+  {
+   "id": "STD-022",
+   "title": "Invalid mode 32767 inhibits held-start recovery",
+   "priority": "MUST",
+   "requirements": [
+    "R01",
+    "R02",
+    "R08"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D330": 1250,
+      "D323": 1
+     },
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "Y0": 1
+     }
+    },
+    {
+     "write": {
+      "D322": 32767
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D322": 32767,
+      "D320": 1
+     }
+    },
+    {
+     "write": {
+      "D320": 0
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D322": 1
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D320": 0
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D320": 1
+     },
+     "duration_ms": 20,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 0,
+      "Y0": 1
+     }
+    }
+   ],
+   "expected_behavior_note": "D191=0 observed only in invalid mode cannot clear inhibit; valid-mode zero then later one is required by S0 revision 2."
+  },
+  {
+   "id": "STD-023",
+   "title": "Invalid mode blocks even simultaneous new start and output enable",
+   "priority": "MUST",
+   "requirements": [
+    "R01",
+    "R02",
+    "R08"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "local_only",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D322": 2,
+      "D320": 1,
+      "D321": 0,
+      "D323": 1
+     },
+     "duration_ms": 200,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D322": 0
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D320": 0
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D320": 1
+     },
+     "duration_ms": 20,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "D311": 2000,
+      "Y0": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "STD-024",
+   "title": "Online SV clamp feeds the sleep qualification without saving",
+   "priority": "MUST",
+   "requirements": [
+    "R03"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D324": -32768
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D309": 10,
+      "D310": 51,
+      "D325": 60
+     }
+    },
+    {
+     "write": {
+      "D324": -1
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D309": 10,
+      "D310": 51,
+      "D325": 60
+     }
+    },
+    {
+     "write": {
+      "D324": 9
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D309": 10,
+      "D310": 51,
+      "D325": 60
+     }
+    },
+    {
+     "write": {
+      "D324": 10
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D309": 10,
+      "D310": 51,
+      "D325": 60
+     }
+    },
+    {
+     "write": {
+      "D324": 11
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D309": 11,
+      "D310": 51,
+      "D325": 60
+     }
+    },
+    {
+     "write": {
+      "D324": 59
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D309": 59,
+      "D310": 51,
+      "D325": 60
+     }
+    },
+    {
+     "write": {
+      "D324": 60
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D309": 60,
+      "D310": 51,
+      "D325": 60
+     }
+    },
+    {
+     "write": {
+      "D324": 61
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D309": 61,
+      "D310": 51,
+      "D325": 60
+     }
+    },
+    {
+     "write": {
+      "D324": 159
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D309": 159,
+      "D310": 51,
+      "D325": 60
+     }
+    },
+    {
+     "write": {
+      "D324": 160
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D309": 160,
+      "D310": 51,
+      "D325": 60
+     }
+    },
+    {
+     "write": {
+      "D324": 161
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D309": 160,
+      "D310": 51,
+      "D325": 60
+     }
+    },
+    {
+     "write": {
+      "D324": 32767
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "D309": 160,
+      "D310": 51,
+      "D325": 60
+     }
+    }
+   ]
+  },
+  {
+   "id": "STD-025",
+   "title": "Changing saved word online does not replace active SV",
+   "priority": "MUST",
+   "requirements": [
+    "R03"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D325": 42
+     },
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "D309": 60,
+      "D310": 51,
+      "D325": 42
+     }
+    },
+    {
+     "write": {
+      "D324": 100
+     },
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D309": 100,
+      "D310": 51,
+      "D325": 42
+     }
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D330": 1250
+     },
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D309": 100,
+      "M0": 1,
+      "D325": 42
+     }
+    }
+   ]
+  },
+  {
+   "id": "STD-026",
+   "title": "Normal PI first two updates and hold between rising edges",
+   "priority": "MUST",
+   "requirements": [
+    "R06",
+    "R07",
+    "R08"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D330": 1250
+     },
+     "duration_ms": 20,
+     "invariant": {
+      "M0": 1,
+      "M11": 0,
+      "D319": 0,
+      "D311": 2000,
+      "Y0": 0,
+      "D312": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {},
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D319": 10,
+      "D311": 2101
+     }
+    },
+    {
+     "write": {},
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D319": 20,
+      "D311": 2102
+     }
+    },
+    {
+     "write": {
+      "D323": 1
+     },
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D319": 30,
+      "D311": 2103,
+      "Y0": 1,
+      "D312": 1682
+     }
+    }
+   ],
+   "expected_behavior_note": "Each 100ms step spans exactly one actual rising M8012 edge; S3 also independently checks every scan against observed edges. No program was run to obtain these numbers."
+  },
+  {
+   "id": "STD-027",
+   "title": "Integer division PI fractional integral checkpoints e=3",
+   "priority": "MUST",
+   "requirements": [
+    "R07"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D330": 1425
+     },
+     "duration_ms": 20,
+     "invariant": {},
+     "expect": {
+      "D319": 0,
+      "D311": 2000
+     }
+    },
+    {
+     "write": {},
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D319": 3,
+      "D311": 2030
+     }
+    },
+    {
+     "write": {},
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D319": 6,
+      "D311": 2030
+     }
+    },
+    {
+     "write": {},
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D319": 9,
+      "D311": 2030
+     }
+    },
+    {
+     "write": {},
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D319": 12,
+      "D311": 2031
+     }
+    },
+    {
+     "write": {},
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D319": 15,
+      "D311": 2031
+     }
+    },
+    {
+     "write": {},
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D319": 18,
+      "D311": 2031
+     }
+    },
+    {
+     "write": {},
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D319": 21,
+      "D311": 2032
+     }
+    },
+    {
+     "write": {},
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D319": 24,
+      "D311": 2032
+     }
+    },
+    {
+     "write": {},
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D319": 27,
+      "D311": 2032
+     }
+    },
+    {
+     "write": {},
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D319": 30,
+      "D311": 2033
+     }
+    }
+   ]
+  },
+  {
+   "id": "STD-028",
+   "title": "PI uses latest online SV and persistent accumulator",
+   "priority": "MUST",
+   "requirements": [
+    "R03",
+    "R07"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D330": 1250
+     },
+     "duration_ms": 20,
+     "invariant": {},
+     "expect": {}
+    },
+    {
+     "write": {},
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D319": 10,
+      "D311": 2101
+     }
+    },
+    {
+     "write": {
+      "D324": 80
+     },
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D319": 40,
+      "D311": 2304,
+      "D310": 51
+     }
+    },
+    {
+     "write": {
+      "D324": 55
+     },
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D319": 45,
+      "D311": 2054,
+      "D310": 51
+     }
+    }
+   ]
+  },
+  {
+   "id": "STD-029",
+   "title": "Signal loss zero reaches full frequency in specified window and integral clamps",
+   "priority": "MUST",
+   "requirements": [
+    "R06",
+    "R07",
+    "R08"
+   ],
+   "injection_mode": "signal_loss",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D330": 0,
+      "D323": 1
+     },
+     "duration_ms": 20,
+     "invariant": {},
+     "expect": {
+      "D311": 2000,
+      "D319": 0
+     }
+    },
+    {
+     "write": {},
+     "duration_ms": 39700,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {
+      "D311": {
+       "min": 2000,
+       "max": 4999
+      }
+     }
+    },
+    {
+     "write": {},
+     "duration_ms": 600,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {
+      "D311": 5000,
+      "D312": 4000
+     }
+    },
+    {
+     "write": {},
+     "duration_ms": 10500,
+     "invariant": {
+      "M0": 1,
+      "M11": 0,
+      "D311": 5000,
+      "D312": 4000
+     },
+     "expect": {
+      "D319": 30000
+     }
+    },
+    {
+     "write": {},
+     "duration_ms": 1000,
+     "invariant": {
+      "D319": 30000,
+      "D311": 5000,
+      "D312": 4000
+     },
+     "expect": {}
+    }
+   ],
+   "expected_behavior_note": "e=60, A_n=min(60n,30000), f_n=2000+min(600+6n,3000). First full frequency at tick400 (39.8..40.2s after start); integral saturates tick500. S3 must measure first crossing, not just endpoint."
+  },
+  {
+   "id": "STD-030",
+   "title": "PI remains active while output gate disabled and exact routing floors",
+   "priority": "MUST",
+   "requirements": [
+    "R07",
+    "R08"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D330": 1250
+     },
+     "duration_ms": 20,
+     "invariant": {},
+     "expect": {}
+    },
+    {
+     "write": {
+      "D323": 0
+     },
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D319": 10,
+      "D311": 2101,
+      "Y0": 0,
+      "D312": 0
+     }
+    },
+    {
+     "write": {
+      "D323": 1
+     },
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D319": 20,
+      "D311": 2102,
+      "Y0": 1,
+      "D312": 1681
+     }
+    },
+    {
+     "write": {
+      "D323": 0
+     },
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D319": 30,
+      "D311": 2103,
+      "Y0": 0,
+      "D312": 0
+     }
+    },
+    {
+     "write": {
+      "D323": 2
+     },
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D319": 40,
+      "D311": 2104,
+      "Y0": 0,
+      "D312": 0
+     }
+    },
+    {
+     "write": {
+      "D323": -1
+     },
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D319": 50,
+      "D311": 2105,
+      "Y0": 0,
+      "D312": 0
+     }
+    },
+    {
+     "write": {
+      "D323": 32767
+     },
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D319": 60,
+      "D311": 2106,
+      "Y0": 0,
+      "D312": 0
+     }
+    },
+    {
+     "write": {
+      "D323": -32768
+     },
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D319": 70,
+      "D311": 2107,
+      "Y0": 0,
+      "D312": 0
+     }
+    },
+    {
+     "write": {
+      "D323": 1
+     },
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D319": 80,
+      "D311": 2108,
+      "Y0": 1,
+      "D312": 1686
+     }
+    }
+   ]
+  },
+  {
+   "id": "STD-031",
+   "title": "Sleep-delay equality at SV, below adjacent value cancels, and timer restarts",
+   "priority": "MUST",
+   "requirements": [
+    "R01",
+    "R04"
+   ],
+   "injection_mode": "full_scale_rush",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D330": 1488
+     },
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "M11": 0,
+      "D319": 0
+     }
+    },
+    {
+     "write": {},
+     "duration_ms": 3000,
+     "invariant": {
+      "M0": 1,
+      "M11": 0,
+      "D319": 0,
+      "D311": 2000
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 1475
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {
+      "M0": 1,
+      "M11": 0,
+      "D319": 1
+     }
+    },
+    {
+     "write": {
+      "D330": 1488
+     },
+     "duration_ms": 3000,
+     "invariant": {
+      "M0": 1,
+      "M11": 0,
+      "D319": 1
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 1475
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M11": 0
+     },
+     "expect": {
+      "M0": 1,
+      "M11": 0
+     }
+    },
+    {
+     "write": {
+      "D330": 1488
+     },
+     "duration_ms": 3600,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {},
+     "duration_ms": 600,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 1,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0
+     }
+    },
+    {
+     "write": {},
+     "duration_ms": 400,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 1,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0
+     }
+    }
+   ],
+   "expected_behavior_note": "Total high time exceeds 5s before final interval. Timer must cancel rather than accumulate. Event oracle requires 4.9..5.1s continuously high before each sleep transition."
+  },
+  {
+   "id": "STD-032",
+   "title": "Pre-sleep does not complete at 4.8s; full-scale sleeps by 5.2s",
+   "priority": "MUST",
+   "requirements": [
+    "R04",
+    "R06",
+    "R08"
+   ],
+   "injection_mode": "full_scale_rush",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D330": 1250,
+      "D323": 1
+     },
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 4000
+     },
+     "duration_ms": 200,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {
+      "D319": 0,
+      "D311": 2000,
+      "Y0": 1,
+      "D312": 1600
+     }
+    },
+    {
+     "write": {},
+     "duration_ms": 9600,
+     "invariant": {
+      "M0": 1,
+      "M11": 0,
+      "D311": 2000,
+      "Y0": 1,
+      "D312": 1600
+     },
+     "expect": {}
+    },
+    {
+     "write": {},
+     "duration_ms": 400,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 1,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0
+     }
+    },
+    {
+     "write": {},
+     "duration_ms": 1000,
+     "invariant": {
+      "M0": 1,
+      "M11": 1,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0
+     },
+     "expect": {}
+    }
+   ]
+  },
+  {
+   "id": "STD-033",
+   "title": "Sleep persists above wake pressure and dead band, equality does not wake",
+   "priority": "MUST",
+   "requirements": [
+    "R01",
+    "R05",
+    "R06"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D330": 4000,
+      "D323": 1
+     },
+     "duration_ms": 10200,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 1,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0
+     }
+    },
+    {
+     "write": {
+      "D330": 1300
+     },
+     "duration_ms": 4000,
+     "invariant": {
+      "M0": 1,
+      "M11": 1,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0
+     },
+     "expect": {
+      "D308": 52
+     }
+    },
+    {
+     "write": {
+      "D330": 1425
+     },
+     "duration_ms": 4000,
+     "invariant": {
+      "M0": 1,
+      "M11": 1,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 1275
+     },
+     "duration_ms": 2800,
+     "invariant": {
+      "M0": 1,
+      "M11": 1,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0
+     },
+     "expect": {
+      "D308": 51
+     },
+     "note": "PV exactly at wake pressure does not qualify; wake requires strictly below."
+    },
+    {
+     "write": {
+      "D330": 1250
+     },
+     "duration_ms": 3200,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 0,
+      "D308": 50,
+      "Y0": 1
+     }
+    },
+    {
+     "write": {},
+     "duration_ms": 2000,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    }
+   ]
+  },
+  {
+   "id": "STD-034",
+   "title": "Wake cancellation at adjacent above-threshold value and next-cycle reset",
+   "priority": "MUST",
+   "requirements": [
+    "R01",
+    "R05"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D330": 4000
+     },
+     "duration_ms": 10200,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 1,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0
+     }
+    },
+    {
+     "write": {
+      "D330": 1250
+     },
+     "duration_ms": 2000,
+     "invariant": {
+      "M0": 1,
+      "M11": 1,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 1275
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 1,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0
+     },
+     "expect": {},
+     "note": "PV back at wake pressure cancels the qualifying region."
+    },
+    {
+     "write": {
+      "D330": 1250
+     },
+     "duration_ms": 2800,
+     "invariant": {
+      "M0": 1,
+      "M11": 1,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {},
+     "duration_ms": 400,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 0
+     }
+    },
+    {
+     "write": {
+      "D330": 4000
+     },
+     "duration_ms": 9800,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {},
+     "duration_ms": 400,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 1
+     }
+    }
+   ],
+   "expected_behavior_note": "Two complete sleep/wake cycles in one uninterrupted execution. Both timers must rearm and clear after cancellation/transition."
+  },
+  {
+   "id": "STD-035",
+   "title": "Changing SV online changes sleep qualification in the same scan",
+   "priority": "MUST",
+   "requirements": [
+    "R01",
+    "R03",
+    "R04"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D330": 1338
+     },
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D319": 6
+     }
+    },
+    {
+     "write": {
+      "D324": 51
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {
+      "D309": 51
+     },
+     "note": "SV drops to 51: PV 54 now qualifies the sleep delay in the same scan."
+    },
+    {
+     "write": {
+      "D324": 51
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {
+      "D309": 51
+     }
+    },
+    {
+     "write": {
+      "D324": 80
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {
+      "D309": 80
+     }
+    },
+    {
+     "write": {},
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D319": 55,
+      "D311": 2265
+     }
+    }
+   ]
+  },
+  {
+   "id": "STD-036",
+   "title": "Large negative error/full-scale cannot wrap PI output",
+   "priority": "MUST",
+   "requirements": [
+    "R02",
+    "R04",
+    "R07"
+   ],
+   "injection_mode": "full_scale_rush",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D324": 10,
+      "D330": 0,
+      "D320": 1
+     },
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D319": 10,
+      "D311": 2101
+     }
+    },
+    {
+     "write": {
+      "D330": 32767
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {
+      "D308": 160
+     }
+    },
+    {
+     "write": {},
+     "duration_ms": 10200,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 1,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "STD-037",
+   "title": "SV lower and upper threshold boundaries remain operational",
+   "priority": "MUST",
+   "requirements": [
+    "R03",
+    "R04",
+    "R05"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D324": 10,
+      "D320": 1,
+      "D330": 175
+     },
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D308": 7
+     }
+    },
+    {
+     "write": {
+      "D330": 250
+     },
+     "duration_ms": 10200,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 1,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0
+     }
+    },
+    {
+     "write": {
+      "D330": 225
+     },
+     "duration_ms": 3400,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 0
+     }
+    },
+    {
+     "write": {
+      "D330": 200
+     },
+     "duration_ms": 3200,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 0
+     }
+    },
+    {
+     "write": {
+      "D321": 1,
+      "D320": 1
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D324": 160,
+      "D320": 0,
+      "D321": 0,
+      "D330": 3925
+     },
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {}
+    },
+    {
+     "write": {
+      "D320": 1
+     },
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D308": 157,
+      "D310": 51
+     }
+    },
+    {
+     "write": {
+      "D330": 4000
+     },
+     "duration_ms": 10200,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 1,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0
+     }
+    },
+    {
+     "write": {
+      "D330": 1250
+     },
+     "duration_ms": 2000,
+     "invariant": {
+      "M0": 1,
+      "M11": 1,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 1200
+     },
+     "duration_ms": 3400,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 0
+     }
+    }
+   ],
+   "expected_behavior_note": "At SV10, wake threshold equals pre-sleep threshold (8); waking at equality may immediately reenter pre-sleep. Event oracle checks wake exists without requiring normal-state duration."
+  },
+  {
+   "id": "STD-038",
+   "title": "Stop same-scan overrides normal",
+   "priority": "MUST",
+   "requirements": [
+    "R01",
+    "R04",
+    "R05",
+    "R07",
+    "R08"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D330": 1250,
+      "D323": 1
+     },
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {}
+    },
+    {
+     "write": {
+      "D321": 1,
+      "D320": 1,
+      "D323": 1
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {},
+     "duration_ms": 200,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D320": 0,
+      "D321": 0
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D330": 1250
+     },
+     "duration_ms": 20,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 0,
+      "D319": 0,
+      "D311": 2000
+     }
+    },
+    {
+     "write": {},
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D319": 10,
+      "D311": 2101
+     }
+    }
+   ]
+  },
+  {
+   "id": "STD-039",
+   "title": "Stop same-scan overrides sleep-delay timing",
+   "priority": "MUST",
+   "requirements": [
+    "R01",
+    "R04"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D330": 4000,
+      "D323": 1
+     },
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {}
+    },
+    {
+     "write": {},
+     "duration_ms": 5000,
+     "invariant": {
+      "M0": 1,
+      "M11": 0,
+      "D311": 2000
+     },
+     "expect": {},
+     "note": "Mid-delay: roughly half the default sleep delay elapsed."
+    },
+    {
+     "write": {
+      "D321": 1,
+      "D320": 1,
+      "D323": 1
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {},
+     "duration_ms": 200,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D320": 0,
+      "D321": 0
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D330": 1250
+     },
+     "duration_ms": 20,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 0,
+      "D311": 2000
+     }
+    }
+   ]
+  },
+  {
+   "id": "STD-040",
+   "title": "Stop same-scan overrides sleep",
+   "priority": "MUST",
+   "requirements": [
+    "R01",
+    "R04",
+    "R05",
+    "R07",
+    "R08"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D330": 1250,
+      "D323": 1
+     },
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 4000
+     },
+     "duration_ms": 10200,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 1,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0
+     }
+    },
+    {
+     "write": {
+      "D321": 1,
+      "D320": 1,
+      "D323": 1
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {},
+     "duration_ms": 200,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D320": 0,
+      "D321": 0
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D330": 1250
+     },
+     "duration_ms": 20,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 0,
+      "D319": 0,
+      "D311": 2000
+     }
+    },
+    {
+     "write": {},
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D319": 10,
+      "D311": 2101
+     }
+    }
+   ]
+  },
+  {
+   "id": "STD-041",
+   "title": "Stop same-scan overrides wake-delay timing",
+   "priority": "MUST",
+   "requirements": [
+    "R01",
+    "R05"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D330": 4000
+     },
+     "duration_ms": 10200,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 1,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0
+     }
+    },
+    {
+     "write": {
+      "D330": 1250
+     },
+     "duration_ms": 2000,
+     "invariant": {
+      "M0": 1,
+      "M11": 1,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D321": 1,
+      "D320": 1,
+      "D323": 1
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {},
+     "duration_ms": 200,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D320": 0,
+      "D321": 0
+     },
+     "duration_ms": 200,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D311": 0
+     }
+    },
+    {
+     "write": {
+      "D320": 1
+     },
+     "duration_ms": 120,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 0,
+      "D311": 2101
+     }
+    }
+   ]
+  },
+  {
+   "id": "STD-042",
+   "title": "Stop dominates a newly arriving full-scale condition",
+   "priority": "MUST",
+   "requirements": [
+    "R01",
+    "R04",
+    "R08"
+   ],
+   "injection_mode": "full_scale_rush",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D330": 1250,
+      "D323": 1
+     },
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 4000,
+      "D321": 1,
+      "D320": 1
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {},
+     "duration_ms": 10200,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    }
+   ]
+  },
+  {
+   "id": "STD-043",
+   "title": "Enable gate toggles within normal/sleep-delay/sleep without stopping application",
+   "priority": "MUST",
+   "requirements": [
+    "R01",
+    "R08"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D323": 1
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D330": 1250
+     },
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "Y0": 1,
+      "D312": 1680
+     }
+    },
+    {
+     "write": {
+      "D323": 0
+     },
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "Y0": 0,
+      "D312": 0
+     }
+    },
+    {
+     "write": {
+      "D330": 4000,
+      "D323": 1
+     },
+     "duration_ms": 150,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {
+      "D319": 0,
+      "D311": 2000,
+      "Y0": 1,
+      "D312": 1600
+     }
+    },
+    {
+     "write": {},
+     "duration_ms": 9400,
+     "invariant": {
+      "M0": 1,
+      "M11": 0,
+      "D311": 2000,
+      "Y0": 1,
+      "D312": 1600
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D323": 2
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0,
+      "D319": 0,
+      "D311": 2000,
+      "Y0": 0,
+      "D312": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D323": 1
+     },
+     "duration_ms": 10200,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 1,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0
+     }
+    },
+    {
+     "write": {
+      "D323": 0
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 1,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D323": 1
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 1,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0
+     },
+     "expect": {}
+    }
+   ]
+  },
+  {
+   "id": "STD-044",
+   "title": "Jitter 0/full-scale every100ms cannot accumulate sleep or deadlock",
+   "priority": "MUST",
+   "requirements": [
+    "R02",
+    "R04",
+    "R06",
+    "R07",
+    "R08"
+   ],
+   "injection_mode": "jitter",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D330": 1250,
+      "D323": 1
+     },
+     "duration_ms": 20,
+     "invariant": {},
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 0
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 4000
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 0
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 4000
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 0
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 4000
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 0
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 4000
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 0
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 4000
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 0
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 4000
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 0
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 4000
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 0
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 4000
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 0
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 4000
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 0
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 4000
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 0
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 4000
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 0
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 4000
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 0
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 4000
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 0
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 4000
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 0
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 4000
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 0
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 4000
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 0
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 4000
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 0
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 4000
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 0
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 4000
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 0
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 4000
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 0
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 4000
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 0
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 4000
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 0
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 4000
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 0
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 4000
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 0
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 4000
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 0
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 4000
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 0
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 4000
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 0
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 4000
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 0
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 4000
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 0
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 4000
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 1250
+     },
+     "duration_ms": 2000,
+     "invariant": {
+      "M0": 1,
+      "M11": 0,
+      "Y0": 1
+     },
+     "expect": {}
+    }
+   ],
+   "expected_behavior_note": "6 seconds of 100ms alternating signal loss/full scale; last high interval is canceled before five seconds. Require recovery to PV50 normal operation for at least2s."
+  },
+  {
+   "id": "STD-045",
+   "title": "Single-scan input glitches reset sleep qualification",
+   "priority": "MUST",
+   "requirements": [
+    "R01",
+    "R04"
+   ],
+   "injection_mode": "full_scale_rush",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D330": 4000
+     },
+     "duration_ms": 9800,
+     "invariant": {
+      "M0": 1,
+      "M11": 0,
+      "D319": 0,
+      "D311": 2000
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 1425
+     },
+     "duration_ms": 110,
+     "invariant": {},
+     "expect": {
+      "M11": 0
+     }
+    },
+    {
+     "write": {
+      "D330": 4000
+     },
+     "duration_ms": 200,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {
+      "D319": 0,
+      "D311": 2000
+     }
+    },
+    {
+     "write": {},
+     "duration_ms": 9500,
+     "invariant": {
+      "M0": 1,
+      "M11": 0,
+      "D319": 0,
+      "D311": 2000
+     },
+     "expect": {}
+    },
+    {
+     "write": {},
+     "duration_ms": 500,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 1,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0
+     }
+    },
+    {
+     "write": {
+      "D321": 1,
+      "D320": 1
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D321": 0,
+      "D320": 0
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0
+     },
+     "expect": {}
+    }
+   ]
+  },
+  {
+   "id": "STD-046",
+   "title": "Single-scan wake-region exit resets wake qualification",
+   "priority": "MUST",
+   "requirements": [
+    "R01",
+    "R05"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D330": 4000
+     },
+     "duration_ms": 10200,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 1,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0
+     }
+    },
+    {
+     "write": {
+      "D330": 1250
+     },
+     "duration_ms": 2000,
+     "invariant": {
+      "M0": 1,
+      "M11": 1,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 1300
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 1,
+      "M11": 1,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D330": 1250
+     },
+     "duration_ms": 2800,
+     "invariant": {
+      "M0": 1,
+      "M11": 1,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {},
+     "duration_ms": 400,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "STD-047",
+   "title": "Stop during delay then restart does not reuse elapsed delay",
+   "priority": "MUST",
+   "requirements": [
+    "R01",
+    "R04",
+    "R05"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D330": 4000
+     },
+     "duration_ms": 9800,
+     "invariant": {
+      "M0": 1,
+      "M11": 0,
+      "D319": 0,
+      "D311": 2000
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D320": 0,
+      "D321": 1
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D321": 0,
+      "D320": 0
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D320": 1
+     },
+     "duration_ms": 9800,
+     "invariant": {
+      "M0": 1,
+      "M11": 0,
+      "D319": 0,
+      "D311": 2000
+     },
+     "expect": {}
+    },
+    {
+     "write": {},
+     "duration_ms": 400,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 1,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0
+     }
+    },
+    {
+     "write": {
+      "D330": 1250
+     },
+     "duration_ms": 2800,
+     "invariant": {
+      "M0": 1,
+      "M11": 1,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D320": 0,
+      "D321": 1
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D321": 0,
+      "D330": 4000,
+      "D320": 0
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D320": 1
+     },
+     "duration_ms": 10200,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 1,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0
+     }
+    },
+    {
+     "write": {
+      "D330": 1250
+     },
+     "duration_ms": 2800,
+     "invariant": {
+      "M0": 1,
+      "M11": 1,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {},
+     "duration_ms": 400,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "STD-048",
+   "title": "Echo accepts all signed words on the next executed scan",
+   "priority": "MUST",
+   "requirements": [
+    "R09"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D333": 1
+     },
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "D317": 1,
+      "D333": 1
+     }
+    },
+    {
+     "write": {
+      "D333": 12345
+     },
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "D317": 12345,
+      "D333": 12345
+     }
+    },
+    {
+     "write": {
+      "D333": -1
+     },
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "D317": -1,
+      "D333": -1
+     }
+    },
+    {
+     "write": {
+      "D333": -32768
+     },
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "D317": -32768,
+      "D333": -32768
+     }
+    },
+    {
+     "write": {
+      "D333": 32767
+     },
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "D317": 32767,
+      "D333": 32767
+     }
+    },
+    {
+     "write": {
+      "D333": 0
+     },
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "D317": 0,
+      "D333": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "STD-049",
+   "title": "Diagnostic signed counter wrap and heartbeat do not corrupt stopped outputs",
+   "priority": "MUST",
+   "requirements": [
+    "R01",
+    "R09"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {},
+     "duration_ms": 340000,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    }
+   ],
+   "expected_behavior_note": "34,001 total scans from zero memory cross signed counter wrap. Assert modulo signed16 delta1 after each scan; no assumption about first-scan absolute counter."
+  },
+  {
+   "id": "STD-050",
+   "title": "Diagnostics remain live during normal running without changing PI cadence",
+   "priority": "MUST",
+   "requirements": [
+    "R07",
+    "R09"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D330": 1250,
+      "D333": -12345
+     },
+     "duration_ms": 20,
+     "invariant": {},
+     "expect": {}
+    },
+    {
+     "write": {},
+     "duration_ms": 2000,
+     "invariant": {},
+     "expect": {
+      "D317": -12345,
+      "D319": 200,
+      "D311": 2120
+     }
+    }
+   ]
+  },
+  {
+   "id": "STD-051",
+   "title": "Wake pressure is independent of online SV",
+   "priority": "MUST",
+   "requirements": [
+    "R01",
+    "R05",
+    "R06"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D330": 4000
+     },
+     "duration_ms": 10200,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 1,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0
+     }
+    },
+    {
+     "write": {
+      "D330": 1250
+     },
+     "duration_ms": 2000,
+     "invariant": {
+      "M0": 1,
+      "M11": 1,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D324": 80
+     },
+     "duration_ms": 2800,
+     "invariant": {
+      "M0": 1
+     },
+     "expect": {
+      "D309": 80,
+      "D310": 51
+     },
+     "note": "SV raised to 80; wake pressure stays 51: PV50<51 keeps counting and wakes."
+    },
+    {
+     "write": {},
+     "duration_ms": 400,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 0
+     }
+    },
+    {
+     "write": {},
+     "duration_ms": 2000,
+     "invariant": {
+      "M0": 1,
+      "M11": 0
+     },
+     "expect": {}
+    }
+   ]
+  },
+  {
+   "id": "STD-052",
+   "title": "Invalid mode same-scan clears sleep-delay timing and requires release/restart",
+   "priority": "MUST",
+   "requirements": [
+    "R01",
+    "R02",
+    "R04",
+    "R05",
+    "R08"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     }
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D323": 1,
+      "D330": 4000
+     },
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 0,
+      "D319": 0,
+      "D311": 2000
+     }
+    },
+    {
+     "write": {
+      "D322": 2
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D322": 1,
+      "D330": 1250
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D320": 0
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D320": 1
+     },
+     "duration_ms": 20,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 0,
+      "Y0": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "STD-053",
+   "title": "Invalid mode same-scan clears sleep and requires release/restart",
+   "priority": "MUST",
+   "requirements": [
+    "R01",
+    "R02",
+    "R04",
+    "R05",
+    "R08"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     }
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D323": 1,
+      "D330": 4000
+     },
+     "duration_ms": 10200,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 1,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0
+     }
+    },
+    {
+     "write": {
+      "D322": 2
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D322": 1,
+      "D330": 1250
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D320": 0
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D320": 1
+     },
+     "duration_ms": 20,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 0,
+      "Y0": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "STD-054",
+   "title": "Invalid mode same-scan clears wake-delay timing and requires release/restart",
+   "priority": "MUST",
+   "requirements": [
+    "R01",
+    "R02",
+    "R04",
+    "R05",
+    "R08"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     }
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D323": 1,
+      "D330": 4000
+     },
+     "duration_ms": 10200,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 1,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0
+     }
+    },
+    {
+     "write": {
+      "D330": 1250
+     },
+     "duration_ms": 2000,
+     "invariant": {
+      "M0": 1,
+      "M11": 1,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D322": 2
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D322": 1,
+      "D330": 1250
+     },
+     "duration_ms": 100,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D320": 0
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D320": 1
+     },
+     "duration_ms": 20,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 0,
+      "Y0": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "STD-055",
+   "title": "Diagnostic wrap during active PI cannot corrupt accumulator or outputs",
+   "priority": "MUST",
+   "requirements": [
+    "R06",
+    "R07",
+    "R08",
+    "R09"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     }
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D330": 1250,
+      "D323": 1
+     },
+     "duration_ms": 20,
+     "invariant": {},
+     "expect": {}
+    },
+    {
+     "write": {},
+     "duration_ms": 340000,
+     "invariant": {
+      "M0": 1,
+      "M11": 0,
+      "Y0": 1
+     },
+     "expect": {
+      "D319": 30000,
+      "D311": 5000,
+      "D312": 4000
+     }
+    }
+   ],
+   "expected_behavior_note": "At PV50 error10 each100ms: accumulator saturates at tick3000. Full trace independent recurrence and routing cover signed D199 wrap while outputs are active."
+  },
+  {
+   "id": "STD-056",
+   "title": "Parallel start terminal starts, latches, and releases cleanly",
+   "priority": "MUST",
+   "requirements": [
+    "R01",
+    "R09"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "First-scan defaults: D1072/D1073 zero, application stopped."
+    },
+    {
+     "write": {
+      "D334": 1
+     },
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "D320": 0,
+      "D321": 0,
+      "D334": 1,
+      "D335": 0
+     },
+     "note": "Virtual terminal alone starts the run; command words untouched."
+    },
+    {
+     "write": {
+      "D334": 0
+     },
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "D334": 0,
+      "D320": 0
+     },
+     "note": "Run latches after the start source releases."
+    },
+    {
+     "write": {
+      "D321": 1,
+      "D320": 1
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D321": 0,
+      "D320": 0
+     },
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "D335": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "STD-057",
+   "title": "Parallel stop terminal dominates both start sources",
+   "priority": "MUST",
+   "requirements": [
+    "R01",
+    "R09"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     }
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D330": 1250,
+      "D323": 1
+     },
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "M0": 1
+     }
+    },
+    {
+     "write": {
+      "D335": 1
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {},
+     "note": "Parallel stop wins the same scan over the held command start."
+    },
+    {
+     "write": {},
+     "duration_ms": 5200,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {},
+     "note": "Stayed stopped: no timers may accumulate while stopped."
+    },
+    {
+     "write": {
+      "D320": 0,
+      "D335": 0
+     },
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "D320": 0,
+      "D335": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "STD-058",
+   "title": "Invalid-mode inhibit with parallel start requires both sources zero to release",
+   "priority": "MUST",
+   "requirements": [
+    "R01",
+    "R02",
+    "R09"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     }
+    },
+    {
+     "write": {
+      "D322": 2
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "D311": 0
+     },
+     "expect": {},
+     "note": "Invalid mode latches restart inhibit."
+    },
+    {
+     "write": {
+      "D334": 1
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0
+     },
+     "expect": {
+      "D334": 1
+     },
+     "note": "Virtual start cannot act during invalid mode."
+    },
+    {
+     "write": {
+      "D322": 1
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0
+     },
+     "expect": {},
+     "note": "Held start source across recovery cannot restart; inhibit still held."
+    },
+    {
+     "write": {
+      "D334": 0
+     },
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "D334": 0
+     },
+     "note": "Both start sources now zero in valid mode: inhibit releases without starting."
+    },
+    {
+     "write": {
+      "D334": 1
+     },
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "M0": 1
+     },
+     "note": "Fresh start from the parallel terminal now begins."
+    },
+    {
+     "write": {
+      "D334": 0,
+      "D321": 1,
+      "D320": 1
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D321": 0,
+      "D320": 0
+     },
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "STD-059",
+   "title": "Sleep delay parameter D327 shortens the delay to 3s",
+   "priority": "MUST",
+   "requirements": [
+    "R01",
+    "R04",
+    "R14"
+   ],
+   "injection_mode": "full_scale_rush",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D330": 4000,
+      "D327": 30
+     },
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {}
+    },
+    {
+     "write": {},
+     "duration_ms": 2800,
+     "invariant": {
+      "M0": 1,
+      "M11": 0,
+      "D311": 2000
+     },
+     "expect": {},
+     "note": "28 ticks < 30: still running under the shortened delay."
+    },
+    {
+     "write": {},
+     "duration_ms": 400,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 1,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0
+     },
+     "note": "Sleep at ~3.0-3.2s proves D327 is consumed."
+    },
+    {
+     "write": {
+      "D321": 1,
+      "D327": 100,
+      "D320": 1
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D321": 0,
+      "D320": 0
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0
+     },
+     "expect": {}
+    }
+   ]
+  },
+  {
+   "id": "STD-060",
+   "title": "Wake delay parameter D328 lengthens the delay to 5s",
+   "priority": "MUST",
+   "requirements": [
+    "R01",
+    "R05",
+    "R14"
+   ],
+   "injection_mode": "full_scale_rush",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D330": 4000,
+      "D328": 50
+     },
+     "duration_ms": 10200,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 1
+     }
+    },
+    {
+     "write": {
+      "D330": 1250
+     },
+     "duration_ms": 4000,
+     "invariant": {
+      "M0": 1,
+      "M11": 1,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0
+     },
+     "expect": {},
+     "note": "40 ticks < 50: still sleeping under the lengthened wake delay."
+    },
+    {
+     "write": {},
+     "duration_ms": 1400,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 0
+     },
+     "note": "Wake at ~5.0-5.4s proves D328 is consumed."
+    },
+    {
+     "write": {
+      "D321": 1,
+      "D328": 30,
+      "D320": 1
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D321": 0,
+      "D320": 0
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0
+     },
+     "expect": {}
+    }
+   ]
+  },
+  {
+   "id": "STD-061",
+   "title": "Wake pressure setting D326 moves the wake boundary",
+   "priority": "MUST",
+   "requirements": [
+    "R01",
+    "R05",
+    "R06",
+    "R14"
+   ],
+   "injection_mode": "full_scale_rush",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D330": 4000,
+      "D326": 55
+     },
+     "duration_ms": 10200,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 1,
+      "D310": 55
+     }
+    },
+    {
+     "write": {
+      "D330": 1400
+     },
+     "duration_ms": 4000,
+     "invariant": {
+      "M0": 1,
+      "M11": 1,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0
+     },
+     "expect": {
+      "D308": 56
+     },
+     "note": "PV 56 >= D326 55: no wake despite PV below SV."
+    },
+    {
+     "write": {
+      "D330": 1350
+     },
+     "duration_ms": 3400,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 0,
+      "D308": 54
+     },
+     "note": "PV 54 < 55 wakes after about 3s."
+    },
+    {
+     "write": {
+      "D321": 1,
+      "D320": 1
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D321": 0,
+      "D320": 0
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0
+     },
+     "expect": {}
+    }
+   ]
+  },
+  {
+   "id": "STD-062",
+   "title": "No-flow speed D329 sleeps a barely-turning pump below SV",
+   "priority": "MUST",
+   "requirements": [
+    "R01",
+    "R11",
+    "R14"
+   ],
+   "injection_mode": "normal_step",
+   "hardware_scope": "bench",
+   "initial_words": {},
+   "steps": [
+    {
+     "write": {},
+     "duration_ms": 10,
+     "invariant": {},
+     "expect": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "note": "Execute first scan before external requests; first-scan defaults may replace seeded command words."
+    },
+    {
+     "write": {
+      "D320": 1,
+      "D330": 1338,
+      "D329": 2200
+     },
+     "duration_ms": 100,
+     "invariant": {},
+     "expect": {
+      "D319": 6
+     }
+    },
+    {
+     "write": {},
+     "duration_ms": 9700,
+     "invariant": {
+      "M0": 1,
+      "M11": 0,
+      "D308": 54
+     },
+     "expect": {},
+     "note": "PV 54 < SV 60 so PI settles f<=2060<=2200: qualifying via no-flow, 28 ticks < 100."
+    },
+    {
+     "write": {},
+     "duration_ms": 500,
+     "invariant": {},
+     "expect": {
+      "M0": 1,
+      "M11": 1,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0
+     },
+     "note": "Sleep via the no-flow path at ~10s despite PV below SV."
+    },
+    {
+     "write": {
+      "D321": 1,
+      "D329": 2000,
+      "D320": 1
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0,
+      "D319": 0,
+      "D311": 0,
+      "Y0": 0,
+      "D312": 0,
+      "D313": 0
+     },
+     "expect": {}
+    },
+    {
+     "write": {
+      "D321": 0,
+      "D320": 0
+     },
+     "duration_ms": 10,
+     "invariant": {
+      "M0": 0,
+      "M11": 0
+     },
+     "expect": {}
+    }
+   ]
+  }
+ ]
+}

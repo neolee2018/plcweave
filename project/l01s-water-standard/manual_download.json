@@ -1,0 +1,19 @@
+{
+  "source_sha256": "13f396bcbece6cc4b01935ec17927f1ddc834ff40070cc6245921c52f9d595f9",
+  "program_version": 5,
+  "edition": 31,
+  "suite_version_word": 5,
+  "fingerprint_words": [
+    -10264,
+    -21461
+  ],
+  "canonical_sha256": "e8d72bac9cc37d14768ca3023ed33408985fd5722c07eabf17952eef03fee1df",
+  "test_sha256": "36123300a8041d4a38ce961bcb7dc18b0b97536ff5059785a18c5a23321c357f",
+  "confirmed_by": "User current chat: 我已经烧录了 project/l01s-water-standard/实验室测试/V005/MAIN.csv，请你完成后续硬件在环测试",
+  "downloaded_at": {
+    "exact_time": null,
+    "confirmed_complete_before": "2026-11-08T13:30:09.096600+00:00"
+  },
+  "software_and_version": null,
+  "note": "Binds the V005 self-latch fix build (burned file 实验室测试/V005/MAIN.csv+COMMENT.csv, mtime 2026-11-08 21:11). L0 register identity + heartbeat + scan counter corroborated read-only on COM11 before any write; no binary readback attestation. Supersedes the 2026-10-22 V002 binding."
+}

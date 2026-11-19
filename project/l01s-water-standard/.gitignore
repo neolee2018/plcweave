@@ -1,0 +1,12 @@
+.pio/
+__pycache__/
+evidence/pytest*/
+evidence/pdfqa/
+evidence/pdf-profile-*/
+**/simulation_trace.csv
+*.zip
+evidence/hil02/pytest*/
+evidence/hil02/pdfqa/
+evidence/hil02/*-pdf-profile-*/
+# V002-final folder is ACL-locked on the bench machine; delivery kits ship.
+delivery/V002-final/

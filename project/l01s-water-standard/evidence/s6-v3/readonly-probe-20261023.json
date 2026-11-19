@@ -1,0 +1,66 @@
+{
+  "kind": "s6_design_input_readonly_probe",
+  "not_a_test_result": "本次只做只读探测，用于 S6-HIL-V2 方案设计；不判定任何 S1 用例，不代表 HARDWARE_PASS。",
+  "task_id": "PW-20261023-S6-HIL-V3-PLAN",
+  "owner": "codex",
+  "at": "2026-10-23T21:25:06+08:00",
+  "bench": {
+    "port": "COM7",
+    "baudrate": 9600,
+    "bytesize": 8,
+    "parity": "N",
+    "stopbits": 1,
+    "unit_id": 1,
+    "writes": 0,
+    "open_mode": "read-only (FC03/FC01)"
+  },
+  "identity_observed": {
+    "D196": 4,
+    "D197": 31,
+    "D198": 18143,
+    "D199": -45,
+    "D200": 29415,
+    "D201": 10550,
+    "D202": 1,
+    "M8000": 1,
+    "M8035": 1,
+    "M8036": 0,
+    "M8037": 0
+  },
+  "identity_bound_by_v002_evidence": {
+    "D196": 2,
+    "D197": 31,
+    "D200": 28642,
+    "D201": 27104,
+    "D202": 2,
+    "source_sha256": "238e10886e2d8ed4e8d2d66e758a18afe4e403f6c613f306d7859796b8ec3a88"
+  },
+  "identity_conclusion": "MISMATCH：当前烧录镜像不是 V002。D196=4/D202=1 与 V002 的 2/2 不同，指纹 29415/10550 与 28642/27104 不同。V002 的 candidate_bench/verify 会拒绝该镜像（这是设计正确的门禁行为）。",
+  "heartbeat": {
+    "D198": "1 秒内 18143 -> 18143（不变）",
+    "D199": "1 秒内 -45 -> -45（不变）",
+    "conclusion": "该镜像不维护 V002 的 100 ms 心跳与扫描计数器；即使身份字相同，verify() 的心跳前进检查也会失败。"
+  },
+  "communication_setting": {
+    "D8120": 3713,
+    "D8120_hex": "0x0E81",
+    "meaning": "9600 / 8 / N / 1 / RTU，与 machine-profile 记录一致",
+    "D8121": 1
+  },
+  "timing_ms": {
+    "single_word_read": {"n": 15, "min": 27.95, "median": 29.03, "max": 30.19},
+    "block_100_words": {"n": 5, "min": 232.21, "median": 236.57, "max": 236.8},
+    "watch_36_devices_snapshot": {"n": 3, "samples": [435.96, 450.05, 440.85], "dword_groups": 9, "coil_groups": 5, "transactions": 14}
+  },
+  "timing_interpretation": [
+    "9600 8N1 下 1 字节约 1.04 ms；单字事务 8+7 字节约 16 ms 线路时间，实测 29 ms，差值主要来自 USB-RS485 转换器默认 16 ms 延迟定时器与协议栈开销。",
+    "100 字块实测 236 ms，接近 205 字节线路时间 214 ms，说明块读本身受波特率限制。",
+    "36 点快照 436-450 ms 不是波特率问题，而是 14 个事务逐个叠加（14 x 约 30 ms）；合并事务可立即下降一个数量级。"
+  ],
+  "implications_for_s6": [
+    "S6 第一步必须先核对镜像身份与心跳，不匹配即 TEST_INFRA_ERROR，禁止任何写入。",
+    "当前 436-450 ms 的快照跨度远大于 10 ms 扫描与 100-200 ms 时序窗口，因此时序类用例只能 UNVERIFIED。",
+    "把快照压到 3 个事务以内、把 USB 延迟定时器调到 1 ms，可在不改 PLC 程序的前提下把跨度降到约 40-60 ms。"
+  ],
+  "cleanup": "串口已关闭；未写入任何寄存器；未创建进程、锁或 GUI 资源。"
+}

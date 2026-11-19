@@ -1,0 +1,3367 @@
+{
+  "task_id": "PW-20261108-V005-BATCH-IO",
+  "kind": "s6_soft_element_case_run",
+  "at": "2026-11-18T11:40:29.956159+00:00",
+  "port": "COM11",
+  "writes": 24,
+  "cases": [
+    {
+      "id": "STD6-001",
+      "title": "First scan identity V006 and fixed wake/max defaults",
+      "scope": "bench",
+      "status": "UNVERIFIED",
+      "steps": [
+        {
+          "index": 0,
+          "duration_ms": 200,
+          "write": {},
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D300",
+              "expected": 6,
+              "actual": 6
+            },
+            {
+              "scope": "expect",
+              "device": "D301",
+              "expected": 31,
+              "actual": 31
+            },
+            {
+              "scope": "expect",
+              "device": "D304",
+              "expected": 6,
+              "actual": 6
+            },
+            {
+              "scope": "expect",
+              "device": "D326",
+              "expected": 40,
+              "actual": 40
+            },
+            {
+              "scope": "expect",
+              "device": "D336",
+              "expected": 80,
+              "actual": 80
+            },
+            {
+              "scope": "expect",
+              "device": "D316",
+              "expected": 80,
+              "actual": 80
+            },
+            {
+              "scope": "expect",
+              "device": "D309",
+              "expected": 60,
+              "actual": 60
+            },
+            {
+              "scope": "expect",
+              "device": "D310",
+              "expected": 40,
+              "actual": 40
+            },
+            {
+              "scope": "expect",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D317",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D322",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "expect",
+              "device": "D320",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D321",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D323",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D333",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D325",
+              "expected": 60,
+              "actual": 60
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [
+            {
+              "scope": "expect",
+              "device": "D175",
+              "expected": 80,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D176",
+              "expected": 75,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "M40",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D8050",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            }
+          ],
+          "observed_at_ms": 209,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 6,
+            "D301": 31,
+            "D302": -7313,
+            "D303": -11960,
+            "D304": 6,
+            "D305": -22126,
+            "D306": -30600,
+            "D307": 16,
+            "D308": 0,
+            "D309": 60,
+            "D310": 40,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 80,
+            "D317": 0,
+            "D318": 0,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 40,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 0,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "D336": 80,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 209
+          }
+        },
+        {
+          "index": 1,
+          "duration_ms": 200,
+          "write": {},
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D316",
+              "expected": 80,
+              "actual": 80
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [
+            {
+              "scope": "invariant",
+              "device": "D175",
+              "expected": 80,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "invariant",
+              "device": "M40",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            }
+          ],
+          "observed_at_ms": 208,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 6,
+            "D301": 31,
+            "D302": -7313,
+            "D303": -11960,
+            "D304": 6,
+            "D305": -22124,
+            "D306": -30118,
+            "D307": 16,
+            "D308": 0,
+            "D309": 60,
+            "D310": 40,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 80,
+            "D317": 0,
+            "D318": 0,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 40,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 0,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "D336": 80,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 208
+          }
+        }
+      ],
+      "asserted_steps": 2,
+      "compared_items": 24,
+      "skipped_items": 6,
+      "ambiguous_items": 0,
+      "tick_hold_items": 0
+    },
+    {
+      "id": "STD6-002",
+      "title": "Overpressure trip blocks output; auto release below limit-0.5bar",
+      "scope": "bench",
+      "status": "UNVERIFIED",
+      "steps": [
+        {
+          "index": 0,
+          "duration_ms": 200,
+          "write": {},
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D300",
+              "expected": 6,
+              "actual": 6
+            },
+            {
+              "scope": "expect",
+              "device": "D301",
+              "expected": 31,
+              "actual": 31
+            },
+            {
+              "scope": "expect",
+              "device": "D304",
+              "expected": 6,
+              "actual": 6
+            },
+            {
+              "scope": "expect",
+              "device": "D326",
+              "expected": 40,
+              "actual": 40
+            },
+            {
+              "scope": "expect",
+              "device": "D336",
+              "expected": 80,
+              "actual": 80
+            },
+            {
+              "scope": "expect",
+              "device": "D316",
+              "expected": 80,
+              "actual": 80
+            },
+            {
+              "scope": "expect",
+              "device": "D309",
+              "expected": 60,
+              "actual": 60
+            },
+            {
+              "scope": "expect",
+              "device": "D310",
+              "expected": 40,
+              "actual": 40
+            },
+            {
+              "scope": "expect",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D317",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D322",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "expect",
+              "device": "D320",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D321",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D323",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D333",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D325",
+              "expected": 60,
+              "actual": 60
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [
+            {
+              "scope": "expect",
+              "device": "D175",
+              "expected": 80,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D176",
+              "expected": 75,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "M40",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D8050",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            }
+          ],
+          "observed_at_ms": 205,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 6,
+            "D301": 31,
+            "D302": -7313,
+            "D303": -11960,
+            "D304": 6,
+            "D305": -22100,
+            "D306": -24870,
+            "D307": 16,
+            "D308": 0,
+            "D309": 60,
+            "D310": 40,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 80,
+            "D317": 0,
+            "D318": 0,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 40,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 0,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "D336": 80,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 205
+          }
+        },
+        {
+          "index": 1,
+          "duration_ms": 1000,
+          "write": {
+            "D322": 1,
+            "D320": 1,
+            "D321": 0,
+            "D323": 1,
+            "D330": 988
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "M0",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "expect",
+              "device": "Y0",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 1,
+              "actual": 1
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [
+            {
+              "scope": "expect",
+              "device": "D100",
+              "expected": 40,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D307",
+              "expected": 49,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "M40",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "invariant",
+              "device": "M40",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            }
+          ],
+          "observed_at_ms": 1011,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 6,
+            "D301": 31,
+            "D302": -7313,
+            "D303": -11960,
+            "D304": 6,
+            "D305": -22090,
+            "D306": -22645,
+            "D307": 49,
+            "D308": 40,
+            "D309": 60,
+            "D310": 40,
+            "D311": 2216,
+            "D312": 1772,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 80,
+            "D317": 0,
+            "D318": 988,
+            "D319": 160,
+            "D320": 1,
+            "D321": 0,
+            "D322": 1,
+            "D323": 1,
+            "D324": 60,
+            "D325": 60,
+            "D326": 40,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 988,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "D336": 80,
+            "Y0": 1,
+            "M0": 1,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 1011
+          }
+        },
+        {
+          "index": 2,
+          "duration_ms": 1000,
+          "write": {
+            "D330": 2013
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [
+            {
+              "scope": "expect",
+              "device": "M40",
+              "expected": 1,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D100",
+              "expected": 81,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D154",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D120",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D8050",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D307",
+              "expected": 181,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "invariant",
+              "device": "M40",
+              "expected": 1,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "invariant",
+              "device": "D154",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            }
+          ],
+          "observed_at_ms": 1008,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 6,
+            "D301": 31,
+            "D302": -7313,
+            "D303": -11960,
+            "D304": 6,
+            "D305": -22080,
+            "D306": -20366,
+            "D307": 181,
+            "D308": 81,
+            "D309": 60,
+            "D310": 40,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 8,
+            "D315": 0,
+            "D316": 80,
+            "D317": 0,
+            "D318": 2013,
+            "D319": 0,
+            "D320": 1,
+            "D321": 0,
+            "D322": 1,
+            "D323": 1,
+            "D324": 60,
+            "D325": 60,
+            "D326": 40,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 2013,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "D336": 80,
+            "Y0": 0,
+            "M0": 1,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 1008
+          }
+        },
+        {
+          "index": 3,
+          "duration_ms": 500,
+          "write": {
+            "D330": 1938
+          },
+          "status": "UNVERIFIED",
+          "compared": [],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [
+            {
+              "scope": "expect",
+              "device": "M40",
+              "expected": 1,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D154",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D307",
+              "expected": 181,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "invariant",
+              "device": "M40",
+              "expected": 1,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "invariant",
+              "device": "D154",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            }
+          ],
+          "observed_at_ms": 508,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 6,
+            "D301": 31,
+            "D302": -7313,
+            "D303": -11960,
+            "D304": 6,
+            "D305": -22075,
+            "D306": -19212,
+            "D307": 181,
+            "D308": 78,
+            "D309": 60,
+            "D310": 40,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 13,
+            "D315": 0,
+            "D316": 80,
+            "D317": 0,
+            "D318": 1938,
+            "D319": 0,
+            "D320": 1,
+            "D321": 0,
+            "D322": 1,
+            "D323": 1,
+            "D324": 60,
+            "D325": 60,
+            "D326": 40,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 1938,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "D336": 80,
+            "Y0": 0,
+            "M0": 1,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 508
+          }
+        },
+        {
+          "index": 4,
+          "duration_ms": 1000,
+          "write": {
+            "D330": 1838
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "Y0",
+              "expected": 1,
+              "actual": 1
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [
+            {
+              "scope": "expect",
+              "device": "M40",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D100",
+              "expected": 74,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D154",
+              "expected": 2000,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D120",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D307",
+              "expected": 53,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D8050",
+              "expected": 1600,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "invariant",
+              "device": "M40",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            }
+          ],
+          "observed_at_ms": 1003,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 6,
+            "D301": 31,
+            "D302": -7313,
+            "D303": -11960,
+            "D304": 6,
+            "D305": -22065,
+            "D306": -16994,
+            "D307": 53,
+            "D308": 74,
+            "D309": 60,
+            "D310": 40,
+            "D311": 2000,
+            "D312": 1600,
+            "D313": 0,
+            "D314": 23,
+            "D315": 0,
+            "D316": 80,
+            "D317": 0,
+            "D318": 1838,
+            "D319": 0,
+            "D320": 1,
+            "D321": 0,
+            "D322": 1,
+            "D323": 1,
+            "D324": 60,
+            "D325": 60,
+            "D326": 40,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 1838,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "D336": 80,
+            "Y0": 1,
+            "M0": 1,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 1003
+          }
+        }
+      ],
+      "asserted_steps": 5,
+      "compared_items": 27,
+      "skipped_items": 28,
+      "ambiguous_items": 0,
+      "tick_hold_items": 0
+    },
+    {
+      "id": "STD6-003",
+      "title": "PV exactly at the limit does not trip (strict comparison)",
+      "scope": "bench",
+      "status": "UNVERIFIED",
+      "steps": [
+        {
+          "index": 0,
+          "duration_ms": 200,
+          "write": {},
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D300",
+              "expected": 6,
+              "actual": 6
+            },
+            {
+              "scope": "expect",
+              "device": "D301",
+              "expected": 31,
+              "actual": 31
+            },
+            {
+              "scope": "expect",
+              "device": "D304",
+              "expected": 6,
+              "actual": 6
+            },
+            {
+              "scope": "expect",
+              "device": "D326",
+              "expected": 40,
+              "actual": 40
+            },
+            {
+              "scope": "expect",
+              "device": "D336",
+              "expected": 80,
+              "actual": 80
+            },
+            {
+              "scope": "expect",
+              "device": "D316",
+              "expected": 80,
+              "actual": 80
+            },
+            {
+              "scope": "expect",
+              "device": "D309",
+              "expected": 60,
+              "actual": 60
+            },
+            {
+              "scope": "expect",
+              "device": "D310",
+              "expected": 40,
+              "actual": 40
+            },
+            {
+              "scope": "expect",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D317",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D322",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "expect",
+              "device": "D320",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D321",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D323",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D333",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D325",
+              "expected": 60,
+              "actual": 60
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [
+            {
+              "scope": "expect",
+              "device": "D175",
+              "expected": 80,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D176",
+              "expected": 75,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "M40",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D8050",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            }
+          ],
+          "observed_at_ms": 209,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 6,
+            "D301": 31,
+            "D302": -7313,
+            "D303": -11960,
+            "D304": 6,
+            "D305": -22042,
+            "D306": -11790,
+            "D307": 16,
+            "D308": 74,
+            "D309": 60,
+            "D310": 40,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 80,
+            "D317": 0,
+            "D318": 1838,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 40,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 1838,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "D336": 80,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 209
+          }
+        },
+        {
+          "index": 1,
+          "duration_ms": 500,
+          "write": {
+            "D322": 1,
+            "D320": 1,
+            "D321": 0,
+            "D323": 1,
+            "D330": 1988
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "Y0",
+              "expected": 1,
+              "actual": 1
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [
+            {
+              "scope": "expect",
+              "device": "M40",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D100",
+              "expected": 80,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D154",
+              "expected": 2000,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D307",
+              "expected": 53,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "invariant",
+              "device": "M40",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            }
+          ],
+          "observed_at_ms": 508,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 6,
+            "D301": 31,
+            "D302": -7313,
+            "D303": -11960,
+            "D304": 6,
+            "D305": -22037,
+            "D306": -10651,
+            "D307": 53,
+            "D308": 80,
+            "D309": 60,
+            "D310": 40,
+            "D311": 2000,
+            "D312": 1600,
+            "D313": 0,
+            "D314": 3,
+            "D315": 0,
+            "D316": 80,
+            "D317": 0,
+            "D318": 1988,
+            "D319": 0,
+            "D320": 1,
+            "D321": 0,
+            "D322": 1,
+            "D323": 1,
+            "D324": 60,
+            "D325": 60,
+            "D326": 40,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 1988,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "D336": 80,
+            "Y0": 1,
+            "M0": 1,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 508
+          }
+        },
+        {
+          "index": 2,
+          "duration_ms": 400,
+          "write": {
+            "D330": 2013
+          },
+          "status": "UNVERIFIED",
+          "compared": [],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [
+            {
+              "scope": "expect",
+              "device": "M40",
+              "expected": 1,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D154",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D307",
+              "expected": 181,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "invariant",
+              "device": "M40",
+              "expected": 1,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "invariant",
+              "device": "D154",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            }
+          ],
+          "observed_at_ms": 405,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 6,
+            "D301": 31,
+            "D302": -7313,
+            "D303": -11960,
+            "D304": 6,
+            "D305": -22033,
+            "D306": -9746,
+            "D307": 181,
+            "D308": 81,
+            "D309": 60,
+            "D310": 40,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 7,
+            "D315": 0,
+            "D316": 80,
+            "D317": 0,
+            "D318": 2013,
+            "D319": 0,
+            "D320": 1,
+            "D321": 0,
+            "D322": 1,
+            "D323": 1,
+            "D324": 60,
+            "D325": 60,
+            "D326": 40,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 2013,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "D336": 80,
+            "Y0": 0,
+            "M0": 1,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 405
+          }
+        }
+      ],
+      "asserted_steps": 3,
+      "compared_items": 22,
+      "skipped_items": 14,
+      "ambiguous_items": 0,
+      "tick_hold_items": 0
+    },
+    {
+      "id": "STD6-004",
+      "title": "Sleep at PV 8.0bar; wake pressure default 4.0bar governs wake",
+      "scope": "bench",
+      "status": "UNVERIFIED",
+      "steps": [
+        {
+          "index": 0,
+          "duration_ms": 200,
+          "write": {},
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D300",
+              "expected": 6,
+              "actual": 6
+            },
+            {
+              "scope": "expect",
+              "device": "D301",
+              "expected": 31,
+              "actual": 31
+            },
+            {
+              "scope": "expect",
+              "device": "D304",
+              "expected": 6,
+              "actual": 6
+            },
+            {
+              "scope": "expect",
+              "device": "D326",
+              "expected": 40,
+              "actual": 40
+            },
+            {
+              "scope": "expect",
+              "device": "D336",
+              "expected": 80,
+              "actual": 80
+            },
+            {
+              "scope": "expect",
+              "device": "D316",
+              "expected": 80,
+              "actual": 80
+            },
+            {
+              "scope": "expect",
+              "device": "D309",
+              "expected": 60,
+              "actual": 60
+            },
+            {
+              "scope": "expect",
+              "device": "D310",
+              "expected": 40,
+              "actual": 40
+            },
+            {
+              "scope": "expect",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D317",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D322",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "expect",
+              "device": "D320",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D321",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D323",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D333",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D325",
+              "expected": 60,
+              "actual": 60
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [
+            {
+              "scope": "expect",
+              "device": "D175",
+              "expected": 80,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D176",
+              "expected": 75,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "M40",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D8050",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            }
+          ],
+          "observed_at_ms": 209,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 6,
+            "D301": 31,
+            "D302": -7313,
+            "D303": -11960,
+            "D304": 6,
+            "D305": -22011,
+            "D306": -4527,
+            "D307": 16,
+            "D308": 81,
+            "D309": 60,
+            "D310": 40,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 80,
+            "D317": 0,
+            "D318": 2013,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 40,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 2013,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "D336": 80,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 209
+          }
+        },
+        {
+          "index": 1,
+          "duration_ms": 1000,
+          "write": {
+            "D322": 1,
+            "D320": 1,
+            "D321": 0,
+            "D323": 1,
+            "D336": 80,
+            "D330": 738
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "M0",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "expect",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 1,
+              "actual": 1
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [
+            {
+              "scope": "expect",
+              "device": "M40",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "invariant",
+              "device": "M40",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            }
+          ],
+          "observed_at_ms": 1008,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 6,
+            "D301": 31,
+            "D302": -7313,
+            "D303": -11960,
+            "D304": 6,
+            "D305": -22001,
+            "D306": -2294,
+            "D307": 49,
+            "D308": 30,
+            "D309": 60,
+            "D310": 40,
+            "D311": 2321,
+            "D312": 1856,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 80,
+            "D317": 0,
+            "D318": 738,
+            "D319": 210,
+            "D320": 1,
+            "D321": 0,
+            "D322": 1,
+            "D323": 1,
+            "D324": 60,
+            "D325": 60,
+            "D326": 40,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 738,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "D336": 80,
+            "Y0": 1,
+            "M0": 1,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 1008
+          }
+        },
+        {
+          "index": 2,
+          "duration_ms": 11000,
+          "write": {
+            "D330": 1988
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "M11",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "expect",
+              "device": "M0",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "expect",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [
+            {
+              "scope": "expect",
+              "device": "D154",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D307",
+              "expected": 51,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            }
+          ],
+          "observed_at_ms": 11006,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 6,
+            "D301": 31,
+            "D302": -7313,
+            "D303": -11960,
+            "D304": 6,
+            "D305": -21891,
+            "D306": 21782,
+            "D307": 51,
+            "D308": 80,
+            "D309": 60,
+            "D310": 40,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 80,
+            "D317": 0,
+            "D318": 1988,
+            "D319": 0,
+            "D320": 1,
+            "D321": 0,
+            "D322": 1,
+            "D323": 1,
+            "D324": 60,
+            "D325": 60,
+            "D326": 40,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 1988,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "D336": 80,
+            "Y0": 0,
+            "M0": 1,
+            "M11": 1,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 11006
+          }
+        },
+        {
+          "index": 3,
+          "duration_ms": 5000,
+          "write": {
+            "D330": 1113
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "M11",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 1,
+              "actual": 1
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [
+            {
+              "scope": "expect",
+              "device": "D154",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D307",
+              "expected": 51,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            }
+          ],
+          "observed_at_ms": 5006,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 6,
+            "D301": 31,
+            "D302": -7313,
+            "D303": -11960,
+            "D304": 6,
+            "D305": -21842,
+            "D306": -32316,
+            "D307": 51,
+            "D308": 45,
+            "D309": 60,
+            "D310": 40,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 80,
+            "D317": 0,
+            "D318": 1113,
+            "D319": 0,
+            "D320": 1,
+            "D321": 0,
+            "D322": 1,
+            "D323": 1,
+            "D324": 60,
+            "D325": 60,
+            "D326": 40,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 1113,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "D336": 80,
+            "Y0": 0,
+            "M0": 1,
+            "M11": 1,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 5006
+          }
+        },
+        {
+          "index": 4,
+          "duration_ms": 5000,
+          "write": {
+            "D330": 738
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "M0",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 1,
+              "actual": 1
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [
+            {
+              "scope": "expect",
+              "device": "D307",
+              "expected": 49,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            }
+          ],
+          "observed_at_ms": 5006,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 6,
+            "D301": 31,
+            "D302": -7313,
+            "D303": -11960,
+            "D304": 6,
+            "D305": -21792,
+            "D306": -21104,
+            "D307": 49,
+            "D308": 30,
+            "D309": 60,
+            "D310": 40,
+            "D311": 2354,
+            "D312": 1883,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 80,
+            "D317": 0,
+            "D318": 738,
+            "D319": 540,
+            "D320": 1,
+            "D321": 0,
+            "D322": 1,
+            "D323": 1,
+            "D324": 60,
+            "D325": 60,
+            "D326": 40,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 738,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "D336": 80,
+            "Y0": 1,
+            "M0": 1,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 5006
+          }
+        }
+      ],
+      "asserted_steps": 5,
+      "compared_items": 32,
+      "skipped_items": 11,
+      "ambiguous_items": 0,
+      "tick_hold_items": 0
+    },
+    {
+      "id": "STD6-005",
+      "title": "Max pressure clamp 10..160 and D316 mirror",
+      "scope": "bench",
+      "status": "UNVERIFIED",
+      "steps": [
+        {
+          "index": 0,
+          "duration_ms": 200,
+          "write": {},
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D300",
+              "expected": 6,
+              "actual": 6
+            },
+            {
+              "scope": "expect",
+              "device": "D301",
+              "expected": 31,
+              "actual": 31
+            },
+            {
+              "scope": "expect",
+              "device": "D304",
+              "expected": 6,
+              "actual": 6
+            },
+            {
+              "scope": "expect",
+              "device": "D326",
+              "expected": 40,
+              "actual": 40
+            },
+            {
+              "scope": "expect",
+              "device": "D336",
+              "expected": 80,
+              "actual": 80
+            },
+            {
+              "scope": "expect",
+              "device": "D316",
+              "expected": 80,
+              "actual": 80
+            },
+            {
+              "scope": "expect",
+              "device": "D309",
+              "expected": 60,
+              "actual": 60
+            },
+            {
+              "scope": "expect",
+              "device": "D310",
+              "expected": 40,
+              "actual": 40
+            },
+            {
+              "scope": "expect",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D317",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D322",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "expect",
+              "device": "D320",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D321",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D323",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D333",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D325",
+              "expected": 60,
+              "actual": 60
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [
+            {
+              "scope": "expect",
+              "device": "D175",
+              "expected": 80,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D176",
+              "expected": 75,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "M40",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D8050",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            }
+          ],
+          "observed_at_ms": 206,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 6,
+            "D301": 31,
+            "D302": -7313,
+            "D303": -11960,
+            "D304": 6,
+            "D305": -21769,
+            "D306": -15913,
+            "D307": 16,
+            "D308": 30,
+            "D309": 60,
+            "D310": 40,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 80,
+            "D317": 0,
+            "D318": 738,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 40,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 738,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "D336": 80,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 206
+          }
+        },
+        {
+          "index": 1,
+          "duration_ms": 100,
+          "write": {
+            "D322": 1,
+            "D320": 0,
+            "D321": 1
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [
+            {
+              "scope": "expect",
+              "device": "D154",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D307",
+              "expected": 16,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "M40",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            }
+          ],
+          "observed_at_ms": 280,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 6,
+            "D301": 31,
+            "D302": -7313,
+            "D303": -11960,
+            "D304": 6,
+            "D305": -21767,
+            "D306": -15266,
+            "D307": 16,
+            "D308": 30,
+            "D309": 60,
+            "D310": 40,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 80,
+            "D317": 0,
+            "D318": 738,
+            "D319": 0,
+            "D320": 0,
+            "D321": 1,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 40,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 738,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "D336": 80,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 280
+          }
+        },
+        {
+          "index": 2,
+          "duration_ms": 100,
+          "write": {
+            "D336": 0
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D316",
+              "expected": 10,
+              "actual": 10
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [
+            {
+              "scope": "expect",
+              "device": "D175",
+              "expected": 10,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D176",
+              "expected": 5,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "M40",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            }
+          ],
+          "observed_at_ms": 276,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 6,
+            "D301": 31,
+            "D302": -7313,
+            "D303": -11960,
+            "D304": 6,
+            "D305": -21764,
+            "D306": -14628,
+            "D307": 16,
+            "D308": 30,
+            "D309": 60,
+            "D310": 40,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 10,
+            "D317": 0,
+            "D318": 738,
+            "D319": 0,
+            "D320": 0,
+            "D321": 1,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 40,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 738,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "D336": 0,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 276
+          }
+        },
+        {
+          "index": 3,
+          "duration_ms": 100,
+          "write": {
+            "D336": 200
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D316",
+              "expected": 160,
+              "actual": 160
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [
+            {
+              "scope": "expect",
+              "device": "D175",
+              "expected": 160,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D176",
+              "expected": 155,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            }
+          ],
+          "observed_at_ms": 281,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 6,
+            "D301": 31,
+            "D302": -7313,
+            "D303": -11960,
+            "D304": 6,
+            "D305": -21761,
+            "D306": -13988,
+            "D307": 16,
+            "D308": 30,
+            "D309": 60,
+            "D310": 40,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 160,
+            "D317": 0,
+            "D318": 738,
+            "D319": 0,
+            "D320": 0,
+            "D321": 1,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 40,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 738,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "D336": 200,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 281
+          }
+        }
+      ],
+      "asserted_steps": 4,
+      "compared_items": 25,
+      "skipped_items": 12,
+      "ambiguous_items": 0,
+      "tick_hold_items": 0
+    },
+    {
+      "id": "STD6-006",
+      "title": "Overpressure alarm does not need the physical route enable",
+      "scope": "bench",
+      "status": "UNVERIFIED",
+      "steps": [
+        {
+          "index": 0,
+          "duration_ms": 200,
+          "write": {},
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D300",
+              "expected": 6,
+              "actual": 6
+            },
+            {
+              "scope": "expect",
+              "device": "D301",
+              "expected": 31,
+              "actual": 31
+            },
+            {
+              "scope": "expect",
+              "device": "D304",
+              "expected": 6,
+              "actual": 6
+            },
+            {
+              "scope": "expect",
+              "device": "D326",
+              "expected": 40,
+              "actual": 40
+            },
+            {
+              "scope": "expect",
+              "device": "D336",
+              "expected": 80,
+              "actual": 80
+            },
+            {
+              "scope": "expect",
+              "device": "D316",
+              "expected": 80,
+              "actual": 80
+            },
+            {
+              "scope": "expect",
+              "device": "D309",
+              "expected": 60,
+              "actual": 60
+            },
+            {
+              "scope": "expect",
+              "device": "D310",
+              "expected": 40,
+              "actual": 40
+            },
+            {
+              "scope": "expect",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D317",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D322",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "expect",
+              "device": "D320",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D321",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D323",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D333",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D325",
+              "expected": 60,
+              "actual": 60
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [
+            {
+              "scope": "expect",
+              "device": "D175",
+              "expected": 80,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D176",
+              "expected": 75,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "M40",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D8050",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            }
+          ],
+          "observed_at_ms": 205,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 6,
+            "D301": 31,
+            "D302": -7313,
+            "D303": -11960,
+            "D304": 6,
+            "D305": -21738,
+            "D306": -8745,
+            "D307": 16,
+            "D308": 30,
+            "D309": 60,
+            "D310": 40,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 80,
+            "D317": 0,
+            "D318": 738,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 40,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 738,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "D336": 80,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 205
+          }
+        },
+        {
+          "index": 1,
+          "duration_ms": 500,
+          "write": {
+            "D322": 1,
+            "D320": 1,
+            "D321": 0,
+            "D323": 0,
+            "D336": 80,
+            "D330": 2013
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "M0",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "expect",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [
+            {
+              "scope": "expect",
+              "device": "M40",
+              "expected": 1,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D154",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D307",
+              "expected": 149,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "invariant",
+              "device": "M40",
+              "expected": 1,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "invariant",
+              "device": "D154",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            }
+          ],
+          "observed_at_ms": 506,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 6,
+            "D301": 31,
+            "D302": -7313,
+            "D303": -11960,
+            "D304": 6,
+            "D305": -21733,
+            "D306": -7584,
+            "D307": 149,
+            "D308": 81,
+            "D309": 60,
+            "D310": 40,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 3,
+            "D315": 0,
+            "D316": 80,
+            "D317": 0,
+            "D318": 2013,
+            "D319": 0,
+            "D320": 1,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 40,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 2013,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "D336": 80,
+            "Y0": 0,
+            "M0": 1,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 506
+          }
+        },
+        {
+          "index": 2,
+          "duration_ms": 500,
+          "write": {
+            "D330": 988
+          },
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [
+            {
+              "scope": "expect",
+              "device": "M40",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D307",
+              "expected": 17,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "invariant",
+              "device": "M40",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            }
+          ],
+          "observed_at_ms": 510,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 6,
+            "D301": 31,
+            "D302": -7313,
+            "D303": -11960,
+            "D304": 6,
+            "D305": -21728,
+            "D306": -6422,
+            "D307": 17,
+            "D308": 40,
+            "D309": 60,
+            "D310": 40,
+            "D311": 2206,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 80,
+            "D317": 0,
+            "D318": 988,
+            "D319": 60,
+            "D320": 1,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 40,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 988,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "D336": 80,
+            "Y0": 0,
+            "M0": 1,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 510
+          }
+        }
+      ],
+      "asserted_steps": 3,
+      "compared_items": 26,
+      "skipped_items": 12,
+      "ambiguous_items": 0,
+      "tick_hold_items": 0
+    },
+    {
+      "id": "STD6-007",
+      "title": "Full-scale PV trips overpressure; N1C bit6 stays clear on short hold",
+      "scope": "bench",
+      "status": "UNVERIFIED",
+      "steps": [
+        {
+          "index": 0,
+          "duration_ms": 200,
+          "write": {},
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D300",
+              "expected": 6,
+              "actual": 6
+            },
+            {
+              "scope": "expect",
+              "device": "D301",
+              "expected": 31,
+              "actual": 31
+            },
+            {
+              "scope": "expect",
+              "device": "D304",
+              "expected": 6,
+              "actual": 6
+            },
+            {
+              "scope": "expect",
+              "device": "D326",
+              "expected": 40,
+              "actual": 40
+            },
+            {
+              "scope": "expect",
+              "device": "D336",
+              "expected": 80,
+              "actual": 80
+            },
+            {
+              "scope": "expect",
+              "device": "D316",
+              "expected": 80,
+              "actual": 80
+            },
+            {
+              "scope": "expect",
+              "device": "D309",
+              "expected": 60,
+              "actual": 60
+            },
+            {
+              "scope": "expect",
+              "device": "D310",
+              "expected": 40,
+              "actual": 40
+            },
+            {
+              "scope": "expect",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D319",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D311",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D312",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D317",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D322",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "expect",
+              "device": "D320",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D321",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D323",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D333",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D325",
+              "expected": 60,
+              "actual": 60
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [
+            {
+              "scope": "expect",
+              "device": "D175",
+              "expected": 80,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D176",
+              "expected": 75,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "M40",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D8050",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            }
+          ],
+          "observed_at_ms": 210,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 6,
+            "D301": 31,
+            "D302": -7313,
+            "D303": -11960,
+            "D304": 6,
+            "D305": -21706,
+            "D306": -1151,
+            "D307": 16,
+            "D308": 40,
+            "D309": 60,
+            "D310": 40,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 80,
+            "D317": 0,
+            "D318": 988,
+            "D319": 0,
+            "D320": 0,
+            "D321": 0,
+            "D322": 1,
+            "D323": 0,
+            "D324": 60,
+            "D325": 60,
+            "D326": 40,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 988,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "D336": 80,
+            "Y0": 0,
+            "M0": 0,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 210
+          }
+        },
+        {
+          "index": 1,
+          "duration_ms": 3000,
+          "write": {
+            "D322": 1,
+            "D320": 1,
+            "D321": 0,
+            "D323": 1,
+            "D336": 80,
+            "D330": 3999
+          },
+          "status": "UNVERIFIED",
+          "compared": [],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [
+            {
+              "scope": "expect",
+              "device": "M40",
+              "expected": 1,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D100",
+              "expected": 160,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D154",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D307",
+              "expected": 181,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "M14",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "invariant",
+              "device": "M40",
+              "expected": 1,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "invariant",
+              "device": "D154",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "invariant",
+              "device": "M14",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            }
+          ],
+          "observed_at_ms": 3006,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 6,
+            "D301": 31,
+            "D302": -7313,
+            "D303": -11960,
+            "D304": 6,
+            "D305": -21676,
+            "D306": 5702,
+            "D307": 181,
+            "D308": 160,
+            "D309": 60,
+            "D310": 40,
+            "D311": 0,
+            "D312": 0,
+            "D313": 0,
+            "D314": 27,
+            "D315": 0,
+            "D316": 80,
+            "D317": 0,
+            "D318": 3999,
+            "D319": 0,
+            "D320": 1,
+            "D321": 0,
+            "D322": 1,
+            "D323": 1,
+            "D324": 60,
+            "D325": 60,
+            "D326": 40,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 3999,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "D336": 80,
+            "Y0": 0,
+            "M0": 1,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 3006
+          }
+        },
+        {
+          "index": 2,
+          "duration_ms": 500,
+          "write": {
+            "D330": 988
+          },
+          "status": "UNVERIFIED",
+          "compared": [],
+          "mismatches": [],
+          "ambiguous": [],
+          "tick_hold": [],
+          "skipped": [
+            {
+              "scope": "expect",
+              "device": "M40",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D100",
+              "expected": 40,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "D307",
+              "expected": 49,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            },
+            {
+              "scope": "expect",
+              "device": "M14",
+              "expected": 0,
+              "reason": "Running PI/analog value; host polling cannot certify this instant"
+            }
+          ],
+          "observed_at_ms": 506,
+          "chunk_checks": [],
+          "observed": {
+            "D300": 6,
+            "D301": 31,
+            "D302": -7313,
+            "D303": -11960,
+            "D304": 6,
+            "D305": -21671,
+            "D306": 6824,
+            "D307": 49,
+            "D308": 40,
+            "D309": 60,
+            "D310": 40,
+            "D311": 2204,
+            "D312": 1763,
+            "D313": 0,
+            "D314": 0,
+            "D315": 0,
+            "D316": 80,
+            "D317": 0,
+            "D318": 988,
+            "D319": 40,
+            "D320": 1,
+            "D321": 0,
+            "D322": 1,
+            "D323": 1,
+            "D324": 60,
+            "D325": 60,
+            "D326": 40,
+            "D327": 100,
+            "D328": 30,
+            "D329": 2000,
+            "D330": 988,
+            "D331": 0,
+            "D332": 0,
+            "D333": 0,
+            "D334": 0,
+            "D335": 0,
+            "D336": 80,
+            "Y0": 1,
+            "M0": 1,
+            "M11": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 506
+          }
+        }
+      ],
+      "asserted_steps": 3,
+      "compared_items": 21,
+      "skipped_items": 16,
+      "ambiguous_items": 0,
+      "tick_hold_items": 0
+    }
+  ],
+  "status": "UNVERIFIED",
+  "identity": {
+    "D300": 6,
+    "D301": 31,
+    "D302": -7313,
+    "D303": -11960,
+    "D304": 6
+  },
+  "system_checkpoint": {
+    "D8120": -8063,
+    "D8121": 1
+  },
+  "initial_state": {
+    "D300": 6,
+    "D301": 31,
+    "D302": -7313,
+    "D303": -11960,
+    "D304": 6,
+    "D305": -22148,
+    "D306": 29691,
+    "D307": 16,
+    "D308": 40,
+    "D309": 60,
+    "D310": 40,
+    "D311": 0,
+    "D312": 0,
+    "D313": 0,
+    "D314": 0,
+    "D315": 0,
+    "D316": 80,
+    "D317": 0,
+    "D318": 1000,
+    "D319": 0,
+    "D320": 0,
+    "D321": 0,
+    "D322": 1,
+    "D323": 0,
+    "D324": 60,
+    "D325": 60,
+    "D326": 40,
+    "D327": 100,
+    "D328": 30,
+    "D329": 2000,
+    "D330": 1000,
+    "D331": 0,
+    "D332": 0,
+    "D333": 0,
+    "D334": 0,
+    "D335": 0,
+    "D336": 80,
+    "Y0": 0,
+    "M0": 0,
+    "M11": 0,
+    "M8196": 1,
+    "M8125": 1
+  }
+}

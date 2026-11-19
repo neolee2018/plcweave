@@ -17,6 +17,8 @@ logs/
 private/
 project/*
 !project/README.md
+# 2026-11-19 用户批准：恒压供水项目本体作为客户演示公开（见 demo/water-supply-standard/README.md 运行手册）
+!project/l01s-water-standard
 reusable/
 local/*
 !local/.gitkeep

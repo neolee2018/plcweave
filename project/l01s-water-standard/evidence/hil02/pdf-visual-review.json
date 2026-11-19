@@ -1,0 +1,1004 @@
+{
+  "task_id": "PW-20261022-V002-HIL02-PDF",
+  "owner": "independent-pdf-judge",
+  "deadline_minutes": 30,
+  "completed_at_utc": "2026-10-22T10:39:37.864245+00:00",
+  "status": "PASS",
+  "method": "Independent agent displayed and visually inspected each individual page PNG using view_image; PDF hashes, page counts and footer strings independently checked with PyMuPDF. Text extraction was supplementary, not the visual-review method.",
+  "scope": "PDF presentation and validation-scope wording only; no independent PLC/hardware execution approval.",
+  "pdf_sha256": {
+    "Blackbox-Test-Cases_EN.pdf": "01dd33e3e5f29e8aa02eaaeb3f4ddbf5ec4da9d58e616e775fbcc553be884f32",
+    "L01S-Water-PI-il-annotated_EN.pdf": "7edfdaeb8d500af62fe66582acac6009b5a6432cd17d15eb675b44b9f0b95ec3"
+  },
+  "documents": [
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "pages": 44,
+      "reviewed_pages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44
+      ],
+      "status": "PASS",
+      "footer_text_check": "PASS",
+      "table_of_contents": "Not present; no TOC page claims to verify."
+    },
+    {
+      "pdf": "L01S-Water-PI-il-annotated_EN.pdf",
+      "pages": 6,
+      "reviewed_pages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "status": "PASS",
+      "footer_text_check": "PASS",
+      "table_of_contents": "Not present; no TOC page claims to verify."
+    }
+  ],
+  "pages": [
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 1,
+      "printed_page_number": "1 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-001.png",
+      "image_sha256": "9f98d42a6715b3611c4b7e6c495f84f3f7e35f306f1c857315622302d2ba2a81",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "Cover, setup gate and scope banner fit; section 2 has its introductory paragraph; footer 1/44."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 2,
+      "printed_page_number": "2 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-002.png",
+      "image_sha256": "8c6d2fe9c3073670b40671955aa99a1d692954d757b71ab871516ace97f42d69",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "Register map tables fit; rows and bottom footer are separate."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 3,
+      "printed_page_number": "3 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-003.png",
+      "image_sha256": "288cc17fa04107de4fadfce38a1bea45d9f7c1da0e69d84a981fa717b99a33a9",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "Register map continuation has repeated header and readable cells."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 4,
+      "printed_page_number": "4 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-004.png",
+      "image_sha256": "1e7901ad59e3686e2eff5777b00865932070cda5b9ce95aaf9b08bb0ff13233c",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "Register map and frozen replay introduction fit; heading 3 stays with text."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 5,
+      "printed_page_number": "5 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-005.png",
+      "image_sha256": "9c198ecb658c88a642ea52020e954614bd515beda9ae2da5c280d9676b91e7a6",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "STD-001 to STD-004: headings, expected-value tables and retest fields fit."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 6,
+      "printed_page_number": "6 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-006.png",
+      "image_sha256": "f79b69853236b258220981c6b4fd3b05538987f347e2006ad38c32d283b3c1b6",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "STD-005 to STD-008: tables and retest fields fit."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 7,
+      "printed_page_number": "7 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-007.png",
+      "image_sha256": "86974092dd54eefa89a619f545d2a88230912382cfdcff23dad0a08455d34c59",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "STD-009 to STD-011: command table fits without clipping."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 8,
+      "printed_page_number": "8 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-008.png",
+      "image_sha256": "aaf1f8d9b91d0b3dbd518b1d1c79a21976a4cf5f600b6da607925a90c1ef6b26",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "STD-012 and STD-013: readable tables with all retest fields."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 9,
+      "printed_page_number": "9 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-009.png",
+      "image_sha256": "26d0819cc6ad938737a38cf37abdfd92f0e12a075c1926f0fa5fbca1b3b53c99",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "STD-014 and STD-015: readable tables with all retest fields."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 10,
+      "printed_page_number": "10 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-010.png",
+      "image_sha256": "c00bb111748efc9d6bbadab9576b18e7747fa95fbdc2d761513d571f38528967",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "STD-016 rows 1-23: dense table remains readable; continuation follows."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 11,
+      "printed_page_number": "11 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-011.png",
+      "image_sha256": "31d8075fad9e8c34c6aeb040a651a5fea98bd36b9b76e317c6de9bd265d467b1",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "STD-016 rows 24-25 and STD-017: continuation has repeated column header."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 12,
+      "printed_page_number": "12 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-012.png",
+      "image_sha256": "9fe38eea2b7a1fcf7653e76bb2811c0674511602ba94af193caf67f8a59e7928",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "STD-018 rows 1-22: long table stays inside printable area; continuation follows."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 13,
+      "printed_page_number": "13 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-013.png",
+      "image_sha256": "12fe388b59a918a349cc6c2fcdc7b22e7a174517030f8350e06563ff894c20c8",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "STD-018 continuation, STD-019 and STD-020: no cut rows or isolated headings."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 14,
+      "printed_page_number": "14 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-014.png",
+      "image_sha256": "fa22af158baa86a40f7b41edb2af3d71f254a648cce22d8be501457cb119e326",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "STD-021 and STD-022: complete tables and retest fields fit."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 15,
+      "printed_page_number": "15 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-015.png",
+      "image_sha256": "ed7244c885bdfb2916a0fb7e88fc6cfbbd06526acc6952f13fe7018a0dfde915",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "STD-023 and STD-024: full tables fit above footer."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 16,
+      "printed_page_number": "16 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-016.png",
+      "image_sha256": "88b865d71c32a2a1a184b604ed4fb6fdfacc13f3173059d594a2c018293be08b",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "STD-025 and STD-026: complete tables and retest fields fit."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 17,
+      "printed_page_number": "17 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-017.png",
+      "image_sha256": "b4e47b2b9694203f254ffac2497b994048ced09d6594f7b0b773ed31c5d872cf",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "STD-027 and STD-028: PI tables fit with readable expected values."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 18,
+      "printed_page_number": "18 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-018.png",
+      "image_sha256": "5a09d46399c1103bec7bd0e7643b3938d4387febcf25a4f850dc6ea81520fa3c",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "STD-029 and STD-030: timing and route tables fit."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 19,
+      "printed_page_number": "19 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-019.png",
+      "image_sha256": "ffbe7248b190708bd9790cdf1a0bfbaef0f190b68e7b4c1a4e63fd3ab441475c",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "STD-031 and STD-032: timer tables fit; heading and content remain together."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 20,
+      "printed_page_number": "20 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-020.png",
+      "image_sha256": "53effd5d5a97a674e814b7a6ebd2e1ba5da8cc9c435a4bd5a3b0ef338e8e44bd",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "STD-033 and STD-034: both long tables fit above footer."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 21,
+      "printed_page_number": "21 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-021.png",
+      "image_sha256": "39678c47da47479ecd5d87daf7a4fc4c7839c5bc42436e1d3038ee04ac18d279",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "STD-035 and STD-036: tables and fields have clear separation."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 22,
+      "printed_page_number": "22 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-022.png",
+      "image_sha256": "5fd510f4df663d336767bc25431f2ee1e822bb0a53a2fb86c7dba03460c11d3d",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "STD-037 and STD-038: tables and fields fit."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 23,
+      "printed_page_number": "23 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-023.png",
+      "image_sha256": "ef7f3f4b268136a8784d9ef894e95bfa82647e7401564f3a3101ddf5a82e74cb",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "STD-039 and STD-040: stop-state tables fit."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 24,
+      "printed_page_number": "24 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-024.png",
+      "image_sha256": "67ec13f779ead1d07d0ba0ceb8470745cb158ae144873a7fa55e64bcfaab9455",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "STD-041 and STD-042: complete tables and retest fields fit."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 25,
+      "printed_page_number": "25 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-025.png",
+      "image_sha256": "9f311998f3117f5edf94fd81507acaaf72d0b3d2fd99247165a1ad77701ab513",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "STD-043 to STD-045: dense page remains readable with no cut rows."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 26,
+      "printed_page_number": "26 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-026.png",
+      "image_sha256": "f527baa67bb35dc94cd5f626e9a6afa8f8e83901c010b3efa3c742ff8802f018",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "STD-046 and STD-047: complete cancellation/restart tables fit."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 27,
+      "printed_page_number": "27 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-027.png",
+      "image_sha256": "d55fbf28e5ec457392a5b905678c4919a4578a15758557fa30f44d4e2982222b",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "STD-048 to STD-050: complete echo/diagnostic tables fit."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 28,
+      "printed_page_number": "28 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-028.png",
+      "image_sha256": "29c2f5c3e443db88510d875b6c5d370c4dfbb2ea235ccd65a1435ec6a79a91ea",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "STD-051 and STD-052: complete tables and retest fields fit."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 29,
+      "printed_page_number": "29 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-029.png",
+      "image_sha256": "0b00d7ba8d623b8856e8021103d333092ac20751d470d86396f760a434b526a1",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "STD-053 to STD-055: complete tables and retest fields fit."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 30,
+      "printed_page_number": "30 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-030.png",
+      "image_sha256": "92fcd33dbfc8a4501cdcc306cd704bfe888b93455315a55eaa1be3e7ff3a4898",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "Acceptance-oracle section: paragraphs readable; REL-08 continues as normal text."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 31,
+      "printed_page_number": "31 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-031.png",
+      "image_sha256": "03717cb30020ea195cea72f2aff3f9f849ef66b888a99e6af370fdc3f2dd248a",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "REL-08 continuation and REL-09/10 fit; validation scope explicitly preserves hardware UNVERIFIED."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 32,
+      "printed_page_number": "32 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-032.png",
+      "image_sha256": "76d150148b7e50b7aeb9d027d485af7ee2d674bfcffa82bc7bd602de88e70f61",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "28-procedure result table fits: PASS=24, UNVERIFIED=4; original 55 hardware cases explicitly UNVERIFIED."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 33,
+      "printed_page_number": "33 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-033.png",
+      "image_sha256": "306da5b922e589d55131e8eabe0a420f977281910bde89d8a15a8547edc171d4",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "Event interval table readable; individual first-frequency PASS does not conceal overall supplemental UNVERIFIED; cleanup and evidence contract fit."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 34,
+      "printed_page_number": "34 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-034.png",
+      "image_sha256": "b2a71ddb46e8ebe929a6af8cc0bba957ce87b0ad2e4089bc3b3414b5153cd6e8",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "Supplemental section 7 and INIT-001/002/003 fit; INIT-003 parameter table continues with repeated header."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 35,
+      "printed_page_number": "35 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-035.png",
+      "image_sha256": "0997f62d8bae3794f51e01b0dc88e324e870db6172d5112cd007b13ab11068b4",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "INIT-003 continuation and INIT-004/005/006 fit; table continuation uses repeated headers."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 36,
+      "printed_page_number": "36 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-036.png",
+      "image_sha256": "2097c4057d2f01b25232d2e719b447a5b5fea1206f0f5ed83c965035093bfdf6",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "INIT-006 continuation and INIT-007/008/009 fit; no cut rows at page bottom."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 37,
+      "printed_page_number": "37 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-037.png",
+      "image_sha256": "b3b1ee803345f400a7d908f873a26a7a666e6670e59216563f51160818904744",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "INIT-009 continuation, INIT-010 and steady STD-016 rows 1-12 fit."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 38,
+      "printed_page_number": "38 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-038.png",
+      "image_sha256": "ed9cd5274d6d276d92470c4b1ed1382b60bbcc8cac39e9f91f1cf8de4828645e",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "Steady STD-016 continuation and steady STD-024 rows 1-9 fit with repeated headers."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 39,
+      "printed_page_number": "39 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-039.png",
+      "image_sha256": "c362e3472d08529d7f107a4f6b40e7830b97cdff432f589e3b2560757c94422f",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "Steady STD-024 continuation, STD-025/048 and command STD-011 fit."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 40,
+      "printed_page_number": "40 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-040.png",
+      "image_sha256": "ab2b6dd5051a57c989ef59f988b047d5671ab52e35ceed898e9e4a9b847dc1ca",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "Command STD-012/013/014 and start of STD-015 fit; continuation has context and table header."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 41,
+      "printed_page_number": "41 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-041.png",
+      "image_sha256": "09e64083ce77ff556ea22140d9696061a10be094de9cc4ddec9143c1380bf98b",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "Command STD-015 continuation, STD-019/020 and start of STD-021 fit."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 42,
+      "printed_page_number": "42 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-042.png",
+      "image_sha256": "524a4dfee5dc1294095d01b43140f4870f5d3af83e1447a9e7e3c47b4995cd62",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "Command STD-021 continuation, STD-022, zero-saturation and gate prerequisite tables fit."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 43,
+      "printed_page_number": "43 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-043.png",
+      "image_sha256": "c4e6141fb336c860b8d4029d9dc62162b8d1f5ce1682655401c87bfd528329c7",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "Gate continuation, two-cycle timer and cancel procedure start fit; no orphan headings."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "page": 44,
+      "printed_page_number": "44 / 44",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\Blackbox-Test-Cases_EN\\page-044.png",
+      "image_sha256": "7e09bba4dc49f89a99352e9ba3c3409a067b1085c3bfcd81dad2b15a9a1f662f",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "Cancel continuation and jitter procedure fit; final scoped-results UNVERIFIED notice and footer 44/44 are legible."
+    },
+    {
+      "pdf": "L01S-Water-PI-il-annotated_EN.pdf",
+      "page": 1,
+      "printed_page_number": "1 / 6",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\L01S-Water-PI-il-annotated_EN\\page-001.png",
+      "image_sha256": "1db2cbce5a3da9c80bae2d375d11987ff2382203a7b577f201c273bd4aa73db2",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "Cover scope banner and initialization table rows 1-24 fit; banner says 24 PASS/4 UNVERIFIED and original hardware UNVERIFIED."
+    },
+    {
+      "pdf": "L01S-Water-PI-il-annotated_EN.pdf",
+      "page": 2,
+      "printed_page_number": "2 / 6",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\L01S-Water-PI-il-annotated_EN\\page-002.png",
+      "image_sha256": "df1b7c20a8d7b3f07ad04c44a97275d44b2cc29eeae6fee22b46597a76720f23",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "Initialization continuation and global-clock/setting sections fit; all table headers repeated."
+    },
+    {
+      "pdf": "L01S-Water-PI-il-annotated_EN.pdf",
+      "page": 3,
+      "printed_page_number": "3 / 6",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\L01S-Water-PI-il-annotated_EN\\page-003.png",
+      "image_sha256": "a71e2de238b11ca9b242730e2dd34f7d94b176f3a8b86c8fe9d65339cd353c71",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "Setting continuation, signed-input and valid-mode sections fit without clipped instructions."
+    },
+    {
+      "pdf": "L01S-Water-PI-il-annotated_EN.pdf",
+      "page": 4,
+      "printed_page_number": "4 / 6",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\L01S-Water-PI-il-annotated_EN\\page-004.png",
+      "image_sha256": "2dad5ab586edaecbe64d9479586563ed40e05a84ecb9d291ba5f3d10ac4b5b89",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "Valid-mode continuation, stop and wake/pre-sleep timer sections fit."
+    },
+    {
+      "pdf": "L01S-Water-PI-il-annotated_EN.pdf",
+      "page": 5,
+      "printed_page_number": "5 / 6",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\L01S-Water-PI-il-annotated_EN\\page-005.png",
+      "image_sha256": "65687089f435f545c2212514a80b6ce11b3d482ea3f55f5ae9225b9afa481c4b",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "Final-normal and integer PI sections fit with readable operands; no orphan heading."
+    },
+    {
+      "pdf": "L01S-Water-PI-il-annotated_EN.pdf",
+      "page": 6,
+      "printed_page_number": "6 / 6",
+      "image": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\evidence\\hil02\\pdfqa\\L01S-Water-PI-il-annotated_EN\\page-006.png",
+      "image_sha256": "68ebd81732c5704170941e9bae7f866d8afec095c4e703ccf7eb96eb0d095fca",
+      "manual_image_review": true,
+      "status": "PASS",
+      "checks": {
+        "no_table_overflow": "PASS",
+        "no_clipped_or_overlapping_text": "PASS",
+        "no_garbled_glyphs": "PASS",
+        "no_orphan_heading": "PASS",
+        "visible_correct_page_number": "PASS"
+      },
+      "issues": [],
+      "notes": "PI continuation and physical route section include END row 176; final UNVERIFIED scope notice and footer 6/6 fit."
+    }
+  ],
+  "content_scope_checks": {
+    "original_55_hardware_cases": "UNVERIFIED explicitly on test page 32; original full-scan suite UNVERIFIED on both page-1 banners.",
+    "supplemental_28": "Separate frozen procedures: 24 PASS and 4 UNVERIFIED, test pages 1 and 32.",
+    "timing_uncertainty": "Test page 33 shows conservative event intervals; mixed/uncertain procedures retain UNVERIFIED on page 32.",
+    "electrical_plant_scope": "UNVERIFIED scope wording is legible on both documents and final notices."
+  },
+  "issues": [],
+  "resources_and_cleanup": {
+    "serial_connections_created": 0,
+    "background_processes_created": 0,
+    "gui_resources_created": 0,
+    "temporary_files_created": 0,
+    "pdf_html_plc_or_frozen_inputs_modified": false,
+    "owned_outputs": [
+      "pdf-visual-review.json",
+      "pdf-visual-review.md"
+    ],
+    "cleanup": "No persistent resource to release; read-only document handles closed."
+  }
+}

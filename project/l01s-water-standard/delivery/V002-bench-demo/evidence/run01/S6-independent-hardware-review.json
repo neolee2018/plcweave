@@ -1,0 +1,277 @@
+{
+  "task_id": "PW-20261022-V002-HIL02",
+  "owner": "independent-s6-review",
+  "at": "2026-10-22T10:23:33.492442+00:00",
+  "decision": "ACCEPT_SCOPED_BENCH_EVIDENCE",
+  "scope": "Independent raw-file audit only; reviewer never opened COM5/COM7 or altered frozen inputs",
+  "run": "run01",
+  "sha256": {
+    "report": "63edaaf2c3dd2c4f10067c43e9a6b2c6006d5697fd56b4e9af76700cadbda6b1",
+    "trace": "845d106cde5bbd877de75af2a5cffee7971deb81682c0a33f9fd5990e3b1d598",
+    "qualification_plan": "d09a6298935138492fcd485831c069a29f9561f10cea1a69008916e3dbb96313"
+  },
+  "trace_rows": 8257,
+  "audit_counts": {
+    "transactions": 5305,
+    "verified_writes": 394,
+    "reconstructed_reads": 2471,
+    "cpu_forces": 192,
+    "cpu_restarts": 27,
+    "stable_observations": 121,
+    "scalar_assertions_recomputed": 933,
+    "timing_events_recomputed": 7
+  },
+  "errors": [],
+  "supplemental": {
+    "actual_executed": 28,
+    "status_counts": {
+      "PASS": 24,
+      "UNVERIFIED": 4
+    },
+    "procedures": [
+      {
+        "id": "SUP-INIT-001",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-INIT-002",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-INIT-003",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-INIT-004",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-INIT-005",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-INIT-006",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-INIT-007",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-INIT-008",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-INIT-009",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-INIT-010",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-STEADY-STD-016",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-STEADY-STD-024",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-STEADY-STD-025",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-STEADY-STD-048",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-COMMAND-STD-011",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-COMMAND-STD-012",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-COMMAND-STD-013",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-COMMAND-STD-014",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-COMMAND-STD-015",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-COMMAND-STD-019",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-COMMAND-STD-020",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-COMMAND-STD-021",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-COMMAND-STD-022",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-ZERO-SATURATION",
+        "status": "UNVERIFIED"
+      },
+      {
+        "id": "SUP-GATE-PLATEAU",
+        "status": "PASS"
+      },
+      {
+        "id": "SUP-TIMER-TWO-CYCLES",
+        "status": "UNVERIFIED"
+      },
+      {
+        "id": "SUP-TIMER-CANCEL",
+        "status": "UNVERIFIED"
+      },
+      {
+        "id": "SUP-JITTER-ACTUAL-SCHEDULE",
+        "status": "UNVERIFIED"
+      }
+    ]
+  },
+  "original_suite": {
+    "count": 55,
+    "bench": 52,
+    "local_only": 3,
+    "hardware_waveforms_replayed": false,
+    "case_status": "ALL_UNVERIFIED",
+    "scalar_assertions": 2473,
+    "global_assertions": 715,
+    "relationship_assertions": 496,
+    "evaluated_scans": 0
+  },
+  "events": [
+    {
+      "procedure": "SUP-ZERO-SATURATION",
+      "id": "first_full_frequency",
+      "elapsed_ms": [
+        39914.08490005415,
+        40057.99800000386
+      ],
+      "expected_ms": {
+        "min": 39800,
+        "max": 40200
+      },
+      "independent_status": "PASS"
+    },
+    {
+      "procedure": "SUP-TIMER-TWO-CYCLES",
+      "id": "sleep-1",
+      "elapsed_ms": [
+        4788.205999997444,
+        4961.773200018797
+      ],
+      "expected_ms": {
+        "min": 4900,
+        "max": 5100
+      },
+      "independent_status": "UNVERIFIED"
+    },
+    {
+      "procedure": "SUP-TIMER-TWO-CYCLES",
+      "id": "wake-1",
+      "elapsed_ms": [
+        2790.2399000013247,
+        2963.9724000007845
+      ],
+      "expected_ms": {
+        "min": 2900,
+        "max": 3100
+      },
+      "independent_status": "UNVERIFIED"
+    },
+    {
+      "procedure": "SUP-TIMER-TWO-CYCLES",
+      "id": "sleep-2",
+      "elapsed_ms": [
+        4805.015499994624,
+        4979.8782000434585
+      ],
+      "expected_ms": {
+        "min": 4900,
+        "max": 5100
+      },
+      "independent_status": "UNVERIFIED"
+    },
+    {
+      "procedure": "SUP-TIMER-TWO-CYCLES",
+      "id": "wake-2",
+      "elapsed_ms": [
+        2806.0416000080295,
+        2979.5545999659225
+      ],
+      "expected_ms": {
+        "min": 2900,
+        "max": 3100
+      },
+      "independent_status": "UNVERIFIED"
+    },
+    {
+      "procedure": "SUP-TIMER-CANCEL",
+      "id": "sleep-after-cancel",
+      "elapsed_ms": [
+        4805.950800015125,
+        4979.123299999628
+      ],
+      "expected_ms": {
+        "min": 4900,
+        "max": 5100
+      },
+      "independent_status": "UNVERIFIED"
+    },
+    {
+      "procedure": "SUP-TIMER-CANCEL",
+      "id": "wake-after-cancel",
+      "elapsed_ms": [
+        2795.4464000067674,
+        2968.4853000217117
+      ],
+      "expected_ms": {
+        "min": 2900,
+        "max": 3100
+      },
+      "independent_status": "UNVERIFIED"
+    }
+  ],
+  "cap_deadline_observations": [
+    {
+      "sequence": 5898,
+      "D120": 29940,
+      "response_elapsed_ms": 50078.8841000176
+    },
+    {
+      "sequence": 5900,
+      "D120": 30000,
+      "response_elapsed_ms": 50106.29700002028
+    }
+  ],
+  "cap_sampler_recommendation": "Preserve run01. Before a new run, freeze/test a capture-only refinement: poll D120 continuously near the existing 50200ms deadline, require latest two complete nonoverlapping 30000 observations ending before earliest trigger+50200ms, never widen tolerance or turn an early non-cap value into PROGRAM_FAIL. A focused saturation/gate rerun can add evidence; it cannot relabel run01.",
+  "timer_interpretation": "All six observed sleep/wake timing intervals overlap the lower tolerance boundary. UNVERIFIED is correct; neither PASS nor PROGRAM_FAIL is proven. Conservative trigger acquisition and serial poll uncertainty contribute.",
+  "cleanup": {
+    "independent_zero_scalar_recheck": "PASS",
+    "cpu_run": 1,
+    "control_flags_restored": true,
+    "serial_closed_reported": true,
+    "owned_lock_absent": true,
+    "reviewer_resources": "No ports, GUI, background process, lock or temporary files created."
+  },
+  "limits": [
+    "No HARDWARE_PASS for all 55 original cases",
+    "No original full-scan trajectory, same-scan interlock or exact PI recurrence proof",
+    "No electrical, connected plant, power-loss retention or binary-readback attestation"
+  ]
+}

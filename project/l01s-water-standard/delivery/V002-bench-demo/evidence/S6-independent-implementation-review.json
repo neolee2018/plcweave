@@ -1,0 +1,43 @@
+{
+  "task_id": "PW-20261022-V002-HIL02",
+  "owner": "independent-s6-review",
+  "at": "2026-10-22T10:13:56.072311+00:00",
+  "phase": "IMPLEMENTATION_REVIEW_BEFORE_HARDWARE",
+  "decision": "ACCEPT_FOR_AUTHORIZED_ISOLATED_BENCH_EXECUTION",
+  "sha256": {
+    "src/plcweave/sampled.py": "a52243d0568cae949c9f04ed5a1230d70edc899273cb95d30808c899c61a5a6e",
+    "src/plcweave/cpu_control.py": "9b710ff2462f69eb25ecbc2eabc37780f7af8979de84f3143267985d330406f9",
+    "src/plcweave/fx_serial.py": "efcee9d2cc9f5aa4f6db03ffa5f5b848b93bfc95072d03c0b22a7d813274ea8d",
+    "private/l01s-water-standard/run_hil02.py": "100737db16d1d5d79e7be43859cd8f523a28a9ae81b19b118258621e690d3e92"
+  },
+  "software_checks": {
+    "scoped_fixtures": "37 passed in 0.07s",
+    "tests": [
+      "test_sampled_backend.py",
+      "test_cpu_v2_identity.py",
+      "test_cpu_control_guards.py",
+      "test_serial_protocol.py"
+    ],
+    "fault_injections": [
+      "identity failure preserves 28 not-executed cases, closes fake bench, removes owned lock and saves report",
+      "first reset failure retains attempted TEST_INFRA_ERROR plus 27 not-executed procedures, saves report and cleans fake resources"
+    ]
+  },
+  "resolved_review_findings": [
+    "Explicit UTF8 for Windows metadata",
+    "Per-transaction Modbus and native programming-port read/control audit",
+    "All 28 procedure records retained through abort; completed and attempted counts separated",
+    "Freeze failure in final validation cannot prevent report saving",
+    "Nonnegative bounded wait sleep"
+  ],
+  "evidence_qualifications": [
+    "Inputs require actual readback after every allowlisted write",
+    "Every procedure restarts real CPU with saved D261 set before STOP/RUN, except plateau gate prerequisite",
+    "Event timing subtracts conservative trigger/event intervals with unchanged acceptance limits",
+    "Scalar grading requires two non-overlapping complete equal observations inside declared window and independently frozen stable class",
+    "All original 55 cases are capability-only, all original assertions UNVERIFIED",
+    "Plateau observations and positive integral-cap deadline evidence do not upgrade original scan traces"
+  ],
+  "hardware_review": "PENDING_RAW_TRACE",
+  "cleanup": "This independent review has opened no hardware connection or GUI and retains no temporary directory, process or lock."
+}

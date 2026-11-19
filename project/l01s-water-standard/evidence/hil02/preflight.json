@@ -1,0 +1,16 @@
+{
+  "environment": "hardware_protocol_preflight",
+  "port": "COM7",
+  "writes": 0,
+  "version": 2,
+  "edition": 31,
+  "fingerprint_words": [
+    28642,
+    27104
+  ],
+  "suite": 2,
+  "heartbeat_before": 601,
+  "heartbeat_after": 604,
+  "status": "PROTOCOL_READ_PASS",
+  "cleanup": "serial_closed"
+}

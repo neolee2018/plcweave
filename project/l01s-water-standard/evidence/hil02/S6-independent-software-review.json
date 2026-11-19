@@ -1,0 +1,18 @@
+{
+  "task_id": "PW-20261022-V002-HIL02",
+  "owner": "independent-s6-review",
+  "at": "2026-10-22T10:05:13.951248+00:00",
+  "scope": "software only; zero serial access",
+  "command": "PYTHONPATH=src .venv/Scripts/python.exe -m pytest -q tests/test_sampled_backend.py tests/test_cpu_v2_identity.py tests/test_cpu_control_guards.py",
+  "exit_code": 0,
+  "result": "36 passed in 0.08s",
+  "sha256": {
+    "src/plcweave/sampled.py": "a52243d0568cae949c9f04ed5a1230d70edc899273cb95d30808c899c61a5a6e",
+    "src/plcweave/cpu_control.py": "56c5d2a8655954fe5dc2980ed4402c1eb63a96152eb47ea7fe891952825b9a1d",
+    "tests/test_sampled_backend.py": "19e41236900bdcdb95beeb5d7417d951a8f77877c4adefb24347d0e1402d8958",
+    "tests/test_cpu_v2_identity.py": "692b4d5a5febfe58a8c775f0d3b9e359d44327d6a24bb036398a4b2eae50fd47",
+    "tests/test_cpu_control_guards.py": "1e9a6a35cbaf2cd27e22cce2bcad8b55661fa5bd696deadfa35aafe316de29c8"
+  },
+  "review": "Pure checkpoint and event interval grading plus CPU identity checks conform to frozen fixtures. Hardware runner and raw evidence still pending.",
+  "cleanup": "No serial, GUI, process or lock retained; repository pytest cache only."
+}

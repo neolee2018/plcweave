@@ -109,11 +109,12 @@ Agent，剩下的它全做：安装前置条件与工具链、跑测试套件、
 就发提示词时说明，Agent 会切换到 [`demo/START-HERE.md`](demo/START-HERE.md) 的硬件流程：采集
 串口参数，等你本人用 GX Works2 烧录并明确确认烧录/台架状态后，才做 S6 抽样。
 
-**客户演示项目——恒压供水**：仓库还内置了一个完整的真实工程
-[`demo/water-supply-standard/`](demo/water-supply-standard/README.md)（L01S 恒压供水 V006：
-压力 PI、休眠/唤醒、超压保护），按三步走：Step 1 Agent 检查整理项目并跑离线脚本测试
-（22 项全部 PASS，无需硬件）；Step 2 客户用 GX Works2 烧录，Agent 接手实机测试；
-Step 3 客户输入"项目交付"，Agent 剔除仿真寄存器并打出最终交付 ZIP。
+**客户演示项目——恒压供水**：完整的真实工程在
+[`project/l01s-water-standard/`](project/l01s-water-standard/README.md)（L01S 恒压供水 V006：
+压力 PI、休眠/唤醒、超压保护），三步走运行手册在
+[`demo/water-supply-standard/README.md`](demo/water-supply-standard/README.md)：Step 1 Agent
+检查整理项目并跑离线脚本测试（22 项全部 PASS，无需硬件）；Step 2 客户用 GX Works2 烧录，
+Agent 接手实机测试；Step 3 客户输入"项目交付"，Agent 剔除仿真寄存器并打出最终交付 ZIP。
 
 ```powershell
 ./tools/plcweave.ps1 demo start demo-run --not-connected

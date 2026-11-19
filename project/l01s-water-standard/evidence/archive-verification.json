@@ -1,0 +1,28 @@
+{
+  "task_id": "PW-20261022-STANDARD-REDO",
+  "owner": "codex",
+  "at": "2026-10-22T06:15:07.850783+00:00",
+  "stage": "S4_CANDIDATE_VERIFIED_AWAITING_MANUAL_DOWNLOAD",
+  "archive": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\L01S-Water-PI-V002-candidate.zip",
+  "archive_sha256": "a1f68a0ec488d7bc5467dea7125aaeaf7b3bb472093291c34468dd752e43f70c",
+  "archive_files_verified": 46,
+  "frozen_s0_s1_intact": true,
+  "status": {
+    "static": "STATIC_PASS",
+    "simulation": "SIM_PASS",
+    "GX_CHECK": "NOT_EXECUTED_USER_OVERRIDE",
+    "hardware": "UNVERIFIED_NOT_DOWNLOADED",
+    "release": "S4_CANDIDATE_ONLY"
+  },
+  "cleanup": {
+    "serial_opened": 0,
+    "owned_edge_processes": 0,
+    "owned_pdf_profiles": 0,
+    "temporary_pytest_dirs_removed": true
+  },
+  "next_steps": [
+    "manual download current V002; old confirmation invalid",
+    "qualify rich-suite sampled adapter before replay; legacy endpoint path blocked",
+    "hardware and physical verification remain unverified"
+  ]
+}

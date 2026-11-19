@@ -1,0 +1,487 @@
+{
+  "cases": [
+    {
+      "run": "run-v3-init2",
+      "id": "STD-001",
+      "title": "First scan rejects preloaded requests and defaults external controls",
+      "status": "PASS",
+      "compared": 33,
+      "skipped": 0,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-init",
+      "id": "STD-002",
+      "title": "Saved SV first scan -32768",
+      "status": "PASS",
+      "compared": 14,
+      "skipped": 0,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-init",
+      "id": "STD-003",
+      "title": "Saved SV first scan -1",
+      "status": "PASS",
+      "compared": 14,
+      "skipped": 0,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-init",
+      "id": "STD-004",
+      "title": "Saved SV first scan 9",
+      "status": "PASS",
+      "compared": 14,
+      "skipped": 0,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-init",
+      "id": "STD-005",
+      "title": "Saved SV first scan 10",
+      "status": "PASS",
+      "compared": 14,
+      "skipped": 0,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-init",
+      "id": "STD-006",
+      "title": "Saved SV first scan 11",
+      "status": "PASS",
+      "compared": 14,
+      "skipped": 0,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-init",
+      "id": "STD-007",
+      "title": "Saved SV first scan 159",
+      "status": "PASS",
+      "compared": 14,
+      "skipped": 0,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-init",
+      "id": "STD-008",
+      "title": "Saved SV first scan 160",
+      "status": "PASS",
+      "compared": 14,
+      "skipped": 0,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-init",
+      "id": "STD-009",
+      "title": "Saved SV first scan 161",
+      "status": "PASS",
+      "compared": 14,
+      "skipped": 0,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-init",
+      "id": "STD-010",
+      "title": "Saved SV first scan 32767",
+      "status": "PASS",
+      "compared": 14,
+      "skipped": 0,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-c",
+      "id": "STD-012",
+      "title": "Non-one command words -32768 are unasserted",
+      "status": "PASS",
+      "compared": 30,
+      "skipped": 0,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-c",
+      "id": "STD-013",
+      "title": "Non-one command words -1 are unasserted",
+      "status": "PASS",
+      "compared": 30,
+      "skipped": 0,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-c",
+      "id": "STD-014",
+      "title": "Non-one command words 2 are unasserted",
+      "status": "PASS",
+      "compared": 30,
+      "skipped": 0,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-c",
+      "id": "STD-015",
+      "title": "Non-one command words 32767 are unasserted",
+      "status": "PASS",
+      "compared": 30,
+      "skipped": 0,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-b",
+      "id": "STD-016",
+      "title": "Signed raw clamp and every rounding boundary class",
+      "status": "PASS",
+      "compared": 248,
+      "skipped": 0,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-b",
+      "id": "STD-019",
+      "title": "Invalid mode -32768 inhibits held-start recovery",
+      "status": "PASS",
+      "compared": 47,
+      "skipped": 0,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-c",
+      "id": "STD-020",
+      "title": "Invalid mode -1 inhibits held-start recovery",
+      "status": "PASS",
+      "compared": 47,
+      "skipped": 0,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-c",
+      "id": "STD-021",
+      "title": "Invalid mode 2 inhibits held-start recovery",
+      "status": "PASS",
+      "compared": 47,
+      "skipped": 0,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-c",
+      "id": "STD-022",
+      "title": "Invalid mode 32767 inhibits held-start recovery",
+      "status": "PASS",
+      "compared": 47,
+      "skipped": 0,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-b",
+      "id": "STD-024",
+      "title": "Online active SV clamp recomputes both thresholds without saving",
+      "status": "PASS",
+      "compared": 152,
+      "skipped": 0,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-b",
+      "id": "STD-025",
+      "title": "Changing saved word online does not replace active SV",
+      "status": "PASS",
+      "compared": 19,
+      "skipped": 0,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-long",
+      "id": "STD-037",
+      "title": "SV lower and upper threshold boundaries remain operational",
+      "status": "PASS",
+      "compared": 56,
+      "skipped": 0,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-long",
+      "id": "STD-042",
+      "title": "Stop dominates a newly arriving full-scale condition",
+      "status": "PASS",
+      "compared": 24,
+      "skipped": 0,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-extra",
+      "id": "STD-044",
+      "title": "Jitter 0/full-scale every100ms cannot accumulate sleep or deadlock",
+      "status": "PASS",
+      "compared": 192,
+      "skipped": 0,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-b",
+      "id": "STD-048",
+      "title": "Echo accepts all signed words on the next executed scan",
+      "status": "PASS",
+      "compared": 20,
+      "skipped": 0,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-wrap",
+      "id": "STD-049",
+      "title": "Diagnostic signed counter wrap and heartbeat do not corrupt stopped outputs",
+      "status": "PASS",
+      "compared": 16,
+      "skipped": 0,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-long",
+      "id": "STD-051",
+      "title": "Online SV updates wake threshold while sleep remains latched",
+      "status": "PASS",
+      "compared": 37,
+      "skipped": 0,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-long",
+      "id": "STD-053",
+      "title": "Invalid mode same-scan clears sleep and requires release/restart",
+      "status": "PASS",
+      "compared": 43,
+      "skipped": 0,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-long",
+      "id": "STD-054",
+      "title": "Invalid mode same-scan clears wake_pending and requires release/restart",
+      "status": "PASS",
+      "compared": 50,
+      "skipped": 0,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-wrap",
+      "id": "STD-055",
+      "title": "Diagnostic wrap during active PI cannot corrupt accumulator or outputs",
+      "status": "PASS",
+      "compared": 15,
+      "skipped": 0,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-b",
+      "id": "STD-011",
+      "title": "Start latches, requests persist, stop dominates simultaneous commands",
+      "status": "UNVERIFIED",
+      "compared": 44,
+      "skipped": 3,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-local",
+      "id": "STD-023",
+      "title": "Invalid mode blocks even simultaneous new start and output enable",
+      "status": "UNVERIFIED",
+      "compared": 34,
+      "skipped": 1,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-c",
+      "id": "STD-026",
+      "title": "Normal PI first two updates and hold between rising edges",
+      "status": "UNVERIFIED",
+      "compared": 13,
+      "skipped": 10,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-c",
+      "id": "STD-027",
+      "title": "Integer division PI fractional integral checkpoints e=3",
+      "status": "UNVERIFIED",
+      "compared": 8,
+      "skipped": 22,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-c",
+      "id": "STD-028",
+      "title": "PI uses latest online SV and persistent accumulator",
+      "status": "UNVERIFIED",
+      "compared": 12,
+      "skipped": 6,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-e",
+      "id": "STD-029",
+      "title": "Signal loss zero reaches full frequency in specified window and integral clamps",
+      "status": "UNVERIFIED",
+      "compared": 25,
+      "skipped": 3,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-c",
+      "id": "STD-030",
+      "title": "PI remains active while output gate disabled and exact routing floors",
+      "status": "UNVERIFIED",
+      "compared": 16,
+      "skipped": 24,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-e",
+      "id": "STD-031",
+      "title": "Pre-sleep equality, below adjacent value cancels, and timer restarts",
+      "status": "UNVERIFIED",
+      "compared": 31,
+      "skipped": 8,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-e",
+      "id": "STD-032",
+      "title": "Pre-sleep does not complete at 4.8s; full-scale sleeps by 5.2s",
+      "status": "UNVERIFIED",
+      "compared": 26,
+      "skipped": 3,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-long2",
+      "id": "STD-033",
+      "title": "Sleep persists above wake threshold and dead band, equality wakes",
+      "status": "UNVERIFIED",
+      "compared": 45,
+      "skipped": 1,
+      "ambiguous": 1
+    },
+    {
+      "run": "run-v3-long",
+      "id": "STD-034",
+      "title": "Wake cancellation at adjacent above-threshold value and next-cycle reset",
+      "status": "UNVERIFIED",
+      "compared": 62,
+      "skipped": 2,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-c",
+      "id": "STD-035",
+      "title": "Changing SV changes pre-sleep threshold in same scan",
+      "status": "UNVERIFIED",
+      "compared": 17,
+      "skipped": 7,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-long",
+      "id": "STD-036",
+      "title": "Large negative error/full-scale cannot wrap PI output",
+      "status": "UNVERIFIED",
+      "compared": 19,
+      "skipped": 4,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-b",
+      "id": "STD-038",
+      "title": "Stop same-scan overrides normal",
+      "status": "UNVERIFIED",
+      "compared": 35,
+      "skipped": 4,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-c",
+      "id": "STD-039",
+      "title": "Stop same-scan overrides pre_sleep",
+      "status": "UNVERIFIED",
+      "compared": 38,
+      "skipped": 6,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-long",
+      "id": "STD-040",
+      "title": "Stop same-scan overrides sleep",
+      "status": "UNVERIFIED",
+      "compared": 42,
+      "skipped": 4,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-long",
+      "id": "STD-041",
+      "title": "Stop same-scan overrides wake_pending",
+      "status": "UNVERIFIED",
+      "compared": 49,
+      "skipped": 4,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-long",
+      "id": "STD-043",
+      "title": "Enable gate toggles within normal/pre-sleep/sleep without starting application",
+      "status": "UNVERIFIED",
+      "compared": 48,
+      "skipped": 8,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-long2",
+      "id": "STD-045",
+      "title": "Single-scan input glitches reset sleep qualification",
+      "status": "UNVERIFIED",
+      "compared": 24,
+      "skipped": 3,
+      "ambiguous": 3
+    },
+    {
+      "run": "run-v3-long2",
+      "id": "STD-046",
+      "title": "Single-scan wake-region exit resets wake qualification",
+      "status": "UNVERIFIED",
+      "compared": 33,
+      "skipped": 6,
+      "ambiguous": 2
+    },
+    {
+      "run": "run-v3-long",
+      "id": "STD-047",
+      "title": "Stop during timer then restart does not reuse elapsed delay",
+      "status": "UNVERIFIED",
+      "compared": 77,
+      "skipped": 4,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-extra",
+      "id": "STD-050",
+      "title": "Diagnostics remain live during normal running without changing PI cadence",
+      "status": "UNVERIFIED",
+      "compared": 9,
+      "skipped": 2,
+      "ambiguous": 0
+    },
+    {
+      "run": "run-v3-b",
+      "id": "STD-052",
+      "title": "Invalid mode same-scan clears pre_sleep and requires release/restart",
+      "status": "UNVERIFIED",
+      "compared": 39,
+      "skipped": 2,
+      "ambiguous": 0
+    }
+  ],
+  "counts": {
+    "PASS": 30,
+    "UNVERIFIED": 23,
+    "PROGRAM_FAIL": 0
+  },
+  "writes": 892
+}

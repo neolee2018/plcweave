@@ -1,0 +1,4747 @@
+{
+  "status": "PASS",
+  "source_sha256": "238e10886e2d8ed4e8d2d66e758a18afe4e403f6c613f306d7859796b8ec3a88",
+  "test_sha256": "b8702dc680b52990c180bbdfa320a477cbc5562ef71c9bf625012d9679475106",
+  "trace_sha256": "811a81c233f797f7fbf0a959c960419dbfddd82b4ba13b44ab12887124a3ddd6",
+  "total_rows": 92996,
+  "cases": [
+    {
+      "id": "STD-001",
+      "rows": 21,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 21,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 21,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 21,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 21,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 21,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 21,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 21,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 21,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 21,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 0,
+        "sleep_events": 0,
+        "wake_events": 0,
+        "heartbeat_intervals": 1,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-002",
+      "rows": 11,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 0,
+        "sleep_events": 0,
+        "wake_events": 0,
+        "heartbeat_intervals": 0,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-003",
+      "rows": 11,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 0,
+        "sleep_events": 0,
+        "wake_events": 0,
+        "heartbeat_intervals": 0,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-004",
+      "rows": 11,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 0,
+        "sleep_events": 0,
+        "wake_events": 0,
+        "heartbeat_intervals": 0,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-005",
+      "rows": 11,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 0,
+        "sleep_events": 0,
+        "wake_events": 0,
+        "heartbeat_intervals": 0,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-006",
+      "rows": 11,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 0,
+        "sleep_events": 0,
+        "wake_events": 0,
+        "heartbeat_intervals": 0,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-007",
+      "rows": 11,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 0,
+        "sleep_events": 0,
+        "wake_events": 0,
+        "heartbeat_intervals": 0,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-008",
+      "rows": 11,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 0,
+        "sleep_events": 0,
+        "wake_events": 0,
+        "heartbeat_intervals": 0,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-009",
+      "rows": 11,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 0,
+        "sleep_events": 0,
+        "wake_events": 0,
+        "heartbeat_intervals": 0,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-010",
+      "rows": 11,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 11,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 0,
+        "sleep_events": 0,
+        "wake_events": 0,
+        "heartbeat_intervals": 0,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-011",
+      "rows": 56,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 56,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 56,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 56,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 56,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 56,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 56,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 56,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 56,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 56,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 2,
+        "sleep_events": 0,
+        "wake_events": 0,
+        "heartbeat_intervals": 4,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-012",
+      "rows": 25,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 1,
+        "sleep_events": 0,
+        "wake_events": 0,
+        "heartbeat_intervals": 1,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-013",
+      "rows": 25,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 1,
+        "sleep_events": 0,
+        "wake_events": 0,
+        "heartbeat_intervals": 1,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-014",
+      "rows": 25,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 1,
+        "sleep_events": 0,
+        "wake_events": 0,
+        "heartbeat_intervals": 1,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-015",
+      "rows": 25,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 1,
+        "sleep_events": 0,
+        "wake_events": 0,
+        "heartbeat_intervals": 1,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-016",
+      "rows": 25,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 0,
+        "sleep_events": 0,
+        "wake_events": 0,
+        "heartbeat_intervals": 1,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-017",
+      "rows": 32,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 32,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 32,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 32,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 32,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 32,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 32,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 32,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 32,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 32,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 3,
+        "sleep_events": 0,
+        "wake_events": 0,
+        "heartbeat_intervals": 2,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-018",
+      "rows": 25,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 0,
+        "sleep_events": 0,
+        "wake_events": 0,
+        "heartbeat_intervals": 1,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-019",
+      "rows": 35,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 35,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 35,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 35,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 35,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 35,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 35,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 35,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 35,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 35,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 1,
+        "sleep_events": 0,
+        "wake_events": 0,
+        "heartbeat_intervals": 2,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-020",
+      "rows": 35,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 35,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 35,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 35,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 35,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 35,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 35,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 35,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 35,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 35,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 1,
+        "sleep_events": 0,
+        "wake_events": 0,
+        "heartbeat_intervals": 2,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-021",
+      "rows": 35,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 35,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 35,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 35,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 35,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 35,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 35,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 35,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 35,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 35,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 1,
+        "sleep_events": 0,
+        "wake_events": 0,
+        "heartbeat_intervals": 2,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-022",
+      "rows": 35,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 35,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 35,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 35,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 35,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 35,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 35,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 35,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 35,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 35,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 1,
+        "sleep_events": 0,
+        "wake_events": 0,
+        "heartbeat_intervals": 2,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-023",
+      "rows": 34,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 34,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 34,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 34,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 34,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 34,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 34,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 34,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 34,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 34,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 0,
+        "sleep_events": 0,
+        "wake_events": 0,
+        "heartbeat_intervals": 2,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-024",
+      "rows": 13,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 13,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 13,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 13,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 13,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 13,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 13,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 13,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 13,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 13,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 0,
+        "sleep_events": 0,
+        "wake_events": 0,
+        "heartbeat_intervals": 0,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-025",
+      "rows": 22,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 22,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 22,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 22,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 22,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 22,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 22,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 22,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 22,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 22,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 1,
+        "sleep_events": 0,
+        "wake_events": 0,
+        "heartbeat_intervals": 1,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-026",
+      "rows": 33,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 33,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 33,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 33,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 33,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 33,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 33,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 33,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 33,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 33,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 3,
+        "sleep_events": 0,
+        "wake_events": 0,
+        "heartbeat_intervals": 2,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-027",
+      "rows": 103,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 103,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 103,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 103,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 103,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 103,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 103,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 103,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 103,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 103,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 10,
+        "sleep_events": 0,
+        "wake_events": 0,
+        "heartbeat_intervals": 9,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-028",
+      "rows": 33,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 33,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 33,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 33,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 33,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 33,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 33,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 33,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 33,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 33,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 3,
+        "sleep_events": 0,
+        "wake_events": 0,
+        "heartbeat_intervals": 2,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-029",
+      "rows": 5183,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 5183,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 5183,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 5183,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 5183,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 5183,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-06",
+          "kind": "first_crossing_and_monotonicity",
+          "status": "PASS",
+          "evaluated_scans": 5183,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 5183,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 5183,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 5183,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 5183,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 518,
+        "sleep_events": 0,
+        "wake_events": 0,
+        "heartbeat_intervals": 517,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": 39990
+      }
+    },
+    {
+      "id": "STD-030",
+      "rows": 83,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 83,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 83,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 83,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 83,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 83,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 83,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 83,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 83,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 83,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 8,
+        "sleep_events": 0,
+        "wake_events": 0,
+        "heartbeat_intervals": 7,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-031",
+      "rows": 1151,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 1151,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 1151,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 1151,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 1151,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 1151,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 1151,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 1151,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 1151,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 1151,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 3,
+        "sleep_events": 1,
+        "wake_events": 0,
+        "heartbeat_intervals": 114,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-032",
+      "rows": 631,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 631,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 631,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 631,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 631,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 631,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 631,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 631,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 631,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 631,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 1,
+        "sleep_events": 1,
+        "wake_events": 0,
+        "heartbeat_intervals": 62,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-033",
+      "rows": 1841,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 1841,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 1841,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 1841,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 1841,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 1841,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 1841,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 1841,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 1841,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 1841,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 22,
+        "sleep_events": 1,
+        "wake_events": 1,
+        "heartbeat_intervals": 183,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-034",
+      "rows": 2091,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 2091,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 2091,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 2091,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 2091,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 2091,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 2091,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 2091,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 2091,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 2091,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 24,
+        "sleep_events": 2,
+        "wake_events": 2,
+        "heartbeat_intervals": 208,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-035",
+      "rows": 23,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 23,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 23,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 23,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 23,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 23,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 23,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 23,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 23,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 23,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 2,
+        "sleep_events": 0,
+        "wake_events": 0,
+        "heartbeat_intervals": 1,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-036",
+      "rows": 532,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 532,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 532,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 532,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 532,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 532,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 532,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 532,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 532,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 532,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 1,
+        "sleep_events": 1,
+        "wake_events": 0,
+        "heartbeat_intervals": 52,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-037",
+      "rows": 2343,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 2343,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 2343,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 2343,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 2343,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 2343,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 2343,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 2343,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 2343,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 2343,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 4,
+        "sleep_events": 2,
+        "wake_events": 2,
+        "heartbeat_intervals": 233,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-038",
+      "rows": 54,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 54,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 54,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 54,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 54,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 54,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 54,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 54,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 54,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 54,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 2,
+        "sleep_events": 0,
+        "wake_events": 0,
+        "heartbeat_intervals": 4,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-039",
+      "rows": 64,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 64,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 64,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 64,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 64,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 64,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 64,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 64,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 64,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 64,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 2,
+        "sleep_events": 0,
+        "wake_events": 0,
+        "heartbeat_intervals": 5,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-040",
+      "rows": 574,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 574,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 574,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 574,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 574,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 574,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 574,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 574,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 574,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 574,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 2,
+        "sleep_events": 1,
+        "wake_events": 0,
+        "heartbeat_intervals": 56,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-041",
+      "rows": 774,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 774,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 774,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 774,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 774,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 774,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 774,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 774,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 774,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 774,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 2,
+        "sleep_events": 1,
+        "wake_events": 0,
+        "heartbeat_intervals": 76,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-042",
+      "rows": 532,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 532,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 532,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 532,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 532,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 532,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 532,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 532,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 532,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 532,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 1,
+        "sleep_events": 0,
+        "wake_events": 0,
+        "heartbeat_intervals": 52,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-043",
+      "rows": 582,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 582,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 582,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 582,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 582,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 582,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 582,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 582,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 582,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 582,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 1,
+        "sleep_events": 1,
+        "wake_events": 0,
+        "heartbeat_intervals": 57,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-044",
+      "rows": 803,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 803,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 803,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 803,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 803,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 803,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 803,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 803,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 803,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 803,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 50,
+        "sleep_events": 0,
+        "wake_events": 0,
+        "heartbeat_intervals": 79,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-045",
+      "rows": 1002,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 1002,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 1002,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 1002,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 1002,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 1002,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 1002,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 1002,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 1002,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 1002,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 0,
+        "sleep_events": 1,
+        "wake_events": 0,
+        "heartbeat_intervals": 99,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-046",
+      "rows": 1122,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 1122,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 1122,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 1122,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 1122,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 1122,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 1122,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 1122,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 1122,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 1122,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 2,
+        "sleep_events": 1,
+        "wake_events": 1,
+        "heartbeat_intervals": 111,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-047",
+      "rows": 2125,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 2125,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 2125,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 2125,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 2125,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 2125,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 2125,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 2125,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 2125,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 2125,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 2,
+        "sleep_events": 2,
+        "wake_events": 1,
+        "heartbeat_intervals": 211,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-048",
+      "rows": 7,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 7,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 7,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 7,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 7,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 7,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 7,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 7,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 7,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 7,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 0,
+        "sleep_events": 0,
+        "wake_events": 0,
+        "heartbeat_intervals": 0,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-049",
+      "rows": 34001,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 34001,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 34001,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 34001,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 34001,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 34001,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 34001,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 34001,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 34001,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 34001,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 0,
+        "sleep_events": 0,
+        "wake_events": 0,
+        "heartbeat_intervals": 3399,
+        "counter_wraps": 1,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-050",
+      "rows": 203,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 203,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 203,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 203,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 203,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 203,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 203,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 203,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 203,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 203,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 20,
+        "sleep_events": 0,
+        "wake_events": 0,
+        "heartbeat_intervals": 19,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-051",
+      "rows": 1241,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 1241,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 1241,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 1241,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 1241,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 1241,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 1241,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 1241,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 1241,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 1241,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 22,
+        "sleep_events": 1,
+        "wake_events": 1,
+        "heartbeat_intervals": 123,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-052",
+      "rows": 25,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 25,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 0,
+        "sleep_events": 0,
+        "wake_events": 0,
+        "heartbeat_intervals": 1,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-053",
+      "rows": 535,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 535,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 535,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 535,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 535,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 535,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 535,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 535,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 535,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 535,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 0,
+        "sleep_events": 1,
+        "wake_events": 0,
+        "heartbeat_intervals": 52,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-054",
+      "rows": 735,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 735,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 735,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 735,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 735,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 735,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 735,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 735,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 735,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 735,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 0,
+        "sleep_events": 1,
+        "wake_events": 0,
+        "heartbeat_intervals": 72,
+        "counter_wraps": 0,
+        "first_full_frequency_elapsed_ms": null
+      }
+    },
+    {
+      "id": "STD-055",
+      "rows": 34003,
+      "relationships": [
+        {
+          "id": "REL-01",
+          "kind": "state_output_consistency",
+          "status": "PASS",
+          "evaluated_scans": 34003,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-02",
+          "kind": "physical_routing",
+          "status": "PASS",
+          "evaluated_scans": 34003,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-03",
+          "kind": "scaling_settings",
+          "status": "PASS",
+          "evaluated_scans": 34003,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-04",
+          "kind": "independent_pi_recurrence",
+          "status": "PASS",
+          "evaluated_scans": 34003,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-05",
+          "kind": "continuous_timers",
+          "status": "PASS",
+          "evaluated_scans": 34003,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-07",
+          "kind": "diagnostics",
+          "status": "PASS",
+          "evaluated_scans": 34003,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-08",
+          "kind": "independent_fingerprint",
+          "status": "PASS",
+          "evaluated_scans": 34003,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-09",
+          "kind": "command_state_oracle",
+          "status": "PASS",
+          "evaluated_scans": 34003,
+          "violation_count": 0,
+          "failures": []
+        },
+        {
+          "id": "REL-10",
+          "kind": "serial_and_engine_gate",
+          "status": "PASS",
+          "evaluated_scans": 34003,
+          "violation_count": 0,
+          "failures": []
+        }
+      ],
+      "metrics": {
+        "pi_updates": 3400,
+        "sleep_events": 0,
+        "wake_events": 0,
+        "heartbeat_intervals": 3399,
+        "counter_wraps": 1,
+        "first_full_frequency_elapsed_ms": null
+      }
+    }
+  ]
+}

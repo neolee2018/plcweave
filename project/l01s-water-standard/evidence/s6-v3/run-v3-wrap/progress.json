@@ -1,0 +1,2106 @@
+{
+  "task_id": "PW-20261023-S6-HIL-V3-PLAN",
+  "kind": "s6_soft_element_case_run",
+  "at": "2026-10-23T15:09:36.693902+00:00",
+  "port": "COM7",
+  "writes": 21,
+  "cases": [
+    {
+      "id": "STD-049",
+      "title": "Diagnostic signed counter wrap and heartbeat do not corrupt stopped outputs",
+      "scope": "bench",
+      "status": "PASS",
+      "steps": [
+        {
+          "index": 0,
+          "duration_ms": 10,
+          "write": {},
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "M10",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D120",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D154",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D8050",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D8051",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "skipped": [],
+          "observed_at_ms": 173,
+          "chunk_checks": [],
+          "observed": {
+            "D100": 0,
+            "D101": 0,
+            "D102": 60,
+            "D103": 0,
+            "D104": 0,
+            "D105": 0,
+            "D106": 0,
+            "D107": 0,
+            "D108": 0,
+            "D109": 0,
+            "D110": 0,
+            "D111": 12,
+            "D112": 0,
+            "D113": 12,
+            "D114": 5100,
+            "D115": 0,
+            "D116": 51,
+            "D117": 0,
+            "D118": 0,
+            "D119": 0,
+            "D120": 0,
+            "D121": 9,
+            "D122": 90,
+            "D123": 0,
+            "D124": 48,
+            "D125": 7,
+            "D126": 138,
+            "D127": 0,
+            "D128": 0,
+            "D129": 0,
+            "D130": 8504,
+            "D131": 0,
+            "D132": 1700,
+            "D133": 4,
+            "D134": 0,
+            "D135": 0,
+            "D136": 0,
+            "D137": 0,
+            "D138": 0,
+            "D139": 0,
+            "D140": 0,
+            "D141": 0,
+            "D142": 0,
+            "D143": 0,
+            "D144": 0,
+            "D145": 0,
+            "D146": 0,
+            "D147": 0,
+            "D148": 0,
+            "D149": 0,
+            "D150": 0,
+            "D151": 0,
+            "D152": 0,
+            "D153": 0,
+            "D154": 0,
+            "D155": 0,
+            "D156": 0,
+            "D157": 0,
+            "D158": 0,
+            "D159": 0,
+            "D160": 0,
+            "D161": 0,
+            "D162": 10,
+            "D163": 0,
+            "D164": 100,
+            "D165": 0,
+            "D166": 2,
+            "D167": 0,
+            "D168": 0,
+            "D169": 0,
+            "D170": 0,
+            "D171": 0,
+            "D172": 0,
+            "D173": 0,
+            "D174": 0,
+            "D175": 0,
+            "D176": 0,
+            "D177": 0,
+            "D178": 0,
+            "D179": 0,
+            "D180": 0,
+            "D181": 0,
+            "D182": 0,
+            "D183": 0,
+            "D184": 0,
+            "D185": 0,
+            "D186": 0,
+            "D187": 0,
+            "D188": 0,
+            "D189": 0,
+            "D190": 1,
+            "D191": 0,
+            "D192": 0,
+            "D193": 0,
+            "D194": 0,
+            "D195": 0,
+            "D196": 2,
+            "D197": 31,
+            "D198": 4138,
+            "D199": -10280,
+            "D260": 58,
+            "D261": 60,
+            "D262": 51,
+            "D200": 28642,
+            "D201": 27104,
+            "D202": 2,
+            "D8120": -8063,
+            "D8121": 1,
+            "D8050": 0,
+            "D8051": 0,
+            "D1056": 0,
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "Y0": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 173
+          }
+        },
+        {
+          "index": 1,
+          "duration_ms": 340000,
+          "write": {},
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "M10",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D120",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D154",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D8050",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "D8051",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "skipped": [],
+          "observed_at_ms": 340208,
+          "chunk_checks": [
+            {
+              "at_ms": 10179,
+              "M0": 0,
+              "M11": 0,
+              "D100": 0,
+              "D154": 0,
+              "violations": [
+                {
+                  "device": "D120",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8050",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8051",
+                  "expected": 0,
+                  "actual": null
+                }
+              ]
+            },
+            {
+              "at_ms": 20343,
+              "M0": 0,
+              "M11": 0,
+              "D100": 0,
+              "D154": 0,
+              "violations": [
+                {
+                  "device": "D120",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8050",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8051",
+                  "expected": 0,
+                  "actual": null
+                }
+              ]
+            },
+            {
+              "at_ms": 30511,
+              "M0": 0,
+              "M11": 0,
+              "D100": 0,
+              "D154": 0,
+              "violations": [
+                {
+                  "device": "D120",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8050",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8051",
+                  "expected": 0,
+                  "actual": null
+                }
+              ]
+            },
+            {
+              "at_ms": 40676,
+              "M0": 0,
+              "M11": 0,
+              "D100": 0,
+              "D154": 0,
+              "violations": [
+                {
+                  "device": "D120",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8050",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8051",
+                  "expected": 0,
+                  "actual": null
+                }
+              ]
+            },
+            {
+              "at_ms": 50851,
+              "M0": 0,
+              "M11": 0,
+              "D100": 0,
+              "D154": 0,
+              "violations": [
+                {
+                  "device": "D120",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8050",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8051",
+                  "expected": 0,
+                  "actual": null
+                }
+              ]
+            },
+            {
+              "at_ms": 61023,
+              "M0": 0,
+              "M11": 0,
+              "D100": 0,
+              "D154": 0,
+              "violations": [
+                {
+                  "device": "D120",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8050",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8051",
+                  "expected": 0,
+                  "actual": null
+                }
+              ]
+            },
+            {
+              "at_ms": 71192,
+              "M0": 0,
+              "M11": 0,
+              "D100": 0,
+              "D154": 0,
+              "violations": [
+                {
+                  "device": "D120",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8050",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8051",
+                  "expected": 0,
+                  "actual": null
+                }
+              ]
+            },
+            {
+              "at_ms": 81360,
+              "M0": 0,
+              "M11": 0,
+              "D100": 0,
+              "D154": 0,
+              "violations": [
+                {
+                  "device": "D120",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8050",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8051",
+                  "expected": 0,
+                  "actual": null
+                }
+              ]
+            },
+            {
+              "at_ms": 91524,
+              "M0": 0,
+              "M11": 0,
+              "D100": 0,
+              "D154": 0,
+              "violations": [
+                {
+                  "device": "D120",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8050",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8051",
+                  "expected": 0,
+                  "actual": null
+                }
+              ]
+            },
+            {
+              "at_ms": 101693,
+              "M0": 0,
+              "M11": 0,
+              "D100": 0,
+              "D154": 0,
+              "violations": [
+                {
+                  "device": "D120",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8050",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8051",
+                  "expected": 0,
+                  "actual": null
+                }
+              ]
+            },
+            {
+              "at_ms": 111866,
+              "M0": 0,
+              "M11": 0,
+              "D100": 0,
+              "D154": 0,
+              "violations": [
+                {
+                  "device": "D120",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8050",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8051",
+                  "expected": 0,
+                  "actual": null
+                }
+              ]
+            },
+            {
+              "at_ms": 122040,
+              "M0": 0,
+              "M11": 0,
+              "D100": 0,
+              "D154": 0,
+              "violations": [
+                {
+                  "device": "D120",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8050",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8051",
+                  "expected": 0,
+                  "actual": null
+                }
+              ]
+            },
+            {
+              "at_ms": 132209,
+              "M0": 0,
+              "M11": 0,
+              "D100": 0,
+              "D154": 0,
+              "violations": [
+                {
+                  "device": "D120",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8050",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8051",
+                  "expected": 0,
+                  "actual": null
+                }
+              ]
+            },
+            {
+              "at_ms": 142387,
+              "M0": 0,
+              "M11": 0,
+              "D100": 0,
+              "D154": 0,
+              "violations": [
+                {
+                  "device": "D120",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8050",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8051",
+                  "expected": 0,
+                  "actual": null
+                }
+              ]
+            },
+            {
+              "at_ms": 152562,
+              "M0": 0,
+              "M11": 0,
+              "D100": 0,
+              "D154": 0,
+              "violations": [
+                {
+                  "device": "D120",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8050",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8051",
+                  "expected": 0,
+                  "actual": null
+                }
+              ]
+            },
+            {
+              "at_ms": 162734,
+              "M0": 0,
+              "M11": 0,
+              "D100": 0,
+              "D154": 0,
+              "violations": [
+                {
+                  "device": "D120",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8050",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8051",
+                  "expected": 0,
+                  "actual": null
+                }
+              ]
+            },
+            {
+              "at_ms": 172902,
+              "M0": 0,
+              "M11": 0,
+              "D100": 0,
+              "D154": 0,
+              "violations": [
+                {
+                  "device": "D120",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8050",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8051",
+                  "expected": 0,
+                  "actual": null
+                }
+              ]
+            },
+            {
+              "at_ms": 183073,
+              "M0": 0,
+              "M11": 0,
+              "D100": 0,
+              "D154": 0,
+              "violations": [
+                {
+                  "device": "D120",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8050",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8051",
+                  "expected": 0,
+                  "actual": null
+                }
+              ]
+            },
+            {
+              "at_ms": 193237,
+              "M0": 0,
+              "M11": 0,
+              "D100": 0,
+              "D154": 0,
+              "violations": [
+                {
+                  "device": "D120",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8050",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8051",
+                  "expected": 0,
+                  "actual": null
+                }
+              ]
+            },
+            {
+              "at_ms": 203409,
+              "M0": 0,
+              "M11": 0,
+              "D100": 0,
+              "D154": 0,
+              "violations": [
+                {
+                  "device": "D120",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8050",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8051",
+                  "expected": 0,
+                  "actual": null
+                }
+              ]
+            },
+            {
+              "at_ms": 213579,
+              "M0": 0,
+              "M11": 0,
+              "D100": 0,
+              "D154": 0,
+              "violations": [
+                {
+                  "device": "D120",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8050",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8051",
+                  "expected": 0,
+                  "actual": null
+                }
+              ]
+            },
+            {
+              "at_ms": 223745,
+              "M0": 0,
+              "M11": 0,
+              "D100": 0,
+              "D154": 0,
+              "violations": [
+                {
+                  "device": "D120",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8050",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8051",
+                  "expected": 0,
+                  "actual": null
+                }
+              ]
+            },
+            {
+              "at_ms": 233908,
+              "M0": 0,
+              "M11": 0,
+              "D100": 0,
+              "D154": 0,
+              "violations": [
+                {
+                  "device": "D120",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8050",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8051",
+                  "expected": 0,
+                  "actual": null
+                }
+              ]
+            },
+            {
+              "at_ms": 244083,
+              "M0": 0,
+              "M11": 0,
+              "D100": 0,
+              "D154": 0,
+              "violations": [
+                {
+                  "device": "D120",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8050",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8051",
+                  "expected": 0,
+                  "actual": null
+                }
+              ]
+            },
+            {
+              "at_ms": 254256,
+              "M0": 0,
+              "M11": 0,
+              "D100": 0,
+              "D154": 0,
+              "violations": [
+                {
+                  "device": "D120",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8050",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8051",
+                  "expected": 0,
+                  "actual": null
+                }
+              ]
+            },
+            {
+              "at_ms": 264435,
+              "M0": 0,
+              "M11": 0,
+              "D100": 0,
+              "D154": 0,
+              "violations": [
+                {
+                  "device": "D120",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8050",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8051",
+                  "expected": 0,
+                  "actual": null
+                }
+              ]
+            },
+            {
+              "at_ms": 274606,
+              "M0": 0,
+              "M11": 0,
+              "D100": 0,
+              "D154": 0,
+              "violations": [
+                {
+                  "device": "D120",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8050",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8051",
+                  "expected": 0,
+                  "actual": null
+                }
+              ]
+            },
+            {
+              "at_ms": 284777,
+              "M0": 0,
+              "M11": 0,
+              "D100": 0,
+              "D154": 0,
+              "violations": [
+                {
+                  "device": "D120",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8050",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8051",
+                  "expected": 0,
+                  "actual": null
+                }
+              ]
+            },
+            {
+              "at_ms": 294944,
+              "M0": 0,
+              "M11": 0,
+              "D100": 0,
+              "D154": 0,
+              "violations": [
+                {
+                  "device": "D120",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8050",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8051",
+                  "expected": 0,
+                  "actual": null
+                }
+              ]
+            },
+            {
+              "at_ms": 305115,
+              "M0": 0,
+              "M11": 0,
+              "D100": 0,
+              "D154": 0,
+              "violations": [
+                {
+                  "device": "D120",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8050",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8051",
+                  "expected": 0,
+                  "actual": null
+                }
+              ]
+            },
+            {
+              "at_ms": 315279,
+              "M0": 0,
+              "M11": 0,
+              "D100": 0,
+              "D154": 0,
+              "violations": [
+                {
+                  "device": "D120",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8050",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8051",
+                  "expected": 0,
+                  "actual": null
+                }
+              ]
+            },
+            {
+              "at_ms": 325450,
+              "M0": 0,
+              "M11": 0,
+              "D100": 0,
+              "D154": 0,
+              "violations": [
+                {
+                  "device": "D120",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8050",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8051",
+                  "expected": 0,
+                  "actual": null
+                }
+              ]
+            },
+            {
+              "at_ms": 335619,
+              "M0": 0,
+              "M11": 0,
+              "D100": 0,
+              "D154": 0,
+              "violations": [
+                {
+                  "device": "D120",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8050",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8051",
+                  "expected": 0,
+                  "actual": null
+                }
+              ]
+            },
+            {
+              "at_ms": 340038,
+              "M0": 0,
+              "M11": 0,
+              "D100": 0,
+              "D154": 0,
+              "violations": [
+                {
+                  "device": "D120",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8050",
+                  "expected": 0,
+                  "actual": null
+                },
+                {
+                  "device": "D8051",
+                  "expected": 0,
+                  "actual": null
+                }
+              ]
+            }
+          ],
+          "observed": {
+            "D100": 0,
+            "D101": 0,
+            "D102": 60,
+            "D103": 0,
+            "D104": 0,
+            "D105": 0,
+            "D106": 0,
+            "D107": 0,
+            "D108": 0,
+            "D109": 0,
+            "D110": 0,
+            "D111": 12,
+            "D112": 0,
+            "D113": 12,
+            "D114": 5100,
+            "D115": 0,
+            "D116": 51,
+            "D117": 0,
+            "D118": 0,
+            "D119": 0,
+            "D120": 0,
+            "D121": 9,
+            "D122": 90,
+            "D123": 0,
+            "D124": 48,
+            "D125": 7,
+            "D126": 138,
+            "D127": 0,
+            "D128": 0,
+            "D129": 0,
+            "D130": 8504,
+            "D131": 0,
+            "D132": 1700,
+            "D133": 4,
+            "D134": 0,
+            "D135": 0,
+            "D136": 0,
+            "D137": 0,
+            "D138": 0,
+            "D139": 0,
+            "D140": 0,
+            "D141": 0,
+            "D142": 0,
+            "D143": 0,
+            "D144": 0,
+            "D145": 0,
+            "D146": 0,
+            "D147": 0,
+            "D148": 0,
+            "D149": 0,
+            "D150": 0,
+            "D151": 0,
+            "D152": 0,
+            "D153": 0,
+            "D154": 0,
+            "D155": 0,
+            "D156": 0,
+            "D157": 0,
+            "D158": 0,
+            "D159": 0,
+            "D160": 0,
+            "D161": 0,
+            "D162": 10,
+            "D163": 0,
+            "D164": 100,
+            "D165": 0,
+            "D166": 2,
+            "D167": 0,
+            "D168": 0,
+            "D169": 0,
+            "D170": 0,
+            "D171": 0,
+            "D172": 0,
+            "D173": 0,
+            "D174": 0,
+            "D175": 0,
+            "D176": 0,
+            "D177": 0,
+            "D178": 0,
+            "D179": 0,
+            "D180": 0,
+            "D181": 0,
+            "D182": 0,
+            "D183": 0,
+            "D184": 0,
+            "D185": 0,
+            "D186": 0,
+            "D187": 0,
+            "D188": 0,
+            "D189": 0,
+            "D190": 1,
+            "D191": 0,
+            "D192": 0,
+            "D193": 0,
+            "D194": 0,
+            "D195": 0,
+            "D196": 2,
+            "D197": 31,
+            "D198": 7531,
+            "D199": 10484,
+            "D260": 58,
+            "D261": 60,
+            "D262": 51,
+            "D200": 28642,
+            "D201": 27104,
+            "D202": 2,
+            "D8120": -8063,
+            "D8121": 1,
+            "D8050": 0,
+            "D8051": 0,
+            "D1056": 0,
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "Y0": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 340208
+          }
+        }
+      ],
+      "asserted_steps": 2,
+      "compared_items": 16,
+      "skipped_items": 0,
+      "ambiguous_items": 0
+    },
+    {
+      "id": "STD-055",
+      "title": "Diagnostic wrap during active PI cannot corrupt accumulator or outputs",
+      "scope": "bench",
+      "status": "PASS",
+      "steps": [
+        {
+          "index": 0,
+          "duration_ms": 10,
+          "write": {},
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "M0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "M10",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D120",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D154",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "Y0",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D8050",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "expect",
+              "device": "D8051",
+              "expected": 0,
+              "actual": 0
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "skipped": [],
+          "observed_at_ms": 172,
+          "chunk_checks": [],
+          "observed": {
+            "D100": 0,
+            "D101": 0,
+            "D102": 60,
+            "D103": 0,
+            "D104": 0,
+            "D105": 0,
+            "D106": 0,
+            "D107": 0,
+            "D108": 0,
+            "D109": 0,
+            "D110": 0,
+            "D111": 12,
+            "D112": 0,
+            "D113": 12,
+            "D114": 5100,
+            "D115": 0,
+            "D116": 51,
+            "D117": 0,
+            "D118": 0,
+            "D119": 0,
+            "D120": 0,
+            "D121": 9,
+            "D122": 90,
+            "D123": 0,
+            "D124": 48,
+            "D125": 7,
+            "D126": 138,
+            "D127": 0,
+            "D128": 0,
+            "D129": 0,
+            "D130": 8504,
+            "D131": 0,
+            "D132": 1700,
+            "D133": 4,
+            "D134": 0,
+            "D135": 0,
+            "D136": 0,
+            "D137": 0,
+            "D138": 0,
+            "D139": 0,
+            "D140": 0,
+            "D141": 0,
+            "D142": 0,
+            "D143": 0,
+            "D144": 0,
+            "D145": 0,
+            "D146": 0,
+            "D147": 0,
+            "D148": 0,
+            "D149": 0,
+            "D150": 0,
+            "D151": 0,
+            "D152": 0,
+            "D153": 0,
+            "D154": 0,
+            "D155": 0,
+            "D156": 0,
+            "D157": 0,
+            "D158": 0,
+            "D159": 0,
+            "D160": 0,
+            "D161": 0,
+            "D162": 10,
+            "D163": 0,
+            "D164": 100,
+            "D165": 0,
+            "D166": 2,
+            "D167": 0,
+            "D168": 0,
+            "D169": 0,
+            "D170": 0,
+            "D171": 0,
+            "D172": 0,
+            "D173": 0,
+            "D174": 0,
+            "D175": 0,
+            "D176": 0,
+            "D177": 0,
+            "D178": 0,
+            "D179": 0,
+            "D180": 0,
+            "D181": 0,
+            "D182": 0,
+            "D183": 0,
+            "D184": 0,
+            "D185": 0,
+            "D186": 0,
+            "D187": 0,
+            "D188": 0,
+            "D189": 0,
+            "D190": 1,
+            "D191": 0,
+            "D192": 0,
+            "D193": 0,
+            "D194": 0,
+            "D195": 0,
+            "D196": 2,
+            "D197": 31,
+            "D198": 7554,
+            "D199": 20073,
+            "D260": 58,
+            "D261": 60,
+            "D262": 51,
+            "D200": 28642,
+            "D201": 27104,
+            "D202": 2,
+            "D8120": -8063,
+            "D8121": 1,
+            "D8050": 0,
+            "D8051": 0,
+            "D1056": 0,
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "Y0": 0,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 172
+          }
+        },
+        {
+          "index": 1,
+          "duration_ms": 20,
+          "write": {
+            "D191": 1,
+            "D1056": 1250,
+            "D193": 1
+          },
+          "status": "UNVERIFIED",
+          "compared": [],
+          "mismatches": [],
+          "ambiguous": [],
+          "skipped": [],
+          "observed_at_ms": 260,
+          "chunk_checks": [],
+          "observed": {
+            "D100": 50,
+            "D101": 0,
+            "D102": 60,
+            "D103": 0,
+            "D104": 0,
+            "D105": 0,
+            "D106": 0,
+            "D107": 0,
+            "D108": 0,
+            "D109": 0,
+            "D110": 1250,
+            "D111": 1262,
+            "D112": 50,
+            "D113": 12,
+            "D114": 5100,
+            "D115": 0,
+            "D116": 51,
+            "D117": 0,
+            "D118": 0,
+            "D119": 0,
+            "D120": 20,
+            "D121": 10,
+            "D122": 100,
+            "D123": 0,
+            "D124": 2,
+            "D125": 0,
+            "D126": 102,
+            "D127": 0,
+            "D128": 0,
+            "D129": 0,
+            "D130": 8408,
+            "D131": 0,
+            "D132": 1681,
+            "D133": 3,
+            "D134": 0,
+            "D135": 0,
+            "D136": 0,
+            "D137": 0,
+            "D138": 0,
+            "D139": 0,
+            "D140": 0,
+            "D141": 0,
+            "D142": 0,
+            "D143": 0,
+            "D144": 0,
+            "D145": 0,
+            "D146": 0,
+            "D147": 0,
+            "D148": 0,
+            "D149": 0,
+            "D150": 0,
+            "D151": 0,
+            "D152": 0,
+            "D153": 0,
+            "D154": 2102,
+            "D155": 0,
+            "D156": 0,
+            "D157": 0,
+            "D158": 0,
+            "D159": 0,
+            "D160": 0,
+            "D161": 0,
+            "D162": 10,
+            "D163": 0,
+            "D164": 100,
+            "D165": 0,
+            "D166": 2,
+            "D167": 0,
+            "D168": 0,
+            "D169": 0,
+            "D170": 0,
+            "D171": 0,
+            "D172": 0,
+            "D173": 0,
+            "D174": 0,
+            "D175": 0,
+            "D176": 0,
+            "D177": 0,
+            "D178": 0,
+            "D179": 0,
+            "D180": 0,
+            "D181": 0,
+            "D182": 0,
+            "D183": 0,
+            "D184": 0,
+            "D185": 0,
+            "D186": 0,
+            "D187": 0,
+            "D188": 0,
+            "D189": 0,
+            "D190": 1,
+            "D191": 1,
+            "D192": 0,
+            "D193": 1,
+            "D194": 0,
+            "D195": 0,
+            "D196": 2,
+            "D197": 31,
+            "D198": 7562,
+            "D199": 23422,
+            "D260": 58,
+            "D261": 60,
+            "D262": 51,
+            "D200": 28642,
+            "D201": 27104,
+            "D202": 2,
+            "D8120": -8063,
+            "D8121": 1,
+            "D8050": 1684,
+            "D8051": 0,
+            "D1056": 1250,
+            "M0": 1,
+            "M10": 0,
+            "M11": 0,
+            "Y0": 1,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 260
+          }
+        },
+        {
+          "index": 2,
+          "duration_ms": 340000,
+          "write": {},
+          "status": "PASS",
+          "compared": [
+            {
+              "scope": "expect",
+              "device": "D120",
+              "expected": 30000,
+              "actual": 30000
+            },
+            {
+              "scope": "expect",
+              "device": "D154",
+              "expected": 5000,
+              "actual": 5000
+            },
+            {
+              "scope": "expect",
+              "device": "D8050",
+              "expected": 4000,
+              "actual": 4000
+            },
+            {
+              "scope": "invariant",
+              "device": "M0",
+              "expected": 1,
+              "actual": 1
+            },
+            {
+              "scope": "invariant",
+              "device": "M10",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "M11",
+              "expected": 0,
+              "actual": 0
+            },
+            {
+              "scope": "invariant",
+              "device": "Y0",
+              "expected": 1,
+              "actual": 1
+            }
+          ],
+          "mismatches": [],
+          "ambiguous": [],
+          "skipped": [],
+          "observed_at_ms": 340206,
+          "chunk_checks": [
+            {
+              "at_ms": 10171,
+              "M0": 1,
+              "M11": 0,
+              "D100": 50,
+              "D154": 2209,
+              "violations": []
+            },
+            {
+              "at_ms": 20342,
+              "M0": 1,
+              "M11": 0,
+              "D100": 50,
+              "D154": 2310,
+              "violations": []
+            },
+            {
+              "at_ms": 30508,
+              "M0": 1,
+              "M11": 0,
+              "D100": 50,
+              "D154": 2411,
+              "violations": []
+            },
+            {
+              "at_ms": 40675,
+              "M0": 1,
+              "M11": 0,
+              "D100": 50,
+              "D154": 2513,
+              "violations": []
+            },
+            {
+              "at_ms": 50841,
+              "M0": 1,
+              "M11": 0,
+              "D100": 50,
+              "D154": 2614,
+              "violations": []
+            },
+            {
+              "at_ms": 61014,
+              "M0": 1,
+              "M11": 0,
+              "D100": 50,
+              "D154": 2715,
+              "violations": []
+            },
+            {
+              "at_ms": 71181,
+              "M0": 1,
+              "M11": 0,
+              "D100": 50,
+              "D154": 2817,
+              "violations": []
+            },
+            {
+              "at_ms": 81355,
+              "M0": 1,
+              "M11": 0,
+              "D100": 50,
+              "D154": 2918,
+              "violations": []
+            },
+            {
+              "at_ms": 91526,
+              "M0": 1,
+              "M11": 0,
+              "D100": 50,
+              "D154": 3019,
+              "violations": []
+            },
+            {
+              "at_ms": 101695,
+              "M0": 1,
+              "M11": 0,
+              "D100": 50,
+              "D154": 3121,
+              "violations": []
+            },
+            {
+              "at_ms": 111869,
+              "M0": 1,
+              "M11": 0,
+              "D100": 50,
+              "D154": 3222,
+              "violations": []
+            },
+            {
+              "at_ms": 122033,
+              "M0": 1,
+              "M11": 0,
+              "D100": 50,
+              "D154": 3323,
+              "violations": []
+            },
+            {
+              "at_ms": 132198,
+              "M0": 1,
+              "M11": 0,
+              "D100": 50,
+              "D154": 3425,
+              "violations": []
+            },
+            {
+              "at_ms": 142368,
+              "M0": 1,
+              "M11": 0,
+              "D100": 50,
+              "D154": 3526,
+              "violations": []
+            },
+            {
+              "at_ms": 152534,
+              "M0": 1,
+              "M11": 0,
+              "D100": 50,
+              "D154": 3627,
+              "violations": []
+            },
+            {
+              "at_ms": 162698,
+              "M0": 1,
+              "M11": 0,
+              "D100": 50,
+              "D154": 3729,
+              "violations": []
+            },
+            {
+              "at_ms": 172871,
+              "M0": 1,
+              "M11": 0,
+              "D100": 50,
+              "D154": 3830,
+              "violations": []
+            },
+            {
+              "at_ms": 183043,
+              "M0": 1,
+              "M11": 0,
+              "D100": 50,
+              "D154": 3931,
+              "violations": []
+            },
+            {
+              "at_ms": 193213,
+              "M0": 1,
+              "M11": 0,
+              "D100": 50,
+              "D154": 4033,
+              "violations": []
+            },
+            {
+              "at_ms": 203377,
+              "M0": 1,
+              "M11": 0,
+              "D100": 50,
+              "D154": 4134,
+              "violations": []
+            },
+            {
+              "at_ms": 213541,
+              "M0": 1,
+              "M11": 0,
+              "D100": 50,
+              "D154": 4235,
+              "violations": []
+            },
+            {
+              "at_ms": 223710,
+              "M0": 1,
+              "M11": 0,
+              "D100": 50,
+              "D154": 4337,
+              "violations": []
+            },
+            {
+              "at_ms": 233879,
+              "M0": 1,
+              "M11": 0,
+              "D100": 50,
+              "D154": 4438,
+              "violations": []
+            },
+            {
+              "at_ms": 244054,
+              "M0": 1,
+              "M11": 0,
+              "D100": 50,
+              "D154": 4539,
+              "violations": []
+            },
+            {
+              "at_ms": 254224,
+              "M0": 1,
+              "M11": 0,
+              "D100": 50,
+              "D154": 4641,
+              "violations": []
+            },
+            {
+              "at_ms": 264398,
+              "M0": 1,
+              "M11": 0,
+              "D100": 50,
+              "D154": 4742,
+              "violations": []
+            },
+            {
+              "at_ms": 274566,
+              "M0": 1,
+              "M11": 0,
+              "D100": 50,
+              "D154": 4843,
+              "violations": []
+            },
+            {
+              "at_ms": 284736,
+              "M0": 1,
+              "M11": 0,
+              "D100": 50,
+              "D154": 4945,
+              "violations": []
+            },
+            {
+              "at_ms": 294911,
+              "M0": 1,
+              "M11": 0,
+              "D100": 50,
+              "D154": 5000,
+              "violations": []
+            },
+            {
+              "at_ms": 305083,
+              "M0": 1,
+              "M11": 0,
+              "D100": 50,
+              "D154": 5000,
+              "violations": []
+            },
+            {
+              "at_ms": 315250,
+              "M0": 1,
+              "M11": 0,
+              "D100": 50,
+              "D154": 5000,
+              "violations": []
+            },
+            {
+              "at_ms": 325420,
+              "M0": 1,
+              "M11": 0,
+              "D100": 50,
+              "D154": 5000,
+              "violations": []
+            },
+            {
+              "at_ms": 335591,
+              "M0": 1,
+              "M11": 0,
+              "D100": 50,
+              "D154": 5000,
+              "violations": []
+            },
+            {
+              "at_ms": 340039,
+              "M0": 1,
+              "M11": 0,
+              "D100": 50,
+              "D154": 5000,
+              "violations": []
+            }
+          ],
+          "observed": {
+            "D100": 50,
+            "D101": 0,
+            "D102": 60,
+            "D103": 0,
+            "D104": 0,
+            "D105": 0,
+            "D106": 0,
+            "D107": 0,
+            "D108": 0,
+            "D109": 0,
+            "D110": 1250,
+            "D111": 1262,
+            "D112": 50,
+            "D113": 12,
+            "D114": 5100,
+            "D115": 0,
+            "D116": 51,
+            "D117": 0,
+            "D118": 0,
+            "D119": 0,
+            "D120": 30000,
+            "D121": 10,
+            "D122": 100,
+            "D123": 0,
+            "D124": 3000,
+            "D125": 0,
+            "D126": 3000,
+            "D127": 0,
+            "D128": 0,
+            "D129": 0,
+            "D130": 20000,
+            "D131": 0,
+            "D132": 4000,
+            "D133": 0,
+            "D134": 0,
+            "D135": 0,
+            "D136": 0,
+            "D137": 0,
+            "D138": 0,
+            "D139": 0,
+            "D140": 0,
+            "D141": 0,
+            "D142": 0,
+            "D143": 0,
+            "D144": 0,
+            "D145": 0,
+            "D146": 0,
+            "D147": 0,
+            "D148": 0,
+            "D149": 0,
+            "D150": 0,
+            "D151": 0,
+            "D152": 0,
+            "D153": 0,
+            "D154": 5000,
+            "D155": 0,
+            "D156": 0,
+            "D157": 0,
+            "D158": 0,
+            "D159": 0,
+            "D160": 0,
+            "D161": 0,
+            "D162": 10,
+            "D163": 0,
+            "D164": 100,
+            "D165": 0,
+            "D166": 2,
+            "D167": 0,
+            "D168": 0,
+            "D169": 0,
+            "D170": 0,
+            "D171": 0,
+            "D172": 0,
+            "D173": 0,
+            "D174": 0,
+            "D175": 0,
+            "D176": 0,
+            "D177": 0,
+            "D178": 0,
+            "D179": 0,
+            "D180": 0,
+            "D181": 0,
+            "D182": 0,
+            "D183": 0,
+            "D184": 0,
+            "D185": 0,
+            "D186": 0,
+            "D187": 0,
+            "D188": 0,
+            "D189": 0,
+            "D190": 1,
+            "D191": 1,
+            "D192": 0,
+            "D193": 1,
+            "D194": 0,
+            "D195": 0,
+            "D196": 2,
+            "D197": 31,
+            "D198": 10958,
+            "D199": -12362,
+            "D260": 58,
+            "D261": 60,
+            "D262": 51,
+            "D200": 28642,
+            "D201": 27104,
+            "D202": 2,
+            "D8120": -8063,
+            "D8121": 1,
+            "D8050": 4000,
+            "D8051": 0,
+            "D1056": 1250,
+            "M0": 1,
+            "M10": 0,
+            "M11": 0,
+            "Y0": 1,
+            "M8196": 1,
+            "M8125": 1,
+            "observed_at_ms": 340206
+          }
+        }
+      ],
+      "asserted_steps": 2,
+      "compared_items": 15,
+      "skipped_items": 0,
+      "ambiguous_items": 0
+    }
+  ],
+  "status": "UNVERIFIED",
+  "identity": {
+    "D196": 2,
+    "D197": 31,
+    "D198": 4111,
+    "D199": -21520,
+    "D200": 28642,
+    "D201": 27104,
+    "D202": 2
+  },
+  "initial_state": {
+    "D100": 0,
+    "D101": 0,
+    "D102": 60,
+    "D103": 0,
+    "D104": 0,
+    "D105": 0,
+    "D106": 0,
+    "D107": 0,
+    "D108": 0,
+    "D109": 0,
+    "D110": 0,
+    "D111": 12,
+    "D112": 0,
+    "D113": 12,
+    "D114": 5100,
+    "D115": 0,
+    "D116": 51,
+    "D117": 0,
+    "D118": 0,
+    "D119": 0,
+    "D120": 0,
+    "D121": 9,
+    "D122": 90,
+    "D123": 0,
+    "D124": 48,
+    "D125": 7,
+    "D126": 138,
+    "D127": 0,
+    "D128": 0,
+    "D129": 0,
+    "D130": 8504,
+    "D131": 0,
+    "D132": 1700,
+    "D133": 4,
+    "D134": 0,
+    "D135": 0,
+    "D136": 0,
+    "D137": 0,
+    "D138": 0,
+    "D139": 0,
+    "D140": 0,
+    "D141": 0,
+    "D142": 0,
+    "D143": 0,
+    "D144": 0,
+    "D145": 0,
+    "D146": 0,
+    "D147": 0,
+    "D148": 0,
+    "D149": 0,
+    "D150": 0,
+    "D151": 0,
+    "D152": 0,
+    "D153": 0,
+    "D154": 0,
+    "D155": 0,
+    "D156": 0,
+    "D157": 0,
+    "D158": 0,
+    "D159": 0,
+    "D160": 0,
+    "D161": 0,
+    "D162": 10,
+    "D163": 0,
+    "D164": 100,
+    "D165": 0,
+    "D166": 2,
+    "D167": 0,
+    "D168": 0,
+    "D169": 0,
+    "D170": 0,
+    "D171": 0,
+    "D172": 0,
+    "D173": 0,
+    "D174": 0,
+    "D175": 0,
+    "D176": 0,
+    "D177": 0,
+    "D178": 0,
+    "D179": 0,
+    "D180": 0,
+    "D181": 0,
+    "D182": 0,
+    "D183": 0,
+    "D184": 0,
+    "D185": 0,
+    "D186": 0,
+    "D187": 0,
+    "D188": 0,
+    "D189": 0,
+    "D190": 1,
+    "D191": 0,
+    "D192": 1,
+    "D193": 0,
+    "D194": 0,
+    "D195": 0,
+    "D196": 2,
+    "D197": 31,
+    "D198": 4115,
+    "D199": -19884,
+    "D260": 58,
+    "D261": 60,
+    "D262": 51,
+    "D200": 28642,
+    "D201": 27104,
+    "D202": 2,
+    "D8120": -8063,
+    "D8121": 1,
+    "D8050": 0,
+    "D8051": 0,
+    "D1056": 0,
+    "M0": 0,
+    "M10": 0,
+    "M11": 0,
+    "Y0": 0,
+    "M8196": 1,
+    "M8125": 1
+  }
+}

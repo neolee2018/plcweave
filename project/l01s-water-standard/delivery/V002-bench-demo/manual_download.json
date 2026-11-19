@@ -1,0 +1,19 @@
+{
+  "source_sha256": "238e10886e2d8ed4e8d2d66e758a18afe4e403f6c613f306d7859796b8ec3a88",
+  "program_version": 2,
+  "edition": 31,
+  "suite_version_word": 2,
+  "fingerprint_words": [
+    28642,
+    27104
+  ],
+  "canonical_sha256": "e26fe069009f01a4f878dc837ce824ee9fac201f4c67f9f63f3d942c84c209ee",
+  "test_sha256": "b8702dc680b52990c180bbdfa320a477cbc5562ef71c9bf625012d9679475106",
+  "confirmed_by": "User current chat: 已经烧录了，请继续",
+  "downloaded_at": {
+    "exact_time": null,
+    "confirmed_complete_before": "2026-10-22T06:29:23.427402+00:00"
+  },
+  "software_and_version": null,
+  "note": "Binds this newly supplied V002 candidate; exact compile software/time not supplied. Identity words and heartbeat corroborated; not binary readback attestation."
+}

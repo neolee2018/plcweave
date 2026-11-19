@@ -1,0 +1,17 @@
+{
+  "pdfs": [
+    {
+      "file": "Blackbox-Test-Cases_EN.pdf",
+      "pages": 31,
+      "sha256": "38e226e56d0c9f74d41ff48376e41cfaa4d303e4d53264b67b694bbac30a5954"
+    },
+    {
+      "file": "L01S-Water-PI-il-annotated_EN.pdf",
+      "pages": 6,
+      "sha256": "48eed5b8145a7f1de05d1fd31e38f7696e54370f3f564087534f3bf853475202"
+    }
+  ],
+  "instruction_count": 176,
+  "generator_sha256": "1457540c91eb88679852b02a6a5a6f27f43467ea2598541fa42740a8e233961f",
+  "profiles_cleanup": "TemporaryDirectory context completed"
+}

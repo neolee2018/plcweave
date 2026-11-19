@@ -1,0 +1,55 @@
+{
+  "at": "2026-10-22T10:34:17.666845+00:00",
+  "writes": 0,
+  "source_sha256": "238e10886e2d8ed4e8d2d66e758a18afe4e403f6c613f306d7859796b8ec3a88",
+  "status": "READ_ONLY_EXIT_PASS",
+  "identity": {
+    "version": 2,
+    "edition": 31,
+    "fingerprint_words": [
+      28642,
+      27104
+    ],
+    "suite": 2,
+    "heartbeat_before": 1040,
+    "heartbeat_after": 1042
+  },
+  "snapshot": {
+    "D102": 60,
+    "D120": 0,
+    "D154": 0,
+    "D190": 1,
+    "D191": 0,
+    "D192": 1,
+    "D193": 0,
+    "D196": 2,
+    "D197": 31,
+    "D200": 28642,
+    "D201": 27104,
+    "D202": 2,
+    "D261": 60,
+    "D1056": 0,
+    "D8050": 0,
+    "D8051": 0,
+    "M0": 0,
+    "M10": 0,
+    "M11": 0,
+    "M8000": 1,
+    "M8035": 0,
+    "M8036": 0,
+    "M8037": 0,
+    "Y0": 0
+  },
+  "native_identity": [
+    2,
+    31,
+    1046,
+    -30169,
+    28642,
+    27104,
+    2
+  ],
+  "native_closed": true,
+  "modbus_closed": true,
+  "serial_lock_absent": true
+}

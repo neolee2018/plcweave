@@ -1,0 +1,15 @@
+{
+  "at": "2026-10-22T10:36:08.961316+00:00",
+  "pdfs": [
+    {
+      "name": "Blackbox-Test-Cases_EN.pdf",
+      "pages": 44,
+      "sha256": "01dd33e3e5f29e8aa02eaaeb3f4ddbf5ec4da9d58e616e775fbcc553be884f32"
+    },
+    {
+      "name": "L01S-Water-PI-il-annotated_EN.pdf",
+      "pages": 6,
+      "sha256": "7edfdaeb8d500af62fe66582acac6009b5a6432cd17d15eb675b44b9f0b95ec3"
+    }
+  ]
+}

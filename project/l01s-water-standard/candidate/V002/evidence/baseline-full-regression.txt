@@ -1,0 +1,39 @@
+...........................FF.....FF.F.................................. [ 72%]
+.....ss....................                                              [100%]
+================================== FAILURES ===================================
+_________ test_partial_graph_keeps_original_list_and_bounded_failures _________
+vendor\gxwlib\tests\python\test_analysis.py:95: in test_partial_graph_keeps_original_list_and_bounded_failures
+    assert not doc.complete and doc.graph.processed_instructions == 2
+E   assert (not True)
+E    +  where True = <gxwlib._core.SvgDocument object at 0x000002CB4EADF650>.complete
+____________ test_diff_sources_canonicalization_and_unknown_status ____________
+vendor\gxwlib\tests\python\test_analysis.py:138: in test_diff_sources_canonicalization_and_unknown_status
+    assert not result.complete and not result.different
+E   assert (not True)
+E    +  where True = <gxwlib._core.ProgramDiff object at 0x000002CB4C7A64F0>.complete
+_________________ test_stub_matches_public_extension_members __________________
+vendor\gxwlib\tests\python\test_inspect.py:122: in test_stub_matches_public_extension_members
+    assert actual == {name for name in expected if not name.startswith("_")}
+E   AssertionError: assert {'compiled', ...', 'get', ...} == {'compiled', ...', 'get', ...}
+E     
+E     Extra items in the left set:
+E     'get_word'
+E     'words'
+E     Use -v to get more diff
+________ test_vendor_pair_and_independent_standard_library_csv_reader _________
+vendor\gxwlib\tests\python\test_instructions.py:63: in test_vendor_pair_and_independent_standard_library_csv_reader
+    assert sum(i.supported for i in program.instructions) == 83
+E   assert 93 == 83
+E    +  where 93 = sum(<generator object test_vendor_pair_and_independent_standard_library_csv_reader.<locals>.<genexpr> at 0x000002CB4E9965C0>)
+_________ test_negative_constants_unknown_width_and_unsupported_forms _________
+vendor\gxwlib\tests\python\test_instructions.py:128: in test_negative_constants_unknown_width_and_unsupported_forms
+    assert not program.complete
+E   assert not True
+E    +  where True = <gxwlib._core.InstructionProgram object at 0x000002CB4EAD04B0>.complete
+=========================== short test summary info ===========================
+FAILED vendor/gxwlib/tests/python/test_analysis.py::test_partial_graph_keeps_original_list_and_bounded_failures
+FAILED vendor/gxwlib/tests/python/test_analysis.py::test_diff_sources_canonicalization_and_unknown_status
+FAILED vendor/gxwlib/tests/python/test_inspect.py::test_stub_matches_public_extension_members
+FAILED vendor/gxwlib/tests/python/test_instructions.py::test_vendor_pair_and_independent_standard_library_csv_reader
+FAILED vendor/gxwlib/tests/python/test_instructions.py::test_negative_constants_unknown_width_and_unsupported_forms
+5 failed, 92 passed, 2 skipped in 12.27s

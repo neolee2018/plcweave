@@ -1,0 +1,4045 @@
+{
+  "schema": "plcweave-s6-qualification-1",
+  "task_id": "PW-20261022-V002-HIL02",
+  "owner": "independent-s6-qualification",
+  "frozen_at": "2026-10-22T06:37:11.012521+00:00",
+  "status": "PLAN_FROZEN_BEFORE_ADAPTER_IMPLEMENTATION",
+  "resources": {
+    "serial_ports": "root owner only; this agent never connects",
+    "owned_files": [
+      "tests/test_sampled_backend.py",
+      "tests/test_cpu_v2_identity.py",
+      "evidence/hil02/S6-qualification-plan.json",
+      "evidence/hil02/S6-qualification-plan.md"
+    ],
+    "deadline": "bounded root hardware batch; independent review after raw trace available",
+    "cleanup": "no processes, ports, GUIs or locks created by independent agent"
+  },
+  "bindings": {
+    "requirements.md": "aafc680c5d7cfe8dc2d47826e5cfc2316c6fc19fbbd581d0a934e46d34a4f282",
+    "test_cases.json": "b8702dc680b52990c180bbdfa320a477cbc5562ef71c9bf625012d9679475106",
+    "s1-freeze.json": "415d680b883750eefd1447ccd4b41b2754d2d235f1ab3e66d42e4301a2ec71b5",
+    "build_identity.json": "fb1c580a07c969b079372ee800a0c1cb37dd277e72bfe2871302921b13a06853"
+  },
+  "fixture_sha256": {
+    "tests/test_sampled_backend.py": "19e41236900bdcdb95beeb5d7417d951a8f77877c4adefb24347d0e1402d8958",
+    "tests/test_cpu_v2_identity.py": "692b4d5a5febfe58a8c775f0d3b9e359d44327d6a24bb036398a4b2eae50fd47"
+  },
+  "suite": {
+    "total": 55,
+    "bench": 52,
+    "local_only": [
+      "STD-017",
+      "STD-018",
+      "STD-023"
+    ],
+    "expectations": "unchanged frozen S1, no PLC implementation read for this design"
+  },
+  "read_only_baseline": {
+    "path": "read-only-baseline.json",
+    "sha256": "97ce18f287585727479d74f271f5db1431496857842e5823d01e3469dcb13a19",
+    "full_watch_words_and_bits": 37,
+    "sample_span_ms": [
+      436.6716,
+      442.1032
+    ],
+    "meaning": "actual 436.6716..442.1032ms non-atomic requests cannot reproduce 10ms/20ms/100ms stimuli or endpoints",
+    "identity": [
+      2,
+      31,
+      28642,
+      27104,
+      2
+    ]
+  },
+  "interfaces": {
+    "evaluate_checkpoint": {
+      "signature": "evaluate_checkpoint(expectation, observations, *, quality, stable_devices=(), phase_sensitive_devices=()) -> list[dict]",
+      "observation": {
+        "values": "device -> signed scalar",
+        "start_ms": "request monotonic time relative to chosen epoch",
+        "end_ms": "response monotonic time; whole non-atomic sample spans interval"
+      },
+      "quality": [
+        "transport_ok",
+        "identity_ok",
+        "applied_inputs_verified",
+        "settled_after_ms",
+        "checkpoint_window_ms=[lo,hi]"
+      ],
+      "output": [
+        "device",
+        "expected",
+        "status",
+        "reason"
+      ],
+      "rules": [
+        "Never mutate frozen expectation or evidence",
+        "Exactly one result per assertion, including ineligible or missing assertions",
+        "transport/identity false -> TEST_INFRA_ERROR",
+        "unknown applied inputs -> UNVERIFIED; proven apply failure -> TEST_INFRA_ERROR in runner",
+        "Require S1-derived stable classification, never classification inferred from actual value",
+        "Require latest two complete, non-overlapping, chronological samples wholly inside original assertion window and after settle; same value, no missing value",
+        "Any unavailable/unstable/late/cross-window sample -> UNVERIFIED",
+        "Phase-sensitive devices and D198/D199 exact endpoints -> UNVERIFIED regardless observed coincidence",
+        "Compare eligible stable value through existing scalar comparator; mismatch -> PROGRAM_FAIL, match -> PASS",
+        "No widened endpoint window; samples after original window are supplemental convergence only"
+      ]
+    },
+    "evaluate_timing_interval": {
+      "signature": "evaluate_timing_interval(*, trigger_ms, transition_ms, expected_ms) -> dict",
+      "elapsed_ms": "[transition_lo-trigger_hi, transition_hi-trigger_lo]",
+      "rules": [
+        "PASS only when elapsed interval wholly contained in frozen expected interval",
+        "PROGRAM_FAIL only when elapsed interval strictly disjoint from frozen expected interval and input/stimulus chain qualified",
+        "Boundary overlap or missing trigger/transition -> UNVERIFIED",
+        "No host latency subtraction or added event tolerance",
+        "Missing event may prove late only with qualified no-transition observation whose earliest elapsed already exceeds upper limit; never silently PASS"
+      ]
+    }
+  },
+  "quality_grades": [
+    {
+      "grade": "Q0",
+      "meaning": "transport, address, identity or confirmed stimulus failed",
+      "verdict": "TEST_INFRA_ERROR"
+    },
+    {
+      "grade": "Q1",
+      "meaning": "raw sampled evidence, no full scan / applied input / legal timing proof",
+      "verdict": "UNVERIFIED"
+    },
+    {
+      "grade": "Q2",
+      "meaning": "two stable scalar observations in qualified original window and contract-stable state",
+      "verdict": "per scalar PASS or PROGRAM_FAIL; original full-scan relation remains UNVERIFIED"
+    },
+    {
+      "grade": "Q3",
+      "meaning": "independently bracketed event with unchanged frozen tolerance and verified held trigger",
+      "verdict": "interval rule only; single scan and full trajectory still UNVERIFIED"
+    },
+    {
+      "grade": "SUPPLEMENTAL",
+      "meaning": "separately declared extended stable observation or demonstration linked to S1; cannot replace original checkpoint",
+      "verdict": "label observed stable scalar/event explicitly, never upgrade 55-case suite"
+    }
+  ],
+  "stable_scalar_eligibility": [
+    "D196,D197,D200,D201,D202 build constants after initialization, no identity mismatch",
+    "D102,D261,D260,D262 clamped/saved SV settings after verified writes and settle; defaults reset every case, D261 set before STOP/RUN",
+    "D100 scaling only with verified fixed test D1056 and D190=1; hardware ADC injection remains local_only",
+    "D190..D195 external command/echo only after first-scan or write settle and until next corresponding write; initialization uniqueness and next-scan latency remain UNVERIFIED",
+    "M0/Y0/static state outputs only when independent command/state history excludes pending timer or mode transition over entire sampled interval",
+    "D120=0,D154=0 and zero AO in contract-proven stop/sleep; D120=0,D154=2000 and AO1600 only proven pre-sleep interval bounded away from sleep transition",
+    "Normal PI exact D120/D154/AO are phase-sensitive unless independently established saturation plateau; observed equality alone never establishes saturation",
+    "M10/M11 and their outputs UNVERIFIED near timer boundary or when stretched prior steps may have accumulated sufficient real trigger time",
+    "Scalar legal ranges can yield supplemental observed sample checks; they do not prove per-scan invariant or atomic inter-device relationship"
+  ],
+  "event_bracketing": {
+    "write": "each request start/ACK end recorded; combined writes are not simultaneous; triggering change interval uses actual triggering transaction, expanded by proven PLC scan latency when needed",
+    "poll": "transition lower bound is previous unchanged poll request start, upper bound is first changed poll response end; this conservatively covers actual register capture time",
+    "continuity": "all trigger inputs held; log every write; no gap, retry or cancel concealed; skipped inputs/delays can invalidate timing proof",
+    "fast_poll": "single M11 coil or D154 word, each actual request/response interval; do not use 440ms fullwatch completion as event instant",
+    "expected_windows_ms": {
+      "sleep": [
+        4900,
+        5100
+      ],
+      "wake": [
+        2900,
+        3100
+      ],
+      "first_full_frequency": [
+        39800,
+        40200
+      ]
+    },
+    "initialization": "STOP/RUN actual interval logged; ten initial cases show initialized steady state only, not a unique first scan"
+  },
+  "supplemental_evidence": [
+    {
+      "id": "SUP-INIT",
+      "S1_cases": "STD-001..STD-010",
+      "scope": "10 saved SV boundaries plus defaults, after true STOP/RUN; two stable observations; all first-scan latency/uniqueness unverified"
+    },
+    {
+      "id": "SUP-SCALE",
+      "S1_cases": [
+        "STD-016",
+        "STD-024",
+        "STD-025"
+      ],
+      "scope": "fixed input clamp/rounding and online SV/threshold settings, exact S1 values, no ADC writes"
+    },
+    {
+      "id": "SUP-COMMAND",
+      "S1_cases": [
+        "STD-011",
+        "STD-012",
+        "STD-013",
+        "STD-014",
+        "STD-015",
+        "STD-019",
+        "STD-020",
+        "STD-021",
+        "STD-022",
+        "STD-038",
+        "STD-039",
+        "STD-040",
+        "STD-041",
+        "STD-042",
+        "STD-052",
+        "STD-053",
+        "STD-054"
+      ],
+      "scope": "latched command, stop priority, invalid-mode inhibit/release; settling only, same-scan never claimed"
+    },
+    {
+      "id": "SUP-PI",
+      "S1_cases": [
+        "STD-026",
+        "STD-027",
+        "STD-028",
+        "STD-029",
+        "STD-050",
+        "STD-055"
+      ],
+      "scope": "zero-pressure first fullfrequency event at39800..40200ms plus independently reached A30000/frequency5000 plateau; normal exact ticks remain unverified"
+    },
+    {
+      "id": "SUP-ROUTE",
+      "S1_cases": [
+        "STD-043",
+        "STD-055"
+      ],
+      "scope": "D193 valid/invalid values after independently reached fullfrequency plateau, M0=1 and outputs Y0/AO0 floor mapping/AO1=0; electrical output unverified"
+    },
+    {
+      "id": "SUP-TIMER",
+      "S1_cases": [
+        "STD-031",
+        "STD-032",
+        "STD-033",
+        "STD-034",
+        "STD-035",
+        "STD-036",
+        "STD-037",
+        "STD-045",
+        "STD-046",
+        "STD-047",
+        "STD-051"
+      ],
+      "scope": "sleep/wake, cancel/reset, two cycles; unchanged5s/3s tolerance with conservative interval arithmetic; inability to prove narrow glitch duration =>unverified"
+    },
+    {
+      "id": "SUP-JITTER",
+      "S1_cases": [
+        "STD-044"
+      ],
+      "scope": "actual host write schedule logged including request/ACK bounds; no claim of100ms exact waveform or fullscan invariants if schedule not qualified"
+    },
+    {
+      "id": "SUP-ECHO",
+      "S1_cases": [
+        "STD-048"
+      ],
+      "scope": "all signed echo values after settling, no next-scan precision claim"
+    },
+    {
+      "id": "SUP-DIAGNOSTICS",
+      "S1_cases": [
+        "STD-049",
+        "STD-050",
+        "STD-055"
+      ],
+      "scope": "liveness and observed stability only; signed counter per-scan delta/wrap and100ms heartbeat exact timing remain unverified without adequate trace"
+    }
+  ],
+  "full_trace_oracle": {
+    "implementation": "plcweave.validation.TraceOracle unchanged",
+    "capabilities": {
+      "full_scan_trace": false,
+      "verified_applied_inputs": false
+    },
+    "all_55_cases_in_report": true,
+    "local_only": "retain explicit UNVERIFIED records, no hardware injection",
+    "relations": "preserve applicable S1 IDs and every UNVERIFIED result; never filter failures or call sampled scalar PASS a full case PASS"
+  },
+  "runner_acceptance": [
+    "manual_download binds current source/test/version/user confirmation before writes",
+    "COM5 CPUControl uses bench expected2/31, expected fingerprint and suite; never hardcode version1",
+    "root exclusively owns COM5/COM7; per-operation and batch deadlines",
+    "every case true recordedSTOP/RUN, set savedD261 beforeSTOP; CPU STOP recovery throughCOM5",
+    "log identity, stimulus request/ACK, every read request/response, actual durations, missing evidence, source/test/comparator/backend hashes",
+    "finally restore CPU RUN as authorized, application stop D191=0/D192=1, D193=0, read back zeroD154/Y0/D8050/D8051, close bothports; cleanup failure TEST_INFRA_ERROR",
+    "separate original55-case statuses from supplemental observations and electrical/plant limitations",
+    "Root batch deadline1800seconds; every loop and serial operation bounded; this is an execution budget, never a widened assertion window"
+  ],
+  "review_rule": "Only evidence-qualified PROGRAM_FAIL may return S2; ambiguous timings/phase stayUNVERIFIED. No HARDWARE_PASS from sampled batch; no electrical validation claim.",
+  "governance": "Hindsight search succeeded. Child ZERO unavailable due local sandbox credential read restriction; parent has successful realtime wake snapshot1288 with underlyingSTALE. Memory not substituted for realtime state.",
+  "supplemental_procedures": [
+    {
+      "id": "SUP-INIT-001",
+      "source_case_ids": [
+        "STD-001"
+      ],
+      "kind": "initialization",
+      "initial_words": {
+        "D190": 0,
+        "D191": 1,
+        "D192": 1,
+        "D193": 1,
+        "D194": 123,
+        "D261": 0
+      },
+      "params": {
+        "saved_sv_default_when_absent": 60,
+        "post_restart_settle_ms": 200,
+        "observation_window_ms": 1500,
+        "stable_samples": 2
+      },
+      "steps": [
+        {
+          "write": {},
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D190": 1,
+            "D191": 0,
+            "D192": 0,
+            "D193": 0,
+            "D194": 0,
+            "D195": 0,
+            "D102": 60,
+            "D261": 60,
+            "D260": 58,
+            "D262": 51,
+            "D196": 2,
+            "D197": 31,
+            "D202": 2,
+            "M8196": 1,
+            "M8125": 1,
+            "D8120": -8063,
+            "D8121": 1
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D190",
+            "D191",
+            "D192",
+            "D193",
+            "D194",
+            "D195",
+            "D102",
+            "D261",
+            "D260",
+            "D262",
+            "D196",
+            "D197",
+            "D202",
+            "M8196",
+            "M8125",
+            "D8120",
+            "D8121"
+          ]
+        }
+      ],
+      "scope": "initialized steady state only; first scan uniqueness/latency UNVERIFIED"
+    },
+    {
+      "id": "SUP-INIT-002",
+      "source_case_ids": [
+        "STD-002"
+      ],
+      "kind": "initialization",
+      "initial_words": {
+        "D261": -32768
+      },
+      "params": {
+        "saved_sv_default_when_absent": 60,
+        "post_restart_settle_ms": 200,
+        "observation_window_ms": 1500,
+        "stable_samples": 2
+      },
+      "steps": [
+        {
+          "write": {},
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D261": 60,
+            "D102": 60,
+            "D260": 58,
+            "D262": 51
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D261",
+            "D102",
+            "D260",
+            "D262"
+          ]
+        }
+      ],
+      "scope": "initialized steady state only; first scan uniqueness/latency UNVERIFIED"
+    },
+    {
+      "id": "SUP-INIT-003",
+      "source_case_ids": [
+        "STD-003"
+      ],
+      "kind": "initialization",
+      "initial_words": {
+        "D261": -1
+      },
+      "params": {
+        "saved_sv_default_when_absent": 60,
+        "post_restart_settle_ms": 200,
+        "observation_window_ms": 1500,
+        "stable_samples": 2
+      },
+      "steps": [
+        {
+          "write": {},
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D261": 60,
+            "D102": 60,
+            "D260": 58,
+            "D262": 51
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D261",
+            "D102",
+            "D260",
+            "D262"
+          ]
+        }
+      ],
+      "scope": "initialized steady state only; first scan uniqueness/latency UNVERIFIED"
+    },
+    {
+      "id": "SUP-INIT-004",
+      "source_case_ids": [
+        "STD-004"
+      ],
+      "kind": "initialization",
+      "initial_words": {
+        "D261": 9
+      },
+      "params": {
+        "saved_sv_default_when_absent": 60,
+        "post_restart_settle_ms": 200,
+        "observation_window_ms": 1500,
+        "stable_samples": 2
+      },
+      "steps": [
+        {
+          "write": {},
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D261": 60,
+            "D102": 60,
+            "D260": 58,
+            "D262": 51
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D261",
+            "D102",
+            "D260",
+            "D262"
+          ]
+        }
+      ],
+      "scope": "initialized steady state only; first scan uniqueness/latency UNVERIFIED"
+    },
+    {
+      "id": "SUP-INIT-005",
+      "source_case_ids": [
+        "STD-005"
+      ],
+      "kind": "initialization",
+      "initial_words": {
+        "D261": 10
+      },
+      "params": {
+        "saved_sv_default_when_absent": 60,
+        "post_restart_settle_ms": 200,
+        "observation_window_ms": 1500,
+        "stable_samples": 2
+      },
+      "steps": [
+        {
+          "write": {},
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D261": 10,
+            "D102": 10,
+            "D260": 8,
+            "D262": 8
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D261",
+            "D102",
+            "D260",
+            "D262"
+          ]
+        }
+      ],
+      "scope": "initialized steady state only; first scan uniqueness/latency UNVERIFIED"
+    },
+    {
+      "id": "SUP-INIT-006",
+      "source_case_ids": [
+        "STD-006"
+      ],
+      "kind": "initialization",
+      "initial_words": {
+        "D261": 11
+      },
+      "params": {
+        "saved_sv_default_when_absent": 60,
+        "post_restart_settle_ms": 200,
+        "observation_window_ms": 1500,
+        "stable_samples": 2
+      },
+      "steps": [
+        {
+          "write": {},
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D261": 11,
+            "D102": 11,
+            "D260": 9,
+            "D262": 9
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D261",
+            "D102",
+            "D260",
+            "D262"
+          ]
+        }
+      ],
+      "scope": "initialized steady state only; first scan uniqueness/latency UNVERIFIED"
+    },
+    {
+      "id": "SUP-INIT-007",
+      "source_case_ids": [
+        "STD-007"
+      ],
+      "kind": "initialization",
+      "initial_words": {
+        "D261": 159
+      },
+      "params": {
+        "saved_sv_default_when_absent": 60,
+        "post_restart_settle_ms": 200,
+        "observation_window_ms": 1500,
+        "stable_samples": 2
+      },
+      "steps": [
+        {
+          "write": {},
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D261": 159,
+            "D102": 159,
+            "D260": 157,
+            "D262": 135
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D261",
+            "D102",
+            "D260",
+            "D262"
+          ]
+        }
+      ],
+      "scope": "initialized steady state only; first scan uniqueness/latency UNVERIFIED"
+    },
+    {
+      "id": "SUP-INIT-008",
+      "source_case_ids": [
+        "STD-008"
+      ],
+      "kind": "initialization",
+      "initial_words": {
+        "D261": 160
+      },
+      "params": {
+        "saved_sv_default_when_absent": 60,
+        "post_restart_settle_ms": 200,
+        "observation_window_ms": 1500,
+        "stable_samples": 2
+      },
+      "steps": [
+        {
+          "write": {},
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D261": 160,
+            "D102": 160,
+            "D260": 158,
+            "D262": 136
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D261",
+            "D102",
+            "D260",
+            "D262"
+          ]
+        }
+      ],
+      "scope": "initialized steady state only; first scan uniqueness/latency UNVERIFIED"
+    },
+    {
+      "id": "SUP-INIT-009",
+      "source_case_ids": [
+        "STD-009"
+      ],
+      "kind": "initialization",
+      "initial_words": {
+        "D261": 161
+      },
+      "params": {
+        "saved_sv_default_when_absent": 60,
+        "post_restart_settle_ms": 200,
+        "observation_window_ms": 1500,
+        "stable_samples": 2
+      },
+      "steps": [
+        {
+          "write": {},
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D261": 60,
+            "D102": 60,
+            "D260": 58,
+            "D262": 51
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D261",
+            "D102",
+            "D260",
+            "D262"
+          ]
+        }
+      ],
+      "scope": "initialized steady state only; first scan uniqueness/latency UNVERIFIED"
+    },
+    {
+      "id": "SUP-INIT-010",
+      "source_case_ids": [
+        "STD-010"
+      ],
+      "kind": "initialization",
+      "initial_words": {
+        "D261": 32767
+      },
+      "params": {
+        "saved_sv_default_when_absent": 60,
+        "post_restart_settle_ms": 200,
+        "observation_window_ms": 1500,
+        "stable_samples": 2
+      },
+      "steps": [
+        {
+          "write": {},
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D261": 60,
+            "D102": 60,
+            "D260": 58,
+            "D262": 51
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D261",
+            "D102",
+            "D260",
+            "D262"
+          ]
+        }
+      ],
+      "scope": "initialized steady state only; first scan uniqueness/latency UNVERIFIED"
+    },
+    {
+      "id": "SUP-STEADY-STD-016",
+      "source_case_ids": [
+        "STD-016"
+      ],
+      "kind": "steady",
+      "initial_words": {},
+      "steps": [
+        {
+          "source_step_index": 1,
+          "original_duration_ms": 10,
+          "write": {
+            "D1056": -32768
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D100": 0,
+            "D1056": -32768
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D100",
+            "D1056"
+          ]
+        },
+        {
+          "source_step_index": 2,
+          "original_duration_ms": 10,
+          "write": {
+            "D1056": -1
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D100": 0,
+            "D1056": -1
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D100",
+            "D1056"
+          ]
+        },
+        {
+          "source_step_index": 3,
+          "original_duration_ms": 10,
+          "write": {
+            "D1056": 0
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D100": 0,
+            "D1056": 0
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D100",
+            "D1056"
+          ]
+        },
+        {
+          "source_step_index": 4,
+          "original_duration_ms": 10,
+          "write": {
+            "D1056": 12
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D100": 0,
+            "D1056": 12
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D100",
+            "D1056"
+          ]
+        },
+        {
+          "source_step_index": 5,
+          "original_duration_ms": 10,
+          "write": {
+            "D1056": 13
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D100": 1,
+            "D1056": 13
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D100",
+            "D1056"
+          ]
+        },
+        {
+          "source_step_index": 6,
+          "original_duration_ms": 10,
+          "write": {
+            "D1056": 24
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D100": 1,
+            "D1056": 24
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D100",
+            "D1056"
+          ]
+        },
+        {
+          "source_step_index": 7,
+          "original_duration_ms": 10,
+          "write": {
+            "D1056": 25
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D100": 1,
+            "D1056": 25
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D100",
+            "D1056"
+          ]
+        },
+        {
+          "source_step_index": 8,
+          "original_duration_ms": 10,
+          "write": {
+            "D1056": 37
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D100": 1,
+            "D1056": 37
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D100",
+            "D1056"
+          ]
+        },
+        {
+          "source_step_index": 9,
+          "original_duration_ms": 10,
+          "write": {
+            "D1056": 38
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D100": 2,
+            "D1056": 38
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D100",
+            "D1056"
+          ]
+        },
+        {
+          "source_step_index": 10,
+          "original_duration_ms": 10,
+          "write": {
+            "D1056": 249
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D100": 10,
+            "D1056": 249
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D100",
+            "D1056"
+          ]
+        },
+        {
+          "source_step_index": 11,
+          "original_duration_ms": 10,
+          "write": {
+            "D1056": 250
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D100": 10,
+            "D1056": 250
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D100",
+            "D1056"
+          ]
+        },
+        {
+          "source_step_index": 12,
+          "original_duration_ms": 10,
+          "write": {
+            "D1056": 1237
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D100": 49,
+            "D1056": 1237
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D100",
+            "D1056"
+          ]
+        },
+        {
+          "source_step_index": 13,
+          "original_duration_ms": 10,
+          "write": {
+            "D1056": 1238
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D100": 50,
+            "D1056": 1238
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D100",
+            "D1056"
+          ]
+        },
+        {
+          "source_step_index": 14,
+          "original_duration_ms": 10,
+          "write": {
+            "D1056": 1250
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D100": 50,
+            "D1056": 1250
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D100",
+            "D1056"
+          ]
+        },
+        {
+          "source_step_index": 15,
+          "original_duration_ms": 10,
+          "write": {
+            "D1056": 1449
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D100": 58,
+            "D1056": 1449
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D100",
+            "D1056"
+          ]
+        },
+        {
+          "source_step_index": 16,
+          "original_duration_ms": 10,
+          "write": {
+            "D1056": 1450
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D100": 58,
+            "D1056": 1450
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D100",
+            "D1056"
+          ]
+        },
+        {
+          "source_step_index": 17,
+          "original_duration_ms": 10,
+          "write": {
+            "D1056": 1462
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D100": 58,
+            "D1056": 1462
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D100",
+            "D1056"
+          ]
+        },
+        {
+          "source_step_index": 18,
+          "original_duration_ms": 10,
+          "write": {
+            "D1056": 1463
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D100": 59,
+            "D1056": 1463
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D100",
+            "D1056"
+          ]
+        },
+        {
+          "source_step_index": 19,
+          "original_duration_ms": 10,
+          "write": {
+            "D1056": 3987
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D100": 159,
+            "D1056": 3987
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D100",
+            "D1056"
+          ]
+        },
+        {
+          "source_step_index": 20,
+          "original_duration_ms": 10,
+          "write": {
+            "D1056": 3988
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D100": 160,
+            "D1056": 3988
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D100",
+            "D1056"
+          ]
+        },
+        {
+          "source_step_index": 21,
+          "original_duration_ms": 10,
+          "write": {
+            "D1056": 3999
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D100": 160,
+            "D1056": 3999
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D100",
+            "D1056"
+          ]
+        },
+        {
+          "source_step_index": 22,
+          "original_duration_ms": 10,
+          "write": {
+            "D1056": 4000
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D100": 160,
+            "D1056": 4000
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D100",
+            "D1056"
+          ]
+        },
+        {
+          "source_step_index": 23,
+          "original_duration_ms": 10,
+          "write": {
+            "D1056": 4001
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D100": 160,
+            "D1056": 4001
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D100",
+            "D1056"
+          ]
+        },
+        {
+          "source_step_index": 24,
+          "original_duration_ms": 10,
+          "write": {
+            "D1056": 32767
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D100": 160,
+            "D1056": 32767
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D100",
+            "D1056"
+          ]
+        }
+      ],
+      "scope": "supplemental steady values, all original narrow timepoints remain UNVERIFIED"
+    },
+    {
+      "id": "SUP-STEADY-STD-024",
+      "source_case_ids": [
+        "STD-024"
+      ],
+      "kind": "steady",
+      "initial_words": {},
+      "steps": [
+        {
+          "source_step_index": 1,
+          "original_duration_ms": 10,
+          "write": {
+            "D102": -32768
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D102": 10,
+            "D260": 8,
+            "D262": 8,
+            "D261": 60
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D102",
+            "D260",
+            "D262",
+            "D261"
+          ]
+        },
+        {
+          "source_step_index": 2,
+          "original_duration_ms": 10,
+          "write": {
+            "D102": -1
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D102": 10,
+            "D260": 8,
+            "D262": 8,
+            "D261": 60
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D102",
+            "D260",
+            "D262",
+            "D261"
+          ]
+        },
+        {
+          "source_step_index": 3,
+          "original_duration_ms": 10,
+          "write": {
+            "D102": 9
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D102": 10,
+            "D260": 8,
+            "D262": 8,
+            "D261": 60
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D102",
+            "D260",
+            "D262",
+            "D261"
+          ]
+        },
+        {
+          "source_step_index": 4,
+          "original_duration_ms": 10,
+          "write": {
+            "D102": 10
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D102": 10,
+            "D260": 8,
+            "D262": 8,
+            "D261": 60
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D102",
+            "D260",
+            "D262",
+            "D261"
+          ]
+        },
+        {
+          "source_step_index": 5,
+          "original_duration_ms": 10,
+          "write": {
+            "D102": 11
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D102": 11,
+            "D260": 9,
+            "D262": 9,
+            "D261": 60
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D102",
+            "D260",
+            "D262",
+            "D261"
+          ]
+        },
+        {
+          "source_step_index": 6,
+          "original_duration_ms": 10,
+          "write": {
+            "D102": 59
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D102": 59,
+            "D260": 57,
+            "D262": 50,
+            "D261": 60
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D102",
+            "D260",
+            "D262",
+            "D261"
+          ]
+        },
+        {
+          "source_step_index": 7,
+          "original_duration_ms": 10,
+          "write": {
+            "D102": 60
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D102": 60,
+            "D260": 58,
+            "D262": 51,
+            "D261": 60
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D102",
+            "D260",
+            "D262",
+            "D261"
+          ]
+        },
+        {
+          "source_step_index": 8,
+          "original_duration_ms": 10,
+          "write": {
+            "D102": 61
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D102": 61,
+            "D260": 59,
+            "D262": 51,
+            "D261": 60
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D102",
+            "D260",
+            "D262",
+            "D261"
+          ]
+        },
+        {
+          "source_step_index": 9,
+          "original_duration_ms": 10,
+          "write": {
+            "D102": 159
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D102": 159,
+            "D260": 157,
+            "D262": 135,
+            "D261": 60
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D102",
+            "D260",
+            "D262",
+            "D261"
+          ]
+        },
+        {
+          "source_step_index": 10,
+          "original_duration_ms": 10,
+          "write": {
+            "D102": 160
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D102": 160,
+            "D260": 158,
+            "D262": 136,
+            "D261": 60
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D102",
+            "D260",
+            "D262",
+            "D261"
+          ]
+        },
+        {
+          "source_step_index": 11,
+          "original_duration_ms": 10,
+          "write": {
+            "D102": 161
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D102": 160,
+            "D260": 158,
+            "D262": 136,
+            "D261": 60
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D102",
+            "D260",
+            "D262",
+            "D261"
+          ]
+        },
+        {
+          "source_step_index": 12,
+          "original_duration_ms": 10,
+          "write": {
+            "D102": 32767
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D102": 160,
+            "D260": 158,
+            "D262": 136,
+            "D261": 60
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D102",
+            "D260",
+            "D262",
+            "D261"
+          ]
+        }
+      ],
+      "scope": "supplemental steady values, all original narrow timepoints remain UNVERIFIED"
+    },
+    {
+      "id": "SUP-STEADY-STD-025",
+      "source_case_ids": [
+        "STD-025"
+      ],
+      "kind": "steady",
+      "initial_words": {},
+      "steps": [
+        {
+          "source_step_index": 1,
+          "original_duration_ms": 10,
+          "write": {
+            "D261": 42
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "D261": 42,
+            "D102": 60,
+            "D260": 58,
+            "D262": 51
+          },
+          "stable_devices": [
+            "D261",
+            "D102",
+            "D260",
+            "D262"
+          ]
+        },
+        {
+          "source_step_index": 2,
+          "original_duration_ms": 100,
+          "write": {
+            "D102": 100
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "D261": 42,
+            "D102": 100,
+            "D260": 98,
+            "D262": 85
+          },
+          "stable_devices": [
+            "D261",
+            "D102",
+            "D260",
+            "D262"
+          ]
+        },
+        {
+          "source_step_index": 3,
+          "original_duration_ms": 100,
+          "write": {
+            "D191": 1,
+            "D1056": 1250
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "D261": 42,
+            "D102": 100,
+            "M0": 1
+          },
+          "stable_devices": [
+            "D261",
+            "D102",
+            "M0"
+          ]
+        }
+      ],
+      "scope": "supplemental steady values, all original narrow timepoints remain UNVERIFIED"
+    },
+    {
+      "id": "SUP-STEADY-STD-048",
+      "source_case_ids": [
+        "STD-048"
+      ],
+      "kind": "steady",
+      "initial_words": {},
+      "steps": [
+        {
+          "source_step_index": 1,
+          "original_duration_ms": 10,
+          "write": {
+            "D194": 1
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "D194": 1,
+            "D195": 1
+          },
+          "stable_devices": [
+            "D194",
+            "D195"
+          ]
+        },
+        {
+          "source_step_index": 2,
+          "original_duration_ms": 10,
+          "write": {
+            "D194": 12345
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "D194": 12345,
+            "D195": 12345
+          },
+          "stable_devices": [
+            "D194",
+            "D195"
+          ]
+        },
+        {
+          "source_step_index": 3,
+          "original_duration_ms": 10,
+          "write": {
+            "D194": -1
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "D194": -1,
+            "D195": -1
+          },
+          "stable_devices": [
+            "D194",
+            "D195"
+          ]
+        },
+        {
+          "source_step_index": 4,
+          "original_duration_ms": 10,
+          "write": {
+            "D194": -32768
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "D194": -32768,
+            "D195": -32768
+          },
+          "stable_devices": [
+            "D194",
+            "D195"
+          ]
+        },
+        {
+          "source_step_index": 5,
+          "original_duration_ms": 10,
+          "write": {
+            "D194": 32767
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "D194": 32767,
+            "D195": 32767
+          },
+          "stable_devices": [
+            "D194",
+            "D195"
+          ]
+        },
+        {
+          "source_step_index": 6,
+          "original_duration_ms": 10,
+          "write": {
+            "D194": 0
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "D194": 0,
+            "D195": 0
+          },
+          "stable_devices": [
+            "D194",
+            "D195"
+          ]
+        }
+      ],
+      "scope": "supplemental steady values, all original narrow timepoints remain UNVERIFIED"
+    },
+    {
+      "id": "SUP-COMMAND-STD-011",
+      "source_case_ids": [
+        "STD-011"
+      ],
+      "kind": "steady",
+      "initial_words": {},
+      "steps": [
+        {
+          "source_step_index": 1,
+          "original_duration_ms": 20,
+          "write": {
+            "D191": 1,
+            "D1056": 1250,
+            "D193": 1
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 1,
+            "M10": 0,
+            "M11": 0,
+            "Y0": 1,
+            "D191": 1,
+            "D193": 1
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "Y0",
+            "D191",
+            "D193"
+          ]
+        },
+        {
+          "source_step_index": 2,
+          "original_duration_ms": 200,
+          "write": {
+            "D191": 0
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 1,
+            "M11": 0,
+            "Y0": 1
+          },
+          "stable_devices": [
+            "M0",
+            "M11",
+            "Y0"
+          ]
+        },
+        {
+          "source_step_index": 3,
+          "original_duration_ms": 10,
+          "write": {
+            "D191": 1,
+            "D192": 1
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D191": 1,
+            "D192": 1
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D191",
+            "D192"
+          ]
+        },
+        {
+          "source_step_index": 4,
+          "original_duration_ms": 200,
+          "write": {},
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051"
+          ]
+        },
+        {
+          "source_step_index": 5,
+          "original_duration_ms": 100,
+          "write": {
+            "D191": 0,
+            "D192": 0
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051"
+          ]
+        },
+        {
+          "source_step_index": 6,
+          "original_duration_ms": 20,
+          "write": {
+            "D191": 1
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 1
+          },
+          "stable_devices": [
+            "M0"
+          ]
+        }
+      ],
+      "scope": "steady command semantics; never same-scan latency or exact PI"
+    },
+    {
+      "id": "SUP-COMMAND-STD-012",
+      "source_case_ids": [
+        "STD-012"
+      ],
+      "kind": "steady",
+      "initial_words": {},
+      "steps": [
+        {
+          "source_step_index": 1,
+          "original_duration_ms": 100,
+          "write": {
+            "D191": -32768,
+            "D192": -32768
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D191": -32768,
+            "D192": -32768
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D191",
+            "D192"
+          ]
+        },
+        {
+          "source_step_index": 2,
+          "original_duration_ms": 20,
+          "write": {
+            "D191": 1
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 1
+          },
+          "stable_devices": [
+            "M0"
+          ]
+        },
+        {
+          "source_step_index": 3,
+          "original_duration_ms": 10,
+          "write": {
+            "D191": 0
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 1
+          },
+          "stable_devices": [
+            "M0"
+          ]
+        },
+        {
+          "source_step_index": 4,
+          "original_duration_ms": 100,
+          "write": {
+            "D192": -32768
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 1,
+            "M11": 0
+          },
+          "stable_devices": [
+            "M0",
+            "M11"
+          ]
+        },
+        {
+          "source_step_index": 5,
+          "original_duration_ms": 10,
+          "write": {
+            "D192": 1
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051"
+          ]
+        }
+      ],
+      "scope": "steady command semantics; never same-scan latency or exact PI"
+    },
+    {
+      "id": "SUP-COMMAND-STD-013",
+      "source_case_ids": [
+        "STD-013"
+      ],
+      "kind": "steady",
+      "initial_words": {},
+      "steps": [
+        {
+          "source_step_index": 1,
+          "original_duration_ms": 100,
+          "write": {
+            "D191": -1,
+            "D192": -1
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D191": -1,
+            "D192": -1
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D191",
+            "D192"
+          ]
+        },
+        {
+          "source_step_index": 2,
+          "original_duration_ms": 20,
+          "write": {
+            "D191": 1
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 1
+          },
+          "stable_devices": [
+            "M0"
+          ]
+        },
+        {
+          "source_step_index": 3,
+          "original_duration_ms": 10,
+          "write": {
+            "D191": 0
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 1
+          },
+          "stable_devices": [
+            "M0"
+          ]
+        },
+        {
+          "source_step_index": 4,
+          "original_duration_ms": 100,
+          "write": {
+            "D192": -1
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 1,
+            "M11": 0
+          },
+          "stable_devices": [
+            "M0",
+            "M11"
+          ]
+        },
+        {
+          "source_step_index": 5,
+          "original_duration_ms": 10,
+          "write": {
+            "D192": 1
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051"
+          ]
+        }
+      ],
+      "scope": "steady command semantics; never same-scan latency or exact PI"
+    },
+    {
+      "id": "SUP-COMMAND-STD-014",
+      "source_case_ids": [
+        "STD-014"
+      ],
+      "kind": "steady",
+      "initial_words": {},
+      "steps": [
+        {
+          "source_step_index": 1,
+          "original_duration_ms": 100,
+          "write": {
+            "D191": 2,
+            "D192": 2
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D191": 2,
+            "D192": 2
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D191",
+            "D192"
+          ]
+        },
+        {
+          "source_step_index": 2,
+          "original_duration_ms": 20,
+          "write": {
+            "D191": 1
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 1
+          },
+          "stable_devices": [
+            "M0"
+          ]
+        },
+        {
+          "source_step_index": 3,
+          "original_duration_ms": 10,
+          "write": {
+            "D191": 0
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 1
+          },
+          "stable_devices": [
+            "M0"
+          ]
+        },
+        {
+          "source_step_index": 4,
+          "original_duration_ms": 100,
+          "write": {
+            "D192": 2
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 1,
+            "M11": 0
+          },
+          "stable_devices": [
+            "M0",
+            "M11"
+          ]
+        },
+        {
+          "source_step_index": 5,
+          "original_duration_ms": 10,
+          "write": {
+            "D192": 1
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051"
+          ]
+        }
+      ],
+      "scope": "steady command semantics; never same-scan latency or exact PI"
+    },
+    {
+      "id": "SUP-COMMAND-STD-015",
+      "source_case_ids": [
+        "STD-015"
+      ],
+      "kind": "steady",
+      "initial_words": {},
+      "steps": [
+        {
+          "source_step_index": 1,
+          "original_duration_ms": 100,
+          "write": {
+            "D191": 32767,
+            "D192": 32767
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D191": 32767,
+            "D192": 32767
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D191",
+            "D192"
+          ]
+        },
+        {
+          "source_step_index": 2,
+          "original_duration_ms": 20,
+          "write": {
+            "D191": 1
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 1
+          },
+          "stable_devices": [
+            "M0"
+          ]
+        },
+        {
+          "source_step_index": 3,
+          "original_duration_ms": 10,
+          "write": {
+            "D191": 0
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 1
+          },
+          "stable_devices": [
+            "M0"
+          ]
+        },
+        {
+          "source_step_index": 4,
+          "original_duration_ms": 100,
+          "write": {
+            "D192": 32767
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 1,
+            "M11": 0
+          },
+          "stable_devices": [
+            "M0",
+            "M11"
+          ]
+        },
+        {
+          "source_step_index": 5,
+          "original_duration_ms": 10,
+          "write": {
+            "D192": 1
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051"
+          ]
+        }
+      ],
+      "scope": "steady command semantics; never same-scan latency or exact PI"
+    },
+    {
+      "id": "SUP-COMMAND-STD-019",
+      "source_case_ids": [
+        "STD-019"
+      ],
+      "kind": "steady",
+      "initial_words": {},
+      "steps": [
+        {
+          "source_step_index": 1,
+          "original_duration_ms": 100,
+          "write": {
+            "D191": 1,
+            "D1056": 1250,
+            "D193": 1
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 1,
+            "Y0": 1
+          },
+          "stable_devices": [
+            "M0",
+            "Y0"
+          ]
+        },
+        {
+          "source_step_index": 2,
+          "original_duration_ms": 10,
+          "write": {
+            "D190": -32768
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D190": -32768,
+            "D191": 1
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D190",
+            "D191"
+          ]
+        },
+        {
+          "source_step_index": 3,
+          "original_duration_ms": 100,
+          "write": {
+            "D191": 0
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051"
+          ]
+        },
+        {
+          "source_step_index": 4,
+          "original_duration_ms": 100,
+          "write": {
+            "D191": 1,
+            "D190": 1
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051"
+          ]
+        },
+        {
+          "source_step_index": 5,
+          "original_duration_ms": 10,
+          "write": {
+            "D191": 0
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051"
+          ]
+        },
+        {
+          "source_step_index": 6,
+          "original_duration_ms": 20,
+          "write": {
+            "D191": 1
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 1,
+            "M11": 0,
+            "Y0": 1
+          },
+          "stable_devices": [
+            "M0",
+            "M11",
+            "Y0"
+          ]
+        }
+      ],
+      "scope": "steady command semantics; never same-scan latency or exact PI"
+    },
+    {
+      "id": "SUP-COMMAND-STD-020",
+      "source_case_ids": [
+        "STD-020"
+      ],
+      "kind": "steady",
+      "initial_words": {},
+      "steps": [
+        {
+          "source_step_index": 1,
+          "original_duration_ms": 100,
+          "write": {
+            "D191": 1,
+            "D1056": 1250,
+            "D193": 1
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 1,
+            "Y0": 1
+          },
+          "stable_devices": [
+            "M0",
+            "Y0"
+          ]
+        },
+        {
+          "source_step_index": 2,
+          "original_duration_ms": 10,
+          "write": {
+            "D190": -1
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D190": -1,
+            "D191": 1
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D190",
+            "D191"
+          ]
+        },
+        {
+          "source_step_index": 3,
+          "original_duration_ms": 100,
+          "write": {
+            "D191": 0
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051"
+          ]
+        },
+        {
+          "source_step_index": 4,
+          "original_duration_ms": 100,
+          "write": {
+            "D191": 1,
+            "D190": 1
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051"
+          ]
+        },
+        {
+          "source_step_index": 5,
+          "original_duration_ms": 10,
+          "write": {
+            "D191": 0
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051"
+          ]
+        },
+        {
+          "source_step_index": 6,
+          "original_duration_ms": 20,
+          "write": {
+            "D191": 1
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 1,
+            "M11": 0,
+            "Y0": 1
+          },
+          "stable_devices": [
+            "M0",
+            "M11",
+            "Y0"
+          ]
+        }
+      ],
+      "scope": "steady command semantics; never same-scan latency or exact PI"
+    },
+    {
+      "id": "SUP-COMMAND-STD-021",
+      "source_case_ids": [
+        "STD-021"
+      ],
+      "kind": "steady",
+      "initial_words": {},
+      "steps": [
+        {
+          "source_step_index": 1,
+          "original_duration_ms": 100,
+          "write": {
+            "D191": 1,
+            "D1056": 1250,
+            "D193": 1
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 1,
+            "Y0": 1
+          },
+          "stable_devices": [
+            "M0",
+            "Y0"
+          ]
+        },
+        {
+          "source_step_index": 2,
+          "original_duration_ms": 10,
+          "write": {
+            "D190": 2
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D190": 2,
+            "D191": 1
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D190",
+            "D191"
+          ]
+        },
+        {
+          "source_step_index": 3,
+          "original_duration_ms": 100,
+          "write": {
+            "D191": 0
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051"
+          ]
+        },
+        {
+          "source_step_index": 4,
+          "original_duration_ms": 100,
+          "write": {
+            "D191": 1,
+            "D190": 1
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051"
+          ]
+        },
+        {
+          "source_step_index": 5,
+          "original_duration_ms": 10,
+          "write": {
+            "D191": 0
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051"
+          ]
+        },
+        {
+          "source_step_index": 6,
+          "original_duration_ms": 20,
+          "write": {
+            "D191": 1
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 1,
+            "M11": 0,
+            "Y0": 1
+          },
+          "stable_devices": [
+            "M0",
+            "M11",
+            "Y0"
+          ]
+        }
+      ],
+      "scope": "steady command semantics; never same-scan latency or exact PI"
+    },
+    {
+      "id": "SUP-COMMAND-STD-022",
+      "source_case_ids": [
+        "STD-022"
+      ],
+      "kind": "steady",
+      "initial_words": {},
+      "steps": [
+        {
+          "source_step_index": 1,
+          "original_duration_ms": 100,
+          "write": {
+            "D191": 1,
+            "D1056": 1250,
+            "D193": 1
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 1,
+            "Y0": 1
+          },
+          "stable_devices": [
+            "M0",
+            "Y0"
+          ]
+        },
+        {
+          "source_step_index": 2,
+          "original_duration_ms": 10,
+          "write": {
+            "D190": 32767
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0,
+            "D190": 32767,
+            "D191": 1
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051",
+            "D190",
+            "D191"
+          ]
+        },
+        {
+          "source_step_index": 3,
+          "original_duration_ms": 100,
+          "write": {
+            "D191": 0
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051"
+          ]
+        },
+        {
+          "source_step_index": 4,
+          "original_duration_ms": 100,
+          "write": {
+            "D191": 1,
+            "D190": 1
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051"
+          ]
+        },
+        {
+          "source_step_index": 5,
+          "original_duration_ms": 10,
+          "write": {
+            "D191": 0
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 0,
+            "M10": 0,
+            "M11": 0,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "Y0",
+            "D8050",
+            "D8051"
+          ]
+        },
+        {
+          "source_step_index": 6,
+          "original_duration_ms": 20,
+          "write": {
+            "D191": 1
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 1,
+            "M11": 0,
+            "Y0": 1
+          },
+          "stable_devices": [
+            "M0",
+            "M11",
+            "Y0"
+          ]
+        }
+      ],
+      "scope": "steady command semantics; never same-scan latency or exact PI"
+    },
+    {
+      "id": "SUP-ZERO-SATURATION",
+      "source_case_ids": [
+        "STD-029"
+      ],
+      "kind": "saturation",
+      "initial_words": {},
+      "params": {
+        "setup_words": {
+          "D102": 60,
+          "D1056": 0,
+          "D193": 1,
+          "D191": 0,
+          "D192": 0
+        },
+        "trigger_write": {
+          "D191": 1
+        },
+        "trigger_state": {
+          "M0": 1,
+          "M10": 0,
+          "M11": 0
+        },
+        "poll_device": "D154",
+        "becomes": 5000,
+        "event_expected_ms": {
+          "min": 39800,
+          "max": 40200
+        },
+        "first_event_deadline_ms": 42000,
+        "final_expected_by_ms": 50200,
+        "final_observation_hold_ms": 1500,
+        "minimum_stable_samples": 2
+      },
+      "expect": {
+        "M0": 1,
+        "M10": 0,
+        "M11": 0,
+        "D120": 30000,
+        "D154": 5000,
+        "Y0": 1,
+        "D8050": 4000,
+        "D8051": 0
+      },
+      "scope": "first frequency event plus stable accumulator/output plateau; no per-edge recurrence proof"
+    },
+    {
+      "id": "SUP-GATE-PLATEAU",
+      "source_case_ids": [
+        "STD-029",
+        "STD-030",
+        "STD-043"
+      ],
+      "kind": "output_gate",
+      "params": {
+        "prerequisite": "independently reached D12030000/D1545000 atPV0 inSUP-ZERO-SATURATION; preserve state, do not restart",
+        "on_missing_prerequisite": "UNVERIFIED; never pretend plateau from one observation"
+      },
+      "steps": [
+        {
+          "write": {
+            "D193": 0
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 1,
+            "M10": 0,
+            "M11": 0,
+            "D120": 30000,
+            "D154": 5000,
+            "D193": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "D193",
+            "Y0",
+            "D8050",
+            "D8051"
+          ]
+        },
+        {
+          "write": {
+            "D193": 1
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 1,
+            "M10": 0,
+            "M11": 0,
+            "D120": 30000,
+            "D154": 5000,
+            "D193": 1,
+            "Y0": 1,
+            "D8050": 4000,
+            "D8051": 0
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "D193",
+            "Y0",
+            "D8050",
+            "D8051"
+          ]
+        },
+        {
+          "write": {
+            "D193": 2
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 1,
+            "M10": 0,
+            "M11": 0,
+            "D120": 30000,
+            "D154": 5000,
+            "D193": 2,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "D193",
+            "Y0",
+            "D8050",
+            "D8051"
+          ]
+        },
+        {
+          "write": {
+            "D193": -1
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 1,
+            "M10": 0,
+            "M11": 0,
+            "D120": 30000,
+            "D154": 5000,
+            "D193": -1,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "D193",
+            "Y0",
+            "D8050",
+            "D8051"
+          ]
+        },
+        {
+          "write": {
+            "D193": 32767
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 1,
+            "M10": 0,
+            "M11": 0,
+            "D120": 30000,
+            "D154": 5000,
+            "D193": 32767,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "D193",
+            "Y0",
+            "D8050",
+            "D8051"
+          ]
+        },
+        {
+          "write": {
+            "D193": -32768
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 1,
+            "M10": 0,
+            "M11": 0,
+            "D120": 30000,
+            "D154": 5000,
+            "D193": -32768,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "D193",
+            "Y0",
+            "D8050",
+            "D8051"
+          ]
+        },
+        {
+          "write": {
+            "D193": 1
+          },
+          "hold_ms": 1500,
+          "expect": {
+            "M0": 1,
+            "M10": 0,
+            "M11": 0,
+            "D120": 30000,
+            "D154": 5000,
+            "D193": 1,
+            "Y0": 1,
+            "D8050": 4000,
+            "D8051": 0
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154",
+            "D193",
+            "Y0",
+            "D8050",
+            "D8051"
+          ]
+        }
+      ],
+      "scope": "register routing sampled steady state only; no electrical or same-scan proof"
+    },
+    {
+      "id": "SUP-TIMER-TWO-CYCLES",
+      "source_case_ids": [
+        "STD-031",
+        "STD-032",
+        "STD-033",
+        "STD-034"
+      ],
+      "kind": "edge_timing",
+      "initial_words": {},
+      "params": {
+        "setup_words": {
+          "D102": 60,
+          "D1056": 1250,
+          "D191": 1,
+          "D192": 0,
+          "D193": 0
+        },
+        "setup_hold_ms": 1000,
+        "poll_device": "M11",
+        "poll_sleep_ms": 0,
+        "trigger_bracket": "triggering write request start through first effective-trigger read response end",
+        "event_bracket": "last unchanged M11 request start through first changed M11 response end",
+        "post_event_stable_samples": 2,
+        "post_event_window_ms": 1500
+      },
+      "events": [
+        {
+          "id": "sleep-1",
+          "write": {
+            "D1056": 1450
+          },
+          "effective_trigger": {
+            "D100": 58,
+            "M10": 1
+          },
+          "device": "M11",
+          "from": 0,
+          "to": 1,
+          "expected_ms": {
+            "min": 4900,
+            "max": 5100
+          },
+          "deadline_ms": 5500,
+          "post_event_expect": {
+            "M0": 1,
+            "M10": 0,
+            "M11": 1,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0
+          }
+        },
+        {
+          "id": "wake-1",
+          "write": {
+            "D1056": 1275
+          },
+          "effective_trigger": {
+            "D100": 51,
+            "M11": 1
+          },
+          "device": "M11",
+          "from": 1,
+          "to": 0,
+          "expected_ms": {
+            "min": 2900,
+            "max": 3100
+          },
+          "deadline_ms": 3500,
+          "post_event_expect": {
+            "M0": 1,
+            "M10": 0,
+            "M11": 0
+          }
+        },
+        {
+          "id": "sleep-2",
+          "write": {
+            "D1056": 1450
+          },
+          "effective_trigger": {
+            "D100": 58,
+            "M10": 1
+          },
+          "device": "M11",
+          "from": 0,
+          "to": 1,
+          "expected_ms": {
+            "min": 4900,
+            "max": 5100
+          },
+          "deadline_ms": 5500,
+          "post_event_expect": {
+            "M0": 1,
+            "M10": 0,
+            "M11": 1,
+            "D120": 0,
+            "D154": 0,
+            "Y0": 0,
+            "D8050": 0,
+            "D8051": 0
+          }
+        },
+        {
+          "id": "wake-2",
+          "write": {
+            "D1056": 1275
+          },
+          "effective_trigger": {
+            "D100": 51,
+            "M11": 1
+          },
+          "device": "M11",
+          "from": 1,
+          "to": 0,
+          "expected_ms": {
+            "min": 2900,
+            "max": 3100
+          },
+          "deadline_ms": 3500,
+          "post_event_expect": {
+            "M0": 1,
+            "M10": 0,
+            "M11": 0
+          }
+        }
+      ],
+      "scope": "unchanged S1 event tolerance; all Q3 qualifications required; two cycles supplementary"
+    },
+    {
+      "id": "SUP-TIMER-CANCEL",
+      "source_case_ids": [
+        "STD-031",
+        "STD-034"
+      ],
+      "kind": "edge_timing",
+      "initial_words": {},
+      "params": {
+        "setup_words": {
+          "D102": 60,
+          "D1056": 1250,
+          "D191": 1,
+          "D193": 0
+        },
+        "poll_device": "M11",
+        "actual_input_history_required": true
+      },
+      "steps": [
+        {
+          "write": {
+            "D1056": 1450
+          },
+          "hold_ms": 2000,
+          "expect": {
+            "M0": 1,
+            "M10": 1,
+            "M11": 0,
+            "D120": 0,
+            "D154": 2000
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11",
+            "D120",
+            "D154"
+          ]
+        },
+        {
+          "write": {
+            "D1056": 1425
+          },
+          "hold_ms": 1000,
+          "expect": {
+            "M0": 1,
+            "M10": 0,
+            "M11": 0
+          },
+          "stable_devices": [
+            "M0",
+            "M10",
+            "M11"
+          ]
+        }
+      ],
+      "events": [
+        {
+          "id": "sleep-after-cancel",
+          "write": {
+            "D1056": 1450
+          },
+          "effective_trigger": {
+            "D100": 58,
+            "M10": 1
+          },
+          "device": "M11",
+          "from": 0,
+          "to": 1,
+          "expected_ms": {
+            "min": 4900,
+            "max": 5100
+          },
+          "deadline_ms": 5500
+        },
+        {
+          "id": "wake-after-cancel",
+          "write": {
+            "D1056": 1275
+          },
+          "effective_trigger": {
+            "D100": 51,
+            "M11": 1
+          },
+          "device": "M11",
+          "from": 1,
+          "to": 0,
+          "expected_ms": {
+            "min": 2900,
+            "max": 3100
+          },
+          "deadline_ms": 3500
+        }
+      ],
+      "scope": "sleep cancel plus complete new timer; 1scan glitch is not reproduced; wake cancellation can be independently added only with frozen procedure revision before run"
+    },
+    {
+      "id": "SUP-JITTER-ACTUAL-SCHEDULE",
+      "source_case_ids": [
+        "STD-044"
+      ],
+      "kind": "jitter",
+      "initial_words": {},
+      "params": {
+        "setup_words": {
+          "D102": 60,
+          "D1056": 1250,
+          "D191": 1,
+          "D193": 1
+        },
+        "schedule": "original S1 steps2..61 writeD1056 alternating0/4000; nominal100ms each, log actual request/ACK intervals",
+        "minimum_total_nominal_ms": 6000,
+        "schedule_verdict": "UNVERIFIED if true100ms waveform cannot be qualified; never amend original tolerance",
+        "recovery_write": {
+          "D1056": 1250
+        },
+        "recovery_hold_ms": 2000
+      },
+      "expect": {
+        "M0": 1,
+        "M10": 0,
+        "M11": 0,
+        "Y0": 1
+      },
+      "scope": "sampled legal domain and post-jitter recovery; no full trajectory or exact100ms proof"
+    }
+  ],
+  "freeze_note": "This initial freeze includes procedures, before adapter implementation and before hardware stimulus. Subsequent revisions require independent review and revision record, never overwriting original evidence.",
+  "drafted_at": "2026-10-22T06:33:18.940453+00:00",
+  "execution_projection": {
+    "decision": "55 original cases capability audit only, plus 28 separately frozen executable supplemental procedures",
+    "authority": "independent S6 qualification decision before adapter implementation or stimulus",
+    "original_cases": {
+      "all_retained": 55,
+      "bench": 52,
+      "local_only": 3,
+      "execution": "capability_only",
+      "scalar_assertions": "every original assertion retained withUNVERIFIED; original checkpoint was not reproduced",
+      "relationship_assertions": "TraceOracle unchanged with falsefull_scan_trace/verified_applied_inputs, preserve all applicable IDs and UNVERIFIED",
+      "hardware_waveforms_replayed": false,
+      "reason": "436.7..442.1ms fullwatch read cannot qualify10ms/20ms endpoints; stretched serial replay alters timer history. No silent no-op or reportPASS."
+    },
+    "supplemental_procedures": {
+      "count": 28,
+      "execution": "actual controlled bench actions according to independently frozen procedure",
+      "reporting": "separate per-procedure and per-assertion evidence, source-case association, actual durations and four-state verdicts; never substitute for original55"
+    },
+    "long_counter_cases": {
+      "ids": [
+        "STD-049",
+        "STD-055"
+      ],
+      "original_duration_each_ms": 340000,
+      "decision": "No purposeless340s wait: missingfull-scan counter proof cannot be repaired by elapsedwalltime; markUNVERIFIED and link saturation/liveness supplemental evidence."
+    }
+  }
+}

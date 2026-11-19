@@ -1,0 +1,15 @@
+{
+  "at": "2026-10-22T10:27:24.971863+00:00",
+  "status": "PASS",
+  "command": "pytest -q tests --basetemp=private/l01s-water-standard/evidence/hil02/pytest-cap-green --tb=short",
+  "result": "78 passed in 0.27s",
+  "scope": "Current repository tests; does not claim all historical upstream tests passed",
+  "files": {
+    "src\\plcweave\\sampled.py": "a52243d0568cae949c9f04ed5a1230d70edc899273cb95d30808c899c61a5a6e",
+    "src\\plcweave\\cpu_control.py": "9b710ff2462f69eb25ecbc2eabc37780f7af8979de84f3143267985d330406f9",
+    "src\\plcweave\\fx_serial.py": "efcee9d2cc9f5aa4f6db03ffa5f5b848b93bfc95072d03c0b22a7d813274ea8d",
+    "private\\l01s-water-standard\\run_hil02.py": "d2877c6410ff22ff91146392fbbe762fefb3be661944ad103eb7d2f8f11a1fdd",
+    "tools\\pio-platform\\builder\\main.py": "16436a4399c5415fa3a68f2828422b439de768ad085c7877b93f932524b1c0aa"
+  },
+  "previous_result": "73 passed in 0.37s"
+}

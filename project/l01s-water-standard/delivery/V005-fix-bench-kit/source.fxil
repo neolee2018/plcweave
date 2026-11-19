@@ -1,0 +1,404 @@
+#meta
+project: HBDTECH L01S Water Standard
+plc: FXCPU FX3U/FX3UC
+comment_project: HBDTECH L01S Water Standard
+version: V005
+
+#instructions
+// ===== 01. First-scan safe initialization. External controls are defaulted only here. =====
+LD M8002
+RST M0
+RST M11
+RST M12
+RST M3
+MOV K1 D322
+MOV K0 D320
+MOV K0 D321
+MOV K0 D323
+MOV K0 D333
+MOV K0 D317
+MOV K0 D331
+MOV K0 D332
+MOV K0 D334
+MOV K0 D335
+MOV K100 D327
+MOV K30 D328
+MOV K2000 D329
+MOV K0 D165
+MOV K0 D166
+MOV K0 D316
+SET M8196
+SET M8125
+MOV HE081 D8120
+MOV K1 D8121
+LD M8002
+AND< D325 K10
+MOV K60 D325
+LD M8002
+AND> D325 K160
+MOV K60 D325
+LD M8002
+MOV D325 D102
+MOV D102 D324
+LD M8002
+MUL D325 K85 D167
+DIV D167 K100 D168
+MOV D168 D326
+
+// BEGIN_IDENTITY
+LD M8002
+MOV K5 D300
+MOV K31 D301
+MUL K2 K27636 D302
+MUL K5 K8815 D303
+MOV K5 D304
+// END_IDENTITY
+
+// ===== 02. Unconditional global clock edge, diagnostics, and batch diagnostic mirrors. =====
+LD M8012
+ANI M3
+OUT M2
+LD M8012
+OUT M3
+LD M2
+ADD D305 K1 D305
+LD M8000
+ADD D306 K1 D306
+MOV D333 D317
+
+// ===== 03. Clamp online SV, wake pressure, and timing/speed parameters every scan. =====
+LD M8000
+MOV D324 D102
+LD M8000
+AND< D102 K10
+MOV K10 D102
+LD M8000
+AND> D102 K160
+MOV K160 D102
+LD M8000
+MOV D326 D160
+LD M8000
+AND< D160 K0
+MOV K0 D160
+LD M8000
+AND> D160 K160
+MOV K160 D160
+LD M8000
+MOV D327 D162
+LD M8000
+AND< D162 K10
+MOV K10 D162
+LD M8000
+AND> D162 K600
+MOV K600 D162
+LD M8000
+MOV D328 D163
+LD M8000
+AND< D163 K5
+MOV K5 D163
+LD M8000
+AND> D163 K300
+MOV K300 D163
+LD M8000
+MOV D329 D164
+LD M8000
+AND< D164 K2000
+MOV K2000 D164
+LD M8000
+AND> D164 K3000
+MOV K3000 D164
+
+// ===== 04. Select signed input, clamp before scaling, and ignore unused AI channels. =====
+LD M8000
+MOV K0 D110
+AND= D322 K1
+MOV D330 D110
+LD M8000
+AND= D322 K0
+MOV D8030 D110
+LD M8000
+AND= D322 K0
+AND= D332 K1
+MOV D331 D110
+LD M8000
+AND< D110 K0
+MOV K0 D110
+LD M8000
+AND> D110 K4000
+MOV K4000 D110
+LD M8000
+ADD D110 K12 D111
+DIV D111 K25 D112
+MOV D112 D100
+
+// ===== 05. Only modes zero and one are valid. Invalid mode latches restart inhibit.
+// Parallel bench terminals D334/D335 OR into start/stop before the same latch,
+// stop-wins and inhibit rules; level semantics identical to D320/D321. =====
+LD M8000
+AND= D322 K0
+OUT M1
+LD M8000
+AND= D322 K1
+OR M1
+OUT M1
+LDI M1
+SET M12
+RST M0
+LD M1
+AND= D320 K0
+AND= D334 K0
+RST M12
+LD M1
+ANI M12
+AND= D320 K1
+SET M0
+LD M1
+ANI M12
+AND= D334 K1
+SET M0
+LD M8000
+AND= D321 K1
+RST M0
+LD M8000
+AND= D335 K1
+RST M0
+
+// ===== 06. Stop clears sleep; entry-normal snapshot excludes the transition scan. =====
+LDI M0
+RST M11
+LD M0
+ANI M11
+OUT M24
+
+// ===== 07. Sleep and wake qualifying conditions feed software tick counters. =====
+LD M0
+ANI M11
+AND>= D100 D102
+OUT M30
+LD M0
+ANI M11
+AND<= D154 D164
+OR M30
+OUT M30
+LD M0
+AND M11
+AND< D100 D160
+OUT M31
+LD M8000
+ANI M30
+MOV K0 D165
+LD M2
+AND M30
+ADD D165 K1 D165
+LD M2
+AND M30
+AND> D165 K32767
+MOV K32767 D165
+LD M8000
+ANI M31
+MOV K0 D166
+LD M2
+AND M31
+ADD D166 K1 D166
+LD M2
+AND M31
+AND> D166 K32767
+MOV K32767 D166
+
+// ===== 08. Parameter-delay transitions: sleep and wake fire when the counter
+// reaches the clamped parameter; equality observed in the same scan applies. =====
+LD M0
+ANI M11
+AND>= D165 D162
+SET M11
+MOV K0 D165
+LD M0
+AND M11
+AND>= D166 D163
+RST M11
+MOV K0 D166
+
+// ===== 09. Identify the final normal state, clear non-normal integral and safe outputs. =====
+LD M0
+ANI M11
+OUT M22
+LDI M22
+MOV K0 D120
+LDI M0
+OR M11
+MOV K0 D154
+LD M22
+ANI M24
+MOV K0 D120
+MOV K2000 D154
+LD M22
+AND< D154 K2000
+MOV K2000 D154
+
+// ===== 10. Portable integer PI, exactly once per global edge after transition scan. =====
+LD M22
+AND M24
+AND M2
+SUB D102 D100 D121
+ADD D120 D121 D120
+LD M22
+AND M24
+AND M2
+AND< D120 K0
+MOV K0 D120
+LD M22
+AND M24
+AND M2
+AND> D120 K30000
+MOV K30000 D120
+LD M22
+AND M24
+AND M2
+MUL D121 K10 D122
+DIV D120 K10 D124
+ADD D122 D124 D126
+LD M22
+AND M24
+AND M2
+AND< D126 K0
+MOV K0 D126
+LD M22
+AND M24
+AND M2
+AND> D126 K3000
+MOV K3000 D126
+LD M22
+AND M24
+AND M2
+ADD K2000 D126 D154
+
+// ===== 11. Physical route defaults OFF on every scan; exact enable value one only. =====
+LD M8000
+MOV K0 D8050
+MOV K0 D8051
+LD M0
+AND= D323 K1
+AND> D154 K0
+OUT Y0
+LD Y0
+MUL D154 K4 D130
+DIV D130 K5 D132
+MOV D132 D8050
+
+// ===== 12. Batch status mirror: one FC03 read covers every host observation. =====
+LD M8000
+MOV K0 D307
+LD M0
+ADD D307 K1 D307
+LD M11
+ADD D307 K2 D307
+LD M30
+ADD D307 K4 D307
+LD M31
+ADD D307 K8 D307
+LD M8000
+AND= D322 K1
+ADD D307 K16 D307
+LD M8000
+AND= D323 K1
+ADD D307 K32 D307
+LD M8000
+MOV D100 D308
+MOV D102 D309
+MOV D160 D310
+MOV D154 D311
+MOV D8050 D312
+MOV D8051 D313
+MOV D165 D314
+MOV D166 D315
+MOV D110 D318
+MOV D120 D319
+END
+
+#comments
+M0 Application running latch; remains on during sleep
+M1 Valid source mode; zero or one only
+M2 Global rising edge of 100 ms clock; evaluated unconditionally
+M3 Previous scan 100 ms clock image; reset on first scan
+M11 Latched sleep state; frequency and physical outputs zero
+M12 Invalid-mode restart inhibit; release start in valid mode
+M22 Final normal state after command and delay processing
+M24 Normal state at scan entry; excludes transition scan from PI
+M30 Sleep-delay qualifying; normal run with PV>=SV or frequency<=no-flow speed
+M31 Wake-delay qualifying; sleeping with PV below wake pressure
+M8000 PLC RUN monitor; system owned
+M8002 First-scan pulse; system owned
+M8012 100 ms clock; system owned
+M8125 Serial communication mode enable; initialized one
+M8196 Serial peripheral setting enable; initialized one
+Y0 Physical route run output; exact D323 enable required
+D100 Clamped scaled pressure; 0.1 bar, 0 to 160; mirrored to D308
+D102 Active pressure setting; clamp of D324, 0.1 bar, 10 to 160; mirrored to D309
+D110 Selected signed raw input, clamped 0 to 4000; mirrored to D318
+D111 Rounded scaling numerator; raw plus 12
+D112 Pressure scaling DIV quotient
+D113 Pressure scaling DIV remainder; paired with D112
+D120 Integer PI accumulator; 0 to 30000; mirrored to D319
+D121 Signed PI error; active setting minus pressure
+D122 Proportional MUL low word; error times 10
+D123 Proportional MUL high word; paired with D122
+D124 Integral DIV quotient; accumulator divided by 10
+D125 Integral DIV remainder; paired with D124
+D126 Clamped PI increment; 0 to 3000
+D130 Analog route MUL low word; frequency times 4
+D131 Analog route MUL high word; paired with D130
+D132 Analog route DIV quotient; product divided by 5
+D133 Analog route DIV remainder; paired with D132
+D154 Frequency command; 0.01 Hz, zero or 2000 to 5000; mirrored to D311
+D160 Wake pressure in effect; clamp of D326; mirrored to D310
+D162 Sleep delay in effect; clamp of D327, 100 ms ticks
+D163 Wake delay in effect; clamp of D328, 100 ms ticks
+D164 No-flow speed in effect; clamp of D329, 0.01 Hz
+D165 Sleep-delay tick counter; qualifying 100 ms edges; mirrored to D314
+D166 Wake-delay tick counter; qualifying 100 ms edges; mirrored to D315
+D167 Wake pressure first-scan MUL low word; saved SV times 85
+D168 Wake pressure first-scan DIV quotient
+D300 Program version word; 5
+D301 Edition word; 31
+D302 Canonical instruction fingerprint word 0; signed little endian
+D303 Canonical instruction fingerprint word 1; signed little endian
+D304 Test suite version word; 5
+D305 Heartbeat edge counter; signed word wrap
+D306 Scan counter; signed word wrap
+D307 Status bitmap; bit0 run bit1 sleep bit2 sleep-timing bit3 wake-timing bit4 test bit5 enable
+D308 Status mirror of D100; 0.1 bar
+D309 Status mirror of D102; 0.1 bar
+D310 Status mirror of D160; 0.1 bar
+D311 Status mirror of D154; 0.01 Hz
+D312 Status mirror of D8050; analog output 0 raw
+D313 Status mirror of D8051; always zero
+D314 Status mirror of D165; sleep-delay ticks
+D315 Status mirror of D166; wake-delay ticks
+D316 Reserved; always zero (physical DI stays on FC02 0x3400)
+D317 Diagnostic echo response; copied each executed scan from D333
+D318 Status mirror of D110; selected raw
+D319 Status mirror of D120; PI integral
+D320 Start level request; only value 1 asserted
+D321 Stop level request; only value 1 asserted; stop wins
+D322 Source mode; 1 test input, 0 hardware AI0
+D323 Physical route enable; only value 1 asserted; defaults zero
+D324 Online pressure setting; 0.1 bar, clamped 10 to 160 into D102
+D325 Saved pressure setting; validated only first scan
+D326 Wake pressure setting; 0.1 bar, first scan floor(saved SV times 85 / 100)
+D327 Sleep delay; 100 ms ticks, clamped 10 to 600, default 100
+D328 Wake delay; 100 ms ticks, clamped 5 to 300, default 30
+D329 No-flow speed; 0.01 Hz, clamped 2000 to 3000, default 2000
+D330 External simulated raw AI0 input; signed word
+D331 Parallel AI0 test input for hardware mode; only when D332=1
+D332 AI0 test-input enable; 1 substitutes D331 for D8030 in mode 0
+D333 Diagnostic external echo request
+D334 Parallel start bench terminal; OR-ed with D320, first scan 0
+D335 Parallel stop bench terminal; OR-ed with D321, first scan 0
+D8030 Hardware AI0 raw input; never written by application
+D8031 Hardware AI1 unused; never read or written
+D8032 Hardware AI2 unused; never read or written
+D8033 Hardware AI3 unused; never read or written
+D8050 Analog output 0 register route; 0 to 4000
+D8051 Analog output 1; always zero
+D8120 Serial format image; HE081, signed -8063
+D8121 Serial station image; 1

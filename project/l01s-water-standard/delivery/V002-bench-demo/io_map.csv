@@ -1,0 +1,6 @@
+﻿signal,device,external_access,range,meaning
+AI0,D8030,RO,0..4000,pressure source in normal mode
+AI1..3,D8031..D8033,RO,0..4000,unused
+AO0,D8050,RO,0..4000,guarded frequency route
+AO1,D8051,RO,0,reserved zero
+run permit,Y0,RO,0/1,no load attached

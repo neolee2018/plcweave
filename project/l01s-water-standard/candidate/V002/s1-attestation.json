@@ -1,0 +1,222 @@
+{
+  "task_id": "PW-20261022-STANDARD-REDO",
+  "identity": "/root/s1_independent",
+  "created_at": "2026-10-22T05:51:00.580768+00:00",
+  "stage": "S1 independent design, no execution",
+  "read_inputs": [
+    {
+      "path": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\requirements.md",
+      "sha256": "aafc680c5d7cfe8dc2d47826e5cfc2316c6fc19fbbd581d0a934e46d34a4f282"
+    },
+    {
+      "path": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\s0-freeze.json",
+      "sha256": "f5c14dcc43cbc0bfc73a0c62bfa24aad08b435ce0c6ed28ed6bffe8f65c99a17"
+    },
+    {
+      "path": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water-standard\\workflow.md",
+      "sha256": "7f883b2d772d8b29aece0d5596e0b300a2569613ec39f971918fd194c4c49622"
+    },
+    {
+      "path": "C:\\Users\\MasterNeo\\.agents\\skills\\plc-program-development\\SKILL.md",
+      "sha256": "fb15693bfa71cafbf4d5e79a7623494d3ead58b291e83617a1e5c15617c313e7"
+    },
+    {
+      "path": "C:\\Users\\MasterNeo\\.agents\\skills\\plc-program-development\\resources\\sop\\PLC-TDD-V2.0-工作流.md",
+      "sha256": "328e2484d5535543672d5831c0ff37c04d956c0ce1d8137b98c051584e3c0027"
+    },
+    {
+      "path": "C:\\Users\\MasterNeo\\.agents\\skills\\plc-program-development\\resources\\templates\\tdd\\test-case-format.md",
+      "sha256": "f377db54b8bb88e86f8fbb26233371949da308ecb93e8662fa2d8ac045e101f3"
+    }
+  ],
+  "independence_declaration": "Only authorized current S0 and3 skill files read. No PLC source, old tests, engines or history read; no PLC simulation or serial run. Expected values independently derived from frozen functional specification.",
+  "clarifications": [
+    "S0 revision2 accepted before S1 freeze: invalid-mode recovery requires valid-mode start0 then later1.",
+    "Root corrected initial clock phase; oracle observes actual M8012 edges, does not assume50ms start.",
+    "Second independent S1 boundary clarification closed by S0 revision3 before S2: SV10/PV8 wake may immediately reenter pre-sleep, no normal dwell. Draft prior freeze withdrawn and archived. Only requirements hash rebind; no expected-value change or program outcome feedback."
+  ],
+  "case_count": 55,
+  "must_count": 55,
+  "relationship_oracle_count": 10,
+  "schema_only_audit": "PASS; not SIM_PASS",
+  "coverage": {
+    "R01": [
+      "STD-001",
+      "STD-011",
+      "STD-012",
+      "STD-013",
+      "STD-014",
+      "STD-015",
+      "STD-019",
+      "STD-020",
+      "STD-021",
+      "STD-022",
+      "STD-023",
+      "STD-038",
+      "STD-039",
+      "STD-040",
+      "STD-041",
+      "STD-042",
+      "STD-043",
+      "STD-047",
+      "STD-049",
+      "STD-052",
+      "STD-053",
+      "STD-054"
+    ],
+    "R02": [
+      "STD-016",
+      "STD-017",
+      "STD-018",
+      "STD-019",
+      "STD-020",
+      "STD-021",
+      "STD-022",
+      "STD-023",
+      "STD-036",
+      "STD-044",
+      "STD-052",
+      "STD-053",
+      "STD-054"
+    ],
+    "R03": [
+      "STD-001",
+      "STD-002",
+      "STD-003",
+      "STD-004",
+      "STD-005",
+      "STD-006",
+      "STD-007",
+      "STD-008",
+      "STD-009",
+      "STD-010",
+      "STD-024",
+      "STD-025",
+      "STD-028",
+      "STD-035",
+      "STD-037",
+      "STD-051"
+    ],
+    "R04": [
+      "STD-031",
+      "STD-032",
+      "STD-033",
+      "STD-034",
+      "STD-035",
+      "STD-036",
+      "STD-037",
+      "STD-038",
+      "STD-039",
+      "STD-040",
+      "STD-041",
+      "STD-042",
+      "STD-044",
+      "STD-045",
+      "STD-047",
+      "STD-052",
+      "STD-053",
+      "STD-054"
+    ],
+    "R05": [
+      "STD-033",
+      "STD-034",
+      "STD-037",
+      "STD-038",
+      "STD-039",
+      "STD-040",
+      "STD-041",
+      "STD-046",
+      "STD-047",
+      "STD-051",
+      "STD-052",
+      "STD-053",
+      "STD-054"
+    ],
+    "R06": [
+      "STD-026",
+      "STD-029",
+      "STD-031",
+      "STD-032",
+      "STD-033",
+      "STD-034",
+      "STD-044",
+      "STD-045",
+      "STD-046",
+      "STD-055"
+    ],
+    "R07": [
+      "STD-026",
+      "STD-027",
+      "STD-028",
+      "STD-029",
+      "STD-030",
+      "STD-031",
+      "STD-033",
+      "STD-035",
+      "STD-036",
+      "STD-038",
+      "STD-039",
+      "STD-040",
+      "STD-041",
+      "STD-044",
+      "STD-050",
+      "STD-055"
+    ],
+    "R08": [
+      "STD-001",
+      "STD-011",
+      "STD-019",
+      "STD-020",
+      "STD-021",
+      "STD-022",
+      "STD-023",
+      "STD-026",
+      "STD-029",
+      "STD-030",
+      "STD-032",
+      "STD-033",
+      "STD-038",
+      "STD-039",
+      "STD-040",
+      "STD-041",
+      "STD-042",
+      "STD-043",
+      "STD-044",
+      "STD-052",
+      "STD-053",
+      "STD-054",
+      "STD-055"
+    ],
+    "R09": [
+      "STD-001",
+      "STD-048",
+      "STD-049",
+      "STD-050",
+      "STD-055"
+    ],
+    "R10": [
+      "STD-001"
+    ]
+  },
+  "hardware_scope_counts": {
+    "bench": 52,
+    "local_only": 3
+  },
+  "final_design_review": "S3 confirmed fixed-kind oracle implementability before freeze; no implementation or simulation results supplied.",
+  "outputs": [
+    {
+      "path": "test_cases.json",
+      "sha256": "b8702dc680b52990c180bbdfa320a477cbc5562ef71c9bf625012d9679475106"
+    },
+    {
+      "path": "S1-Test-Cases_EN.md",
+      "sha256": "d3832fd6d121ef0aba8bd64c245c61e814f6092fb27858e8a865a16c166f0878"
+    },
+    {
+      "path": "S1-design-review.md",
+      "sha256": "d197383ab5e8c80c9ed87d9018074a6fa90f7beb49cf2603a035b27d480217db"
+    }
+  ],
+  "requirements_spec_revision": 3,
+  "expectation_projection_sha256": "ec29ba30d7e1b0def736749ef8a1c60d8edf0aa29708c620a67c2781885eb525"
+}

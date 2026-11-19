@@ -1,0 +1,241 @@
+{
+  "status": "PASS",
+  "task_id": "PW-20261022-STANDARD-REDO",
+  "owner": "/root/s3_verifier",
+  "completed_at": "2026-10-22T06:06:08.735768+00:00",
+  "program_version": "V002",
+  "suite_version": "STD-002",
+  "source_sha256": "238e10886e2d8ed4e8d2d66e758a18afe4e403f6c613f306d7859796b8ec3a88",
+  "test_sha256": "b8702dc680b52990c180bbdfa320a477cbc5562ef71c9bf625012d9679475106",
+  "requirements_sha256": "aafc680c5d7cfe8dc2d47826e5cfc2316c6fc19fbbd581d0a934e46d34a4f282",
+  "validator_sha256": "d58c5713a2980b190835a61f5caf5f7f6c578893c80a12d88eb78320d41c4ed3",
+  "runner_sha256": "eb710fad7dfdd4a90b1c954a20640069f71ebe14667ee4e0d485928b8c6bcbf9",
+  "engine_binary_sha256": "21ebd9f071b3eafeff77f67bc22fcfe2829183047e45d2527b0f1f95816e9ff6",
+  "independence": "S3 separate verifier; S1 frozen before S2; historical program/tests excluded; no frozen expected results changed",
+  "levels": {
+    "static": "STATIC_PASS",
+    "simulation": "SIM_PASS",
+    "gx": "NOT_EXECUTED",
+    "hardware": "NOT_EXECUTED"
+  },
+  "static": {
+    "main_errors": 0,
+    "main_warnings": 0,
+    "comment_errors": 0,
+    "comment_nonblocking_advisories": 1,
+    "advisory_reason": "Seven implicit arithmetic result words and three intentionally unused ADC channels retain comments"
+  },
+  "simulation": {
+    "must_cases": 55,
+    "passed_cases": 55,
+    "postscan_rows": 92996,
+    "independent_full_csv_replay": "PASS",
+    "relationship_kind_count": 10,
+    "relationship_coverage": {
+      "command_state_oracle": {
+        "case_count": 55,
+        "evaluated_scans": 92996,
+        "violation_count": 0,
+        "statuses": [
+          "PASS"
+        ]
+      },
+      "serial_and_engine_gate": {
+        "case_count": 55,
+        "evaluated_scans": 92996,
+        "violation_count": 0,
+        "statuses": [
+          "PASS"
+        ]
+      },
+      "first_crossing_and_monotonicity": {
+        "case_count": 1,
+        "evaluated_scans": 5183,
+        "violation_count": 0,
+        "statuses": [
+          "PASS"
+        ]
+      },
+      "physical_routing": {
+        "case_count": 55,
+        "evaluated_scans": 92996,
+        "violation_count": 0,
+        "statuses": [
+          "PASS"
+        ]
+      },
+      "state_output_consistency": {
+        "case_count": 55,
+        "evaluated_scans": 92996,
+        "violation_count": 0,
+        "statuses": [
+          "PASS"
+        ]
+      },
+      "diagnostics": {
+        "case_count": 55,
+        "evaluated_scans": 92996,
+        "violation_count": 0,
+        "statuses": [
+          "PASS"
+        ]
+      },
+      "continuous_timers": {
+        "case_count": 55,
+        "evaluated_scans": 92996,
+        "violation_count": 0,
+        "statuses": [
+          "PASS"
+        ]
+      },
+      "independent_fingerprint": {
+        "case_count": 55,
+        "evaluated_scans": 92996,
+        "violation_count": 0,
+        "statuses": [
+          "PASS"
+        ]
+      },
+      "scaling_settings": {
+        "case_count": 55,
+        "evaluated_scans": 92996,
+        "violation_count": 0,
+        "statuses": [
+          "PASS"
+        ]
+      },
+      "independent_pi_recurrence": {
+        "case_count": 55,
+        "evaluated_scans": 92996,
+        "violation_count": 0,
+        "statuses": [
+          "PASS"
+        ]
+      }
+    },
+    "first_full_frequency_ms": 39990
+  },
+  "fingerprint": {
+    "status": "PASS",
+    "canonical_sha256": "e26fe069009f01a4f878dc837ce824ee9fac201f4c67f9f63f3d942c84c209ee",
+    "canonical_instruction_count": 170,
+    "fingerprint_words": [
+      28642,
+      27104
+    ],
+    "manifest_independently_matched": true
+  },
+  "execution_tool_negative_gates": {
+    "status": "PASS",
+    "fixtures": [
+      {
+        "fixture": "BOGUS M0",
+        "status": "BLOCKED",
+        "error": "simulation GXW_SIM_INCOMPLETE at instruction None: Instruction program is incomplete; unsupported code and opaque regions cannot execute",
+        "code": "GXW_SIM_INCOMPLETE"
+      },
+      {
+        "fixture": "PID D0 D1 D2 D3",
+        "status": "BLOCKED",
+        "error": "simulation GXW_SIM_INCOMPLETE at instruction None: Instruction program is incomplete; unsupported code and opaque regions cannot execute",
+        "code": "GXW_SIM_INCOMPLETE"
+      },
+      {
+        "fixture": "MOV K1 D8512",
+        "status": "BLOCKED",
+        "error": "simulation GXW_SIM_DEVICE_UNSUPPORTED at instruction Some(1): simulation GXW_SIM_DEVICE_UNSUPPORTED at instruction None: D8512 is outside D0..D8511 (16-bit image; external peripheral semantics unmodelled)",
+        "code": "GXW_SIM_DEVICE_UNSUPPORTED"
+      },
+      {
+        "fixture": "LD M99999",
+        "status": "BLOCKED",
+        "error": "simulation GXW_SIM_DEVICE_UNSUPPORTED at instruction Some(1): simulation GXW_SIM_DEVICE_UNSUPPORTED at instruction None: M99999 is outside the simulation subset (X/Y0..177 octal, M0..7679, T0..191/T200..245/T250..319, C0..199 decimal; fx3u adds M8000..M8511 and D0..D7999)",
+        "code": "GXW_SIM_DEVICE_UNSUPPORTED"
+      }
+    ]
+  },
+  "semantic_mutations": {
+    "status": "PASS",
+    "rejected": 7,
+    "identity_passed_for_all": true,
+    "oracles": [
+      {
+        "name": "missing_stop_priority",
+        "target": "command_state_oracle",
+        "violations": 686
+      },
+      {
+        "name": "incorrect_enable_gate",
+        "target": "physical_routing",
+        "violations": 8181
+      },
+      {
+        "name": "incorrect_pi_divisor",
+        "target": "independent_pi_recurrence",
+        "violations": 33732
+      },
+      {
+        "name": "pi_every_scan",
+        "target": "independent_pi_recurrence",
+        "violations": 36991
+      },
+      {
+        "name": "timer_runs_across_gaps",
+        "target": "continuous_timers",
+        "violations": 38246
+      },
+      {
+        "name": "wrong_adc_channel",
+        "target": "scaling_settings",
+        "violations": 20
+      },
+      {
+        "name": "one_scan_ao_spike",
+        "target": "physical_routing",
+        "violations": 22
+      }
+    ]
+  },
+  "repository_regression": {
+    "passed": 40,
+    "failed": 0,
+    "legacy_schema_simulation_covered": true
+  },
+  "upstream_baseline": {
+    "status": "KNOWN_BASELINE_FAILURES_NOT_CLAIMED_GREEN",
+    "failed": 5,
+    "passed": 92,
+    "skipped": 2,
+    "evidence": "evidence/baseline-full-regression.txt",
+    "expectations_modified": false,
+    "scope": "Legacy parser/render/diff unsupported-form assumptions, supported instruction count and words/get_word stub mismatch"
+  },
+  "limits": [
+    "No GX manufacturer validation",
+    "No electrical AO/pressure dynamics validation",
+    "No physical peripheral protocol validation",
+    "No power-loss retention validation",
+    "Rich-suite S6 adapter remains unqualified; legacy endpoint runner rejects this schema",
+    "A new manual download must bind this source/suite/identity before authorized bench replay"
+  ],
+  "cleanup": {
+    "pytest_temporary_directory": "removed_and_absence_verified",
+    "subprocesses": "all_bounded_and_completed",
+    "serial_connections_opened": 0,
+    "gui_sessions_created": 0,
+    "persistent_helpers_created": 0,
+    "retained": "Business evidence and intentional mutation fixtures"
+  },
+  "artifacts": {
+    "evidence\\simulation\\latest\\simulation_report.json": "891ab82e4e7caa9338c72d22e5244ccacfe1c2c60f880df9d2ca0e39e6aa27a0",
+    "evidence\\simulation\\latest\\simulation_trace.csv": "811a81c233f797f7fbf0a959c960419dbfddd82b4ba13b44ab12887124a3ddd6",
+    "evidence\\S3-full-trace-review.json": "cfd34a94f34628284a154c5ad79c2d0f27c23803f3ed27e8dae4365e7bcaeea5",
+    "evidence\\S3-semantic-mutations.json": "77e2b87b01afaf653dc6738ff91cadc342e409fc2dec16fa9302cc70d6b42ef0",
+    "evidence\\S3-infrastructure-tests.txt": "0f133ff23d5c5f5e5e7854eb8908cad96db44625fa006e2cfd8c589fb66c7d15",
+    "evidence\\S3-final-cli.txt": "7884f063a72705cac4d0a6cc1041ec777cace09933be272ef9fc3e6c3167f26a",
+    "evidence\\S3-platformio-simulate.txt": "0d5a2b6aa58e5e7c0416c4635def6bca6e56f0bfc8c6cd5458212685821f4438",
+    "evidence\\S3-static-validation.txt": "6164017082bb3aabf89b646a2d9c084bbd8285298034b0e062766c4dc98abc9a",
+    "evidence\\S3-validation-review.md": "fc39d6465fed6c4181181a7588d875bbf043c96a590f9a5a943de38476335fb4",
+    "evidence\\S3-verify.py": "a250125c7a4b5738601c14cf7e47e38948544ed5cac796f887442e69d3235e49"
+  }
+}

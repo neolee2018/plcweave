@@ -1,0 +1,11 @@
+{
+  "source_sha256": "13f396bcbece6cc4b01935ec17927f1ddc834ff40070cc6245921c52f9d595f9",
+  "program_version": 5,
+  "edition": 31,
+  "suite_version_word": 5,
+  "fingerprint_words": [
+    -10264,
+    -21461
+  ],
+  "canonical_sha256": "e8d72bac9cc37d14768ca3023ed33408985fd5722c07eabf17952eef03fee1df"
+}

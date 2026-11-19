@@ -118,9 +118,10 @@ say so when you send the prompt; the agent switches to the hardware flow in
 [`demo/START-HERE.md`](demo/START-HERE.md) and pauses for your GX Works2 download and explicit
 flash/bench confirmations before S6 sampling.
 
-**Customer demo project — constant-pressure water supply:** a complete, real L01S program
+**Customer demo project — constant-pressure water supply:** the complete L01S water project
 (V006: pressure PI, sleep/wake, overpressure protection) ships in
-[`demo/water-supply-standard/`](demo/water-supply-standard/README.md) with a three-step runbook:
+[`project/l01s-water-standard/`](project/l01s-water-standard/README.md), with a three-step
+runbook in [`demo/water-supply-standard/README.md`](demo/water-supply-standard/README.md):
 Step 1 the agent checks/organizes the project and runs the offline script test (22/22 PASS,
 no hardware), Step 2 the customer flashes with GX Works2 and the agent runs bench tests,
 Step 3 the customer says "项目交付" and the agent strips simulation registers and produces the

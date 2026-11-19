@@ -1,0 +1,24 @@
+{
+  "at": "2026-10-22T10:31:23.201932+00:00",
+  "python": "3.13.2 (tags/v3.13.2:4f8bb39, Feb  4 2025, 15:23:48) [MSC v.1942 64 bit (AMD64)]",
+  "os": "Windows-10-10.0.19045-SP0",
+  "packages": {
+    "pyserial": "3.5",
+    "pymodbus": "3.11.1",
+    "pytest": "9.1.1",
+    "PyMuPDF": "2.0"
+  },
+  "platformio_version": "6.1.19 (verified installed tool in prior workflow)",
+  "files": {
+    "src/plcweave/hil.py": "8cde162c4042180d93e685b65e87cd9bc4c0b70de247fb4ab2927782d18632bc",
+    "src/plcweave/fx_serial.py": "efcee9d2cc9f5aa4f6db03ffa5f5b848b93bfc95072d03c0b22a7d813274ea8d",
+    "src/plcweave/cpu_control.py": "9b710ff2462f69eb25ecbc2eabc37780f7af8979de84f3143267985d330406f9",
+    "src/plcweave/sampled.py": "a52243d0568cae949c9f04ed5a1230d70edc899273cb95d30808c899c61a5a6e",
+    "src/plcweave/testing.py": "eb710fad7dfdd4a90b1c954a20640069f71ebe14667ee4e0d485928b8c6bcbf9",
+    "src/plcweave/validation.py": "d58c5713a2980b190835a61f5caf5f7f6c578893c80a12d88eb78320d41c4ed3",
+    "tools/pio-platform/builder/main.py": "16436a4399c5415fa3a68f2828422b439de768ad085c7877b93f932524b1c0aa",
+    "private/l01s-water-standard/platformio.ini": "e60cd3f72f802618ba1d2fbbbef122892c2d923d057c985f359b407627032738"
+  },
+  "serial_owner": "root exclusively; independent reviewers file-only",
+  "source_test_change": "none"
+}

@@ -1,0 +1,72 @@
+{
+  "status": "FAIL",
+  "reviewer": "visual independent judge / pdf_visual_check",
+  "pages_checked": 34,
+  "pdf_sha256": {
+    "Blackbox-Test-Cases_EN.pdf": "48200dada6e4bd991438a2ac26177c9c818e6b4824aa97c4002593458a1990aa",
+    "L01S-Water-PI-il-annotated_EN.pdf": "8e16dd907af101317bd5fc0134556d576028f515107e0a39063843d9c89c77b9"
+  },
+  "page_counts": {
+    "Blackbox-Test-Cases_EN.pdf": 28,
+    "L01S-Water-PI-il-annotated_EN.pdf": 6
+  },
+  "findings": [
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "pages": [
+        3
+      ],
+      "issue": "Register-map continuation lacks repeated column headings."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "pages": [
+        4,
+        5,
+        15,
+        19,
+        20,
+        21,
+        23,
+        24
+      ],
+      "issue": "Case heading and metadata are separated from the first step table by a page break. Cases STD-002, STD-006, STD-028, STD-037, STD-039, STD-041, STD-046, STD-048."
+    },
+    {
+      "pdf": "Blackbox-Test-Cases_EN.pdf",
+      "pages": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27
+      ],
+      "issue": "Many step tables use narrow Step/Apply/Duration columns; headings and timing values wrap inside words or numeric-unit strings (e.g. 100m / s), harming readability."
+    }
+  ],
+  "limitations": [
+    "Visual/text-layout review only, based on all 34 rendered PNG pages; no functional, compiler, serial, or hardware verification.",
+    "V002 candidate and unverified hardware scope markings are correct.",
+    "Annotated PDF 6 pages passed visual inspection."
+  ],
+  "cleanup": "No processes, connections, or temporary files created by reviewer."
+}

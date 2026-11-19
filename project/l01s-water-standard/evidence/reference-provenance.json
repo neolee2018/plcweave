@@ -1,0 +1,17 @@
+[
+  {
+    "source": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water\\requirements.md",
+    "sha256": "52b49b1dcd40656b7b5728591255f21c7090e6379fcd6f1bff957e22323cbd47",
+    "use": "private reference only; no public redistribution"
+  },
+  {
+    "source": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water\\reference\\l01s_user_manual.md",
+    "sha256": "125170cf1da4d044b432da932e46095f4d06136239f8a86af9ed905839e5ac97",
+    "use": "private reference only; no public redistribution"
+  },
+  {
+    "source": "F:\\000-HBDTECH-Neo\\103-plcweave\\private\\l01s-water\\reference\\l01s_programming_manual.md",
+    "sha256": "7c96f29fd86dec2b09a5560afee3581039d5f91c646a6613f5f0af056747263c",
+    "use": "private reference only; no public redistribution"
+  }
+]

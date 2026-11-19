@@ -1,0 +1,273 @@
+#meta
+project: HBDTECH L01S Water Standard
+plc: FXCPU FX3U/FX3UC
+comment_project: HBDTECH L01S Water Standard
+version: V002
+
+#instructions
+// ===== 01. First-scan safe initialization. External controls are defaulted only here. =====
+LD M8002
+RST M0
+RST M10
+RST M11
+RST M12
+RST M3
+RST T0
+RST T1
+MOV K1 D190
+MOV K0 D191
+MOV K0 D192
+MOV K0 D193
+MOV K0 D194
+MOV K0 D195
+MOV K0 D198
+MOV K0 D199
+SET M8196
+SET M8125
+MOV HE081 D8120
+MOV K1 D8121
+LD M8002
+AND< D261 K10
+MOV K60 D261
+LD M8002
+AND> D261 K160
+MOV K60 D261
+LD M8002
+MOV D261 D102
+
+// BEGIN_IDENTITY
+LD M8002
+MOV K2 D196
+MOV K31 D197
+MOV K32484 D200
+MOV K-17806 D201
+MOV K2 D202
+// END_IDENTITY
+
+// ===== 02. Unconditional global clock edge, diagnostics, and previous normal state. =====
+LD M8012
+ANI M3
+OUT M2
+LD M8012
+OUT M3
+LD M2
+ADD D198 K1 D198
+LD M8000
+ADD D199 K1 D199
+MOV D194 D195
+LD M0
+ANI M10
+ANI M11
+OUT M20
+
+// ===== 03. Validate and clamp the active setting without saving online edits. =====
+LD M8000
+AND< D102 K10
+MOV K10 D102
+LD M8000
+AND> D102 K160
+MOV K160 D102
+LD M8000
+SUB D102 K2 D260
+MUL D102 K85 D114
+DIV D114 K100 D116
+MOV D116 D262
+
+// ===== 04. Select signed input, clamp before scaling, and ignore unused AI channels. =====
+LD M8000
+MOV K0 D110
+AND= D190 K1
+MOV D1056 D110
+LD M8000
+AND= D190 K0
+MOV D8030 D110
+LD M8000
+AND< D110 K0
+MOV K0 D110
+LD M8000
+AND> D110 K4000
+MOV K4000 D110
+LD M8000
+ADD D110 K12 D111
+DIV D111 K25 D112
+MOV D112 D100
+
+// ===== 05. Only modes zero and one are valid. Invalid mode latches restart inhibit. =====
+LD M8000
+AND= D190 K0
+OUT M1
+LD M8000
+AND= D190 K1
+OR M1
+OUT M1
+LDI M1
+SET M12
+RST M0
+LD M1
+AND= D191 K0
+RST M12
+LD M1
+ANI M12
+AND= D191 K1
+SET M0
+LD M8000
+AND= D192 K1
+RST M0
+
+// ===== 06. Stop clears both states before timers and output mapping in this scan. =====
+LDI M0
+RST M10
+RST M11
+
+// ===== 07. Continuous low-pressure wake timer. False rung resets its elapsed value. =====
+LD M0
+AND M11
+AND<= D100 D262
+OUT T1 K30
+LD T1
+RST M11
+
+// ===== 08. Pre-sleep threshold is inclusive; each interruption resets T0 completely. =====
+LD M0
+ANI M11
+AND>= D100 D260
+OUT M10
+LD M10
+OUT T0 K50
+LD T0
+SET M11
+RST M10
+
+// ===== 09. Identify the final normal state, clear non-normal integral and safe outputs. =====
+LD M0
+ANI M10
+ANI M11
+OUT M21
+LDI M21
+MOV K0 D120
+LDI M0
+OR M11
+MOV K0 D154
+LD M10
+MOV K2000 D154
+LD M21
+ANI M20
+MOV K0 D120
+MOV K2000 D154
+
+// ===== 10. Portable integer PI, exactly once per global edge after transition scan. =====
+LD M21
+AND M20
+AND M2
+SUB D102 D100 D121
+ADD D120 D121 D120
+LD M21
+AND M20
+AND M2
+AND< D120 K0
+MOV K0 D120
+LD M21
+AND M20
+AND M2
+AND> D120 K30000
+MOV K30000 D120
+LD M21
+AND M20
+AND M2
+MUL D121 K10 D122
+DIV D120 K9 D124
+ADD D122 D124 D126
+LD M21
+AND M20
+AND M2
+AND< D126 K0
+MOV K0 D126
+LD M21
+AND M20
+AND M2
+AND> D126 K3000
+MOV K3000 D126
+LD M21
+AND M20
+AND M2
+ADD K2000 D126 D154
+
+// ===== 11. Physical route defaults OFF on every scan; exact enable value one only. =====
+LD M8000
+MOV K0 D8050
+MOV K0 D8051
+LD M0
+AND= D193 K1
+AND> D154 K0
+OUT Y0
+LD Y0
+MUL D154 K4 D130
+DIV D130 K5 D132
+MOV D132 D8050
+END
+
+#comments
+M0 Application running latch; remains on during sleep
+M1 Valid source mode; zero or one only
+M2 Global rising edge of 100 ms clock; evaluated unconditionally
+M3 Previous scan 100 ms clock image; reset on first scan
+M10 Pre-sleep state; 20.00 Hz, integral cleared
+M11 Latched sleep state; frequency and physical outputs zero
+M12 Invalid-mode restart inhibit; release start in valid mode
+M20 Normal state at scan entry; excludes transition scan from PI
+M21 Final normal state after command and timer processing
+M8000 PLC RUN monitor; system owned
+M8002 First-scan pulse; system owned
+M8012 100 ms clock; system owned
+M8125 Serial communication mode enable; initialized one
+M8196 Serial peripheral setting enable; initialized one
+T0 Continuous pre-sleep delay; 100 ms base, preset 50
+T1 Continuous wake delay; 100 ms base, preset 30
+Y0 Physical route run output; exact D193 enable required
+D100 Clamped scaled pressure; 0.1 bar, 0 to 160
+D102 Active pressure setting; 0.1 bar, 10 to 160
+D110 Selected signed raw input, clamped 0 to 4000
+D111 Rounded scaling numerator; raw plus 12
+D112 Pressure scaling DIV quotient
+D113 Pressure scaling DIV remainder; paired with D112
+D114 Wake threshold MUL low word; setting times 85
+D115 Wake threshold MUL high word; paired with D114
+D116 Wake threshold DIV quotient
+D117 Wake threshold DIV remainder; paired with D116
+D120 Integer PI accumulator; 0 to 30000
+D121 Signed PI error; active setting minus pressure
+D122 Proportional MUL low word; error times 10
+D123 Proportional MUL high word; paired with D122
+D124 Integral DIV quotient; accumulator divided by 10
+D125 Integral DIV remainder; paired with D124
+D126 Clamped PI increment; 0 to 3000
+D130 Analog route MUL low word; frequency times 4
+D131 Analog route MUL high word; paired with D130
+D132 Analog route DIV quotient; product divided by 5
+D133 Analog route DIV remainder; paired with D132
+D154 Frequency command; 0.01 Hz, zero or 2000 to 5000
+D190 Source mode; 1 test input, 0 hardware AI0
+D191 Start level request; only value 1 asserted
+D192 Stop level request; only value 1 asserted; stop wins
+D193 Physical route enable; only value 1 asserted; defaults zero
+D194 Diagnostic external echo request
+D195 Diagnostic echo response; copied each executed scan
+D196 Program version word; 2
+D197 Edition word; 31
+D198 Heartbeat edge counter; signed word wrap
+D199 Scan counter; signed word wrap
+D200 Canonical instruction fingerprint word 0; signed little endian
+D201 Canonical instruction fingerprint word 1; signed little endian
+D202 Test suite version word; 2
+D260 Inclusive pre-sleep pressure threshold; active setting minus 2
+D261 Saved pressure setting; validated only first scan
+D262 Inclusive wake threshold; floor active setting times 85 divided by 100
+D1056 External simulated raw AI0 input; signed word
+D8030 Hardware AI0 raw input; never written by application
+D8031 Hardware AI1 unused; never read or written
+D8032 Hardware AI2 unused; never read or written
+D8033 Hardware AI3 unused; never read or written
+D8050 Analog output 0 register route; 0 to 4000
+D8051 Analog output 1; always zero
+D8120 Serial format image; HE081, signed -8063
+D8121 Serial station image; 1
