@@ -42,6 +42,23 @@ cd plcweave
 
 安装时把**整个** `skills/plc-program-development/` 目录复制或链接到所用Agent平台的技能目录，目录名必须保持 `plc-program-development`（与 `SKILL.md` 的 `name:` 字段一致）；`SKILL.md` 与 `references/` 不能拆开。更新仓库后重新同步该目录，保持仓库技能为唯一来源。`tools/sync_plc_skill.py` 仅更新**已有旧技能**，不是通用安装器。
 
+示例（在仓库根目录执行；目标路径按所用Agent的技能目录调整）：
+
+```sh
+# Claude Code（用户级技能目录）
+mkdir -p ~/.claude/skills && cp -r skills/plc-program-development ~/.claude/skills/
+# 也可改用软链接，git pull 后技能自动更新：
+ln -s "$(pwd)/skills/plc-program-development" ~/.claude/skills/plc-program-development
+```
+
+```powershell
+# Windows / PowerShell
+New-Item -ItemType Directory -Force "$HOME/.claude/skills" | Out-Null
+Copy-Item -Recurse skills/plc-program-development "$HOME/.claude/skills/"
+```
+
+检查：`<技能目录>/plc-program-development/SKILL.md` 存在，且 `name:` 为 `plc-program-development`。
+
 缺少系统前提时，遵循官方[Python](https://www.python.org/downloads/)、[Rust/rustup](https://www.rust-lang.org/tools/install/)、[Windows Rust/MSVC](https://learn.microsoft.com/en-us/windows/dev-environment/rust/setup)安装说明。Windows可使用 `winget install --exact --id Python.Python.3.13` 和 `winget install --exact --id Rustlang.Rustup`，仍需安装C++工作负载/SDK。安装后重新打开终端。AI安装系统软件须遵守主机安装/提权权限。
 
 ### Windows / PowerShell
@@ -76,7 +93,15 @@ tools/plcweave.ps1会选择本仓venv、设置源码导入/UTF-8并恢复调用�
 
 ### Linux / macOS
 
-安装支持venv的标准CPython3.13，以及Rust、GCC/Clang/链接器（Linux）或Xcode Command Line Tools（macOS），见[Rust官方指南](https://doc.rust-lang.org/book/ch01-01-installation.html)。然后：
+安装支持venv和Tk的标准CPython3.13，以及Rust、GCC/Clang/链接器（Linux）或Xcode Command Line Tools（macOS），见[Rust官方指南](https://doc.rust-lang.org/book/ch01-01-installation.html)。Linux 的 Tk 需单独安装（python.org 的 Windows/macOS 安装包已自带），缺少时 pytest 在收集阶段报 `No module named 'tkinter'`。以 Debian/Ubuntu 为例：
+
+```sh
+sudo apt install python3.13-venv python3.13-dev python3.13-tk build-essential pkg-config
+# 仅无显示器的机器（服务器、CI、容器）跑GUI测试时需要：
+sudo apt install xvfb
+```
+
+然后：
 
 ```sh
 python3.13 -m venv .venv
@@ -90,9 +115,13 @@ rustup toolchain install 1.93.0 --profile minimal --component rustfmt --componen
 .venv/bin/python -c 'import gxwlib; from gxwlib import _core; print(_core.__file__)'
 .venv/bin/python -m plcweave --help
 .venv/bin/python -m pytest -q tests --basetemp=local/pytest-readme
+# 无显示器的机器：用虚拟X服务器包一层
+xvfb-run -a .venv/bin/python -m pytest -q tests --basetemp=local/pytest-readme
 ```
 
-这是源码安装路径，不代表这些平台已经验证。现有本地验证在Windows完成。POSIX下将后文Windows入口替换成 `.venv/bin/python -m plcweave`，用编辑器或Agent文件工具写入示例UTF-8文件。当前PlatformIO适配器和离线开发助手为Windows专用。
+非Windows平台上，`tests/test_bench_app.py` 中2个像素布局测试按设计跳过（按Windows字体度量校准），结果应含 `2 skipped`。
+
+这是源码安装路径。主要验证在Windows完成；以上步骤也已在Debian Linux（aarch64、CPython 3.13.5、Rust 1.93.0，含Tk与 `xvfb-run`）上完整跑通。POSIX下将后文Windows入口替换成 `.venv/bin/python -m plcweave`，用编辑器或Agent文件工具写入示例UTF-8文件。当前PlatformIO适配器和离线开发助手为Windows专用。
 
 公开工具测试使用合成夹具，不依赖客户project内容。客户专用集成测试保留在各自私有项目目录。记录实际通过/失败/跳过数量，不套用私有工作区数量。
 

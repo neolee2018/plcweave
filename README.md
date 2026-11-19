@@ -23,6 +23,7 @@ See the [conversion guide, existing template locations and AI prompt (Chinese)](
 | Python | Standard GIL-enabled CPython **3.13+**; 3.13 is recommended. The vendored binding does not support PyPy or free-threaded Python. |
 | Rust | **1.93+**, Cargo and a native linker. The vendor's `rust-toolchain.toml` pins rustup to **1.93.0**. |
 | Windows build tools | MSVC C++ Build Tools, Desktop development with C++, and a compatible Windows SDK. |
+| Tk (GUI bench + tests) | Bundled with the python.org Windows/macOS installers. On Linux install it separately, e.g. Debian/Ubuntu `sudo apt install python3.13-tk` (or `python3-tk`), Fedora `sudo dnf install python3-tkinter`. Without it pytest stops at collection with `No module named 'tkinter'`. |
 | Source | The complete repository, including `vendor/gxwlib`, `src`, `tools`, and `skills`. |
 
 Clone the public repository, or extract its source archive:
@@ -47,6 +48,23 @@ Run commands from the directory containing `pyproject.toml`. Do not fetch missin
 The workflow is the repository skill **`plc-program-development`** (`skills/plc-program-development/SKILL.md`) together with its `references/` folder. Reading it from this checkout is enough; a global install is optional, but install it when the agent should follow the workflow from project folders outside this repository.
 
 To install, copy or link the **whole** `skills/plc-program-development/` directory into your agent platform's skills directory and keep the directory name exactly `plc-program-development` (it must match the `name:` field in `SKILL.md`). Keep `SKILL.md` and `references/` together, and restore the directory after updating the checkout so the repository skill stays the single source. `tools/sync_plc_skill.py` only updates an existing legacy company skill; it is not a general-purpose installer.
+
+Examples (run from the repository root; adjust the target to your agent's skills directory):
+
+```sh
+# Claude Code (user-level skills)
+mkdir -p ~/.claude/skills && cp -r skills/plc-program-development ~/.claude/skills/
+# Or link instead of copy, so `git pull` updates the skill automatically:
+ln -s "$(pwd)/skills/plc-program-development" ~/.claude/skills/plc-program-development
+```
+
+```powershell
+# Windows / PowerShell
+New-Item -ItemType Directory -Force "$HOME/.claude/skills" | Out-Null
+Copy-Item -Recurse skills/plc-program-development "$HOME/.claude/skills/"
+```
+
+Check: `<skills dir>/plc-program-development/SKILL.md` exists and its `name:` line reads `plc-program-development`.
 
 Install missing system prerequisites using the official [Python](https://www.python.org/downloads/), [Rust/rustup](https://www.rust-lang.org/tools/install/), and [Windows Rust/MSVC](https://learn.microsoft.com/en-us/windows/dev-environment/rust/setup) instructions. Windows package-manager options include `winget install --exact --id Python.Python.3.13` and `winget install --exact --id Rustlang.Rustup`; the C++ workload/SDK must also be installed. Reopen the terminal afterward. Agents must respect host installation/elevation permissions.
 
@@ -82,7 +100,15 @@ Do not overwrite an unrelated existing `.venv`. If `py` is unavailable, use the 
 
 ### Linux / macOS
 
-Install standard CPython 3.13 with venv support and Rust plus GCC/Clang/linker (Linux) or Xcode Command Line Tools (macOS). See the [official Rust guide](https://doc.rust-lang.org/book/ch01-01-installation.html). Then:
+Install standard CPython 3.13 with venv and Tk support and Rust plus GCC/Clang/linker (Linux) or Xcode Command Line Tools (macOS). See the [official Rust guide](https://doc.rust-lang.org/book/ch01-01-installation.html). On Debian/Ubuntu, for example:
+
+```sh
+sudo apt install python3.13-venv python3.13-dev python3.13-tk build-essential pkg-config
+# Only for headless machines (servers, CI, containers) that must run the GUI tests:
+sudo apt install xvfb
+```
+
+Then:
 
 ```sh
 python3.13 -m venv .venv
@@ -96,9 +122,13 @@ rustup toolchain install 1.93.0 --profile minimal --component rustfmt --componen
 .venv/bin/python -c 'import gxwlib; from gxwlib import _core; print(_core.__file__)'
 .venv/bin/python -m plcweave --help
 .venv/bin/python -m pytest -q tests --basetemp=local/pytest-readme
+# Headless host without a display: wrap the GUI tests in a virtual X server
+xvfb-run -a .venv/bin/python -m pytest -q tests --basetemp=local/pytest-readme
 ```
 
-This is a source-install route, not a claim that these hosts were validated. Local validation was on Windows. On POSIX, replace the Windows CLI wrapper below with `.venv/bin/python -m plcweave` and create the shown UTF-8 files with an editor/agent file tool. The current PlatformIO adapter and offline development helper are Windows-specific.
+On non-Windows hosts two pixel-layout tests in `tests/test_bench_app.py` are skipped by design (they are calibrated on Windows font metrics); expect `2 skipped`.
+
+This is a source-install route. Primary validation is on Windows; the steps above were also run end to end on Debian Linux (aarch64, CPython 3.13.5, Rust 1.93.0) with Tk and `xvfb-run`. On POSIX, replace the Windows CLI wrapper below with `.venv/bin/python -m plcweave` and create the shown UTF-8 files with an editor/agent file tool. The current PlatformIO adapter and offline development helper are Windows-specific.
 
 Public toolkit tests use synthetic fixtures and do not require customer `project/` contents. Customer-specific integration tests remain in their private project directories. Record actual passed/failed/skipped counts; do not copy a private workspace's counts.
 
