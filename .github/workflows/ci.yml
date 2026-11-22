@@ -36,14 +36,30 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install ./vendor/gxwlib
-          python -m pip install -e ".[test]"
+          # .[test] alone leaves the bench script host without pyserial/pymodbus:
+          # tests launch real demo scripts that import them (project/l01s-water-standard).
+          python -m pip install -e ".[test,hil]"
           python -c "import gxwlib; from gxwlib import _core; print(_core.__file__)"
+
+      - name: Install Xvfb (Linux only)
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends xvfb
 
       - name: Run tests
         shell: bash
         run: |
           mkdir -p local
-          python -m pytest -q tests --basetemp=local/pytest-ci
+          if [ "$RUNNER_OS" = "Linux" ]; then
+            # tests/test_bench_app.py imports tkinter; the bare runner has no display,
+            # so the Tk window cannot be created (39 collection/run errors).
+            xvfb-run -a --server-args="-screen 0 1920x1080x24" \
+              python -m pytest -q tests --basetemp=local/pytest-ci
+          else
+            python -m pytest -q tests --basetemp=local/pytest-ci
+          fi
 
       - name: No-hardware quickstart
         shell: bash

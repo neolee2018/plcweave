@@ -234,10 +234,16 @@ def main(argv=None) -> int:
     try:
         install_observers(writer, demo=args.demo)
         if args.demo:
-            import serial
-            def deny_serial(*args, **kwargs):
-                raise PermissionError("演示模式禁止打开物理串口")
-            serial.Serial = deny_serial
+            # Demo mode must not require the optional HIL dependency: pyserial is only used
+            # here to fail physical port opens closed. Without it the import simply fails.
+            try:
+                import serial
+            except ImportError:
+                serial = None
+            if serial is not None:
+                def deny_serial(*args, **kwargs):
+                    raise PermissionError("演示模式禁止打开物理串口")
+                serial.Serial = deny_serial
         sys.argv = [str(script), *args.args]
         sys.path.insert(0, str(script.parent))
         with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
