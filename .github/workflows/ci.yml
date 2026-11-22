@@ -1,0 +1,81 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install Rust 1.93.0
+        shell: bash
+        run: |
+          rustup toolchain install 1.93.0 --profile minimal
+          rustup default 1.93.0
+          rustc --version
+
+      - name: Install vendored runtime and PLCWeave
+        shell: bash
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install ./vendor/gxwlib
+          python -m pip install -e ".[test]"
+          python -c "import gxwlib; from gxwlib import _core; print(_core.__file__)"
+
+      - name: Run tests
+        shell: bash
+        run: |
+          mkdir -p local
+          python -m pytest -q tests --basetemp=local/pytest-ci
+
+      - name: No-hardware quickstart
+        shell: bash
+        run: |
+          python -m plcweave init ci-smoke
+          d=project/ci-smoke
+          printf '# Requirements\nR01: In virtual RUN, M0 shall be 1 on every observed scan.\n' > $d/requirements.md
+          cat > $d/test_cases.md <<'MD'
+          # Test cases
+          ## Suite
+          | key | value |
+          | --- | --- |
+          | suite_version | V001 |
+          | scan_ms | 10 |
+          | watch | M0 |
+
+          ## Invariants
+          | device | expected |
+          | --- | --- |
+          | M0 | 0..1 |
+
+          ## TC-001: RUN indication
+          ### Initial
+          | device | value |
+          | --- | --- |
+
+          ### Steps
+          | duration_ms | write | invariant | expect | note |
+          | --- | --- | --- | --- | --- |
+          | 20 | - | M0=1 | M0=1 | Two scans |
+          MD
+          sed -i.bak 's/^          //' $d/test_cases.md && rm -f $d/test_cases.md.bak
+          python -m plcweave freeze $d
+          printf '#meta\nproject: CI\n#instructions\nLD M8000\nOUT M0\nEND\n' > $d/source.fxil
+          python -m plcweave simulate $d

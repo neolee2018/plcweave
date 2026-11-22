@@ -296,7 +296,7 @@ X开关 / AD加减或数值输入
 | `project/l01s-water/reference/l01s_user_manual.md`，Coolmay L01S&M01S&FP V26.31，§5.1/5.2、§8.1.4、§8.2.4 | 通道范围、硬件地址与串口格式位定义 |
 | `src/plcweave/demo.py` 的 `BAUD_CODES`、`PARITY_CODES`、`serial_format` | 现有工具支持的波特率及串口格式编码；不据此声明全部组合已实机验证 |
 | `src/plcweave/variants.py` / `hil.py` | 现有输入映射、身份校验、白名单与采样边界；现有HIL不输出至真实端子的差异必须补齐 |
-| `skills/plc-program-development/references/s6-hil-v2.md` | 仿真输入注入及普通轮询的证据边界，案例地址不作为新接口 |
+| `.agents/skills/plc-program-development/references/s6-hil-v2.md` | 仿真输入注入及普通轮询的证据边界，案例地址不作为新接口 |
 
 历史采集站文档对X读取功能码有待核实旧记载，本设计按手册只读离散输入分区用FC02，首次联调只读对值，失败明确报不兼容。程序版本号不是厂家固件版本；DA1/DA2显示别名尚沿用上版建议，需和实际端子确认。
 

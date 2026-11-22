@@ -102,7 +102,7 @@ Agent 拿到本项目后的默认动作：
 ## Step 3 项目交付（客户输入"项目交付"，Agent 执行生产导出）
 
 客户确认测试完毕后，输入：**"项目交付"**（或"测试完毕，导出生产程序"）。
-Agent 按仓库工作流的[生产导出规则](../../skills/plc-program-development/references/two-phase-workflow.md)执行：
+Agent 按仓库工作流的[生产导出规则](../../.agents/skills/plc-program-development/references/two-phase-workflow.md)执行：
 
 1. **剔除全部仿真寄存器**：从正式版程序中删除仅仿真/台架使用的寄存器与段
    （命令块中的压力注入 D330、测试注入 D322、并联 AI/并联使能、bench 旁路等），

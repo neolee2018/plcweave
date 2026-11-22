@@ -6,7 +6,7 @@
 
 Markdown需求与测试 → 受支持FX指令执行 → 独立验证 → 受控硬件采样 → 可追溯交付。首个执行子集面向FX3U/HBDTECH L01S。只想先看它跑起来，直接走[快速演示](#2-快速演示一条提示词)；要直接开发自己的控制程序，用第 2 节末尾的[两阶段编程提示词](#一条提示词开始真实项目编程两阶段工作流)。目前仍在开发，不是完整PLC仿真器，也不是经过认证的生产控制器。
 
-客户定制项目使用[两阶段工作流](skills/plc-program-development/references/two-phase-workflow.md)：用户只修改需求，AI维护设计、共用控制程序，并在第二阶段维护独立测试用例。第一阶段做语法检查与逻辑关系静态检查后即交付HIL测试版及正式版两份指令表——交付前不再设本地仿真门禁（`plcweave simulate` 保留为可选调试工具）；第二阶段由用户编译下载后，AI先冻结测试用例再做硬件在环采样、比较和迭代。新增 `workflow init/freeze/freeze-tests/build/deliver/confirm-download/test/status/revise`；当前仅覆盖受支持FX子集和L01S稳态采样，台达适配尚未实现，厂家编译下载保留人工通路。
+客户定制项目使用[两阶段工作流](.agents/skills/plc-program-development/references/two-phase-workflow.md)：用户只修改需求，AI维护设计、共用控制程序，并在第二阶段维护独立测试用例。第一阶段做语法检查与逻辑关系静态检查后即交付HIL测试版及正式版两份指令表——交付前不再设本地仿真门禁（`plcweave simulate` 保留为可选调试工具）；第二阶段由用户编译下载后，AI先冻结测试用例再做硬件在环采样、比较和迭代。新增 `workflow init/freeze/freeze-tests/build/deliver/confirm-download/test/status/revise`；当前仅覆盖受支持FX子集和L01S稳态采样，台达适配尚未实现，厂家编译下载保留人工通路。
 
 ## 1. 安装
 
@@ -38,23 +38,23 @@ cd plcweave
 
 ### 安装工作流技能（AI Agent建议安装）
 
-工作流就是本仓技能 **`plc-program-development`**（`skills/plc-program-development/SKILL.md`）及其 `references/` 目录。直接阅读本仓技能即可，全局安装可选；若要让Agent在本仓库之外的项目目录中也能按该工作流执行，建议安装。
+工作流就是本仓技能 **`plc-program-development`**（`.agents/skills/plc-program-development/SKILL.md`）及其 `references/` 目录。直接阅读本仓技能即可，全局安装可选；若要让Agent在本仓库之外的项目目录中也能按该工作流执行，建议安装。
 
-安装时把**整个** `skills/plc-program-development/` 目录复制或链接到所用Agent平台的技能目录，目录名必须保持 `plc-program-development`（与 `SKILL.md` 的 `name:` 字段一致）；`SKILL.md` 与 `references/` 不能拆开。更新仓库后重新同步该目录，保持仓库技能为唯一来源。`tools/sync_plc_skill.py` 仅更新**已有旧技能**，不是通用安装器。
+安装时把**整个** `.agents/skills/plc-program-development/` 目录复制或链接到所用Agent平台的技能目录，目录名必须保持 `plc-program-development`（与 `SKILL.md` 的 `name:` 字段一致）；`SKILL.md` 与 `references/` 不能拆开。更新仓库后重新同步该目录，保持仓库技能为唯一来源。`tools/sync_plc_skill.py` 仅更新**已有旧技能**，不是通用安装器。
 
 示例（在仓库根目录执行；目标路径按所用Agent的技能目录调整）：
 
 ```sh
 # Claude Code（用户级技能目录）
-mkdir -p ~/.claude/skills && cp -r skills/plc-program-development ~/.claude/skills/
+mkdir -p ~/.claude/skills && cp -r .agents/skills/plc-program-development ~/.claude/skills/
 # 也可改用软链接，git pull 后技能自动更新：
-ln -s "$(pwd)/skills/plc-program-development" ~/.claude/skills/plc-program-development
+ln -s "$(pwd)/.agents/skills/plc-program-development" ~/.claude/.agents/skills/plc-program-development
 ```
 
 ```powershell
 # Windows / PowerShell
 New-Item -ItemType Directory -Force "$HOME/.claude/skills" | Out-Null
-Copy-Item -Recurse skills/plc-program-development "$HOME/.claude/skills/"
+Copy-Item -Recurse .agents/skills/plc-program-development "$HOME/.claude/skills/"
 ```
 
 检查：`<技能目录>/plc-program-development/SKILL.md` 存在，且 `name:` 为 `plc-program-development`。
@@ -82,6 +82,7 @@ py -3.13 -m venv .venv
 
 ./.venv/Scripts/python.exe -c "import gxwlib; from gxwlib import _core; print(_core.__file__)"
 ./.venv/Scripts/python.exe -m plcweave --help
+New-Item -ItemType Directory -Force local | Out-Null
 ./.venv/Scripts/python.exe -m pytest -q tests --basetemp=local/pytest-readme
 ```
 
@@ -114,6 +115,7 @@ rustup toolchain install 1.93.0 --profile minimal --component rustfmt --componen
 .venv/bin/python -m pip install -e '.[hil]'
 .venv/bin/python -c 'import gxwlib; from gxwlib import _core; print(_core.__file__)'
 .venv/bin/python -m plcweave --help
+mkdir -p local
 .venv/bin/python -m pytest -q tests --basetemp=local/pytest-readme
 # 无显示器的机器：用虚拟X服务器包一层
 xvfb-run -a .venv/bin/python -m pytest -q tests --basetemp=local/pytest-readme
@@ -121,7 +123,7 @@ xvfb-run -a .venv/bin/python -m pytest -q tests --basetemp=local/pytest-readme
 
 非Windows平台上，`tests/test_bench_app.py` 中2个像素布局测试按设计跳过（按Windows字体度量校准），结果应含 `2 skipped`。
 
-这是源码安装路径。主要验证在Windows完成；以上步骤也已在Debian Linux（aarch64、CPython 3.13.5、Rust 1.93.0，含Tk与 `xvfb-run`）上完整跑通。POSIX下将后文Windows入口替换成 `.venv/bin/python -m plcweave`，用编辑器或Agent文件工具写入示例UTF-8文件。当前PlatformIO适配器和离线开发助手为Windows专用。
+这是源码安装路径。主要验证在Windows完成；以上步骤也已在Debian Linux（aarch64、CPython 3.13.5、Rust 1.93.0，含Tk与 `xvfb-run`）上完整跑通。Debian/Ubuntu需先安装C工具链（`sudo apt install build-essential`，否则cargo报 ``linker `cc` not found``）；若 `python3.13 -m venv` 提示缺ensurepip，安装 `python3.13-venv`，或用 `--without-pip` 建venv后以 `get-pip.py` 安装pip。macOS尚未验证。POSIX下将后文Windows入口替换成 `.venv/bin/python -m plcweave`，用编辑器或Agent文件工具写入示例UTF-8文件。当前PlatformIO适配器和离线开发助手为Windows专用。
 
 公开工具测试使用合成夹具，不依赖客户project内容。客户专用集成测试保留在各自私有项目目录。记录实际通过/失败/跳过数量，不套用私有工作区数量。
 
@@ -175,8 +177,8 @@ AI Agent，并在【我的控制需求】处填入你的控制要求（写不清
 控制逻辑：例如启动后水泵运行；停止或液位超限立即停机；故障报警并自锁
 保护/复位/验收要求：（补充你的验收要求）
 
-0. 准备：先读 AGENTS.md、skills/plc-program-development/SKILL.md 和
-   skills/plc-program-development/references/two-phase-workflow.md。环境没装就先按 README
+0. 准备：先读 AGENTS.md、.agents/skills/plc-program-development/SKILL.md 和
+   .agents/skills/plc-program-development/references/two-phase-workflow.md。环境没装就先按 README
    第 1 节装好：创建专用 .venv；先 python -m pip install ./vendor/gxwlib，再
    python -m pip install -e ".[test]"；导入与 --help 验证通过。不要动无关环境。项目默认建在
    仓库 project/<项目名>/ 下；我指定了外部目录就遵从；项目内目录与文件名一律用英文
@@ -277,7 +279,7 @@ R02: M0 stays within 0..1. No physical I/O is used.
 ./tools/plcweave.ps1 freeze project/quickstart
 ```
 
-s1-freeze.md绑定两份MD的原始字节。草稿/空用例、未知字段、双重作者源、创建源程序后才首次冻结都会被拒绝。[MD用例格式](skills/plc-program-development/references/markdown-cases.md)定义可执行表格，执行时内存解析，不另存测试JSON/YAML作者文件。
+s1-freeze.md绑定两份MD的原始字节。草稿/空用例、未知字段、双重作者源、创建源程序后才首次冻结都会被拒绝。[MD用例格式](.agents/skills/plc-program-development/references/markdown-cases.md)定义可执行表格，执行时内存解析，不另存测试JSON/YAML作者文件。
 
 ### B. 实现，再执行冻结测试
 
@@ -317,7 +319,7 @@ M0 Virtual RUN indication
 | S2 | 编写source.fxil，生成导入格式并实际执行受支持指令；未知指令/形式/地址阻断，不能静默NOP。 |
 | S3 | 比较实际轨迹/断言，独立复核检查证据；程序缺陷与工具缺陷分别处理，S2不能改冻结预期。 |
 | S4 | 提供可检查候选及真实验证等级；草稿保持MD，需要交付时再正式排版。 |
-| S5/S6 | 按适用且已授权的厂家/人工下载和台架通路执行，只记录真实做过的检查；精度不足保留UNVERIFIED。S6 HIL方法见[S6-HIL-V2](skills/plc-program-development/references/s6-hil-v2.md)。 |
+| S5/S6 | 按适用且已授权的厂家/人工下载和台架通路执行，只记录真实做过的检查；精度不足保留UNVERIFIED。S6 HIL方法见[S6-HIL-V2](.agents/skills/plc-program-development/references/s6-hil-v2.md)。 |
 | S7 | 执行受影响回归及依赖，完成复核，在项目内建立交付目录和ZIP，校验哈希，释放任务资源。 |
 
 **四位独立复核者**：S1冻结、S3/重大修订、S6判定、最终交付复核节点，使用四个不同、独立上下文Agent；主Agent组织/修复，不计入四位。每人仅接收相关原始材料、版本/哈希、验收标准和资源边界，不传完整主会话或预设结论。
@@ -343,13 +345,24 @@ project/
 
 客户项目内目录与文件名一律英文（lab-tests/、delivery/、delivery-docs/），保证交付包和脚本在不支持中文路径的电脑上可用。客户确认“测试完毕，导出生产程序”后：先从正式版程序删除全部仿真/注入寄存器（寄存器表与文档条目同步剔除），再把最终版文档导出到 delivery/<版本>/ 并打成新ZIP，不覆盖既有版本。
 
+### 已支持指令子集（FX3U profile）
+
+| 类别 | 仿真可执行 | 不支持（编译即阻断） |
+| --- | --- | --- |
+| 位逻辑 | LD、LDI、AND、ANI、OR、ORI、OUT、SET、RST、ANB、ORB、MPS、MRD、MPP、END | 脉冲触点/输出、STL/SFC、跳转、子程序、中断 |
+| 定时器/计数器 | T、C触点，常数设定值OUT，RST | 变量设定值、32位及高速计数器 |
+| 字运算 | MOV、ADD、SUB、MUL、DIV（非零常数除数），有符号16位 AND=/</<=/>/>= | 32位运算、运算标志、PID、变址/间接寻址 |
+| 软元件 | X/Y0–177（八进制）、M0–7679、M8000–8511、T、C、D0–7999（D8000–8511仅作普通字映像） | 特殊寄存器背后的外设行为（UART、ADC、DAC）、掉电保持 |
+
+表外指令一律拒绝，不会静默变成NOP。详见[执行核边界](docs/RUNTIME-CHANGES.md)。
+
 ## 5. AI Agent执行指令
 
 将本仓库和以下任务交给Agent：
 
-> 先读AGENTS.md、skills/plc-program-development/SKILL.md及MD参考。识别系统、Python ABI/版本、Rust和原生编译器，在主机权限内安装缺失前提；创建/使用专用.venv，先安装./vendor/gxwlib，再安装.[test]。实际执行导入、CLI帮助、测试和无硬件示例，记录命令、版本、错误与结果；依赖错误先修依赖，不改PLC逻辑。公开安装不需要公司服务、兄弟仓库、客户案例或全局技能。未指定位置时新建project子目录；指定外部位置则遵从。需求/测试只MD，规定节点组织四位独立新上下文复核，先冻结后源程序，再真实执行和比较轨迹，不改预期迎合实现。仿真/协议/硬件/未验证分开记录；没有现场授权和已知映射不访问设备或切RUN/STOP。保留旧证据，最终项目内交付目录+ZIP、核对哈希，仅清理本任务资源。复核者、前提、权限、指令或采集能力缺失时说明确切阻塞，不得伪造完成。
+> 先读AGENTS.md、.agents/skills/plc-program-development/SKILL.md及MD参考。识别系统、Python ABI/版本、Rust和原生编译器，在主机权限内安装缺失前提；创建/使用专用.venv，先安装./vendor/gxwlib，再安装.[test]。实际执行导入、CLI帮助、测试和无硬件示例，记录命令、版本、错误与结果；依赖错误先修依赖，不改PLC逻辑。公开安装不需要公司服务、兄弟仓库、客户案例或全局技能。未指定位置时新建project子目录；指定外部位置则遵从。需求/测试只MD，规定节点组织四位独立新上下文复核，先冻结后源程序，再真实执行和比较轨迹，不改预期迎合实现。仿真/协议/硬件/未验证分开记录；没有现场授权和已知映射不访问设备或切RUN/STOP。保留旧证据，最终项目内交付目录+ZIP、核对哈希，仅清理本任务资源。复核者、前提、权限、指令或采集能力缺失时说明确切阻塞，不得伪造完成。
 
-可以直接阅读仓库技能，全局安装可选（安装方法见第1节“安装工作流技能”）。tools/sync_plc_skill.py仅更新**已有旧技能**，不是通用新技能安装器。Hindsight/ZERO仅适用于已配置的公司工作区，开源用户不需要这些服务或凭据。只要“自动安装+跑演示”的话，直接把根目录 [PROMPT.md](PROMPT.md) 的提示词一交给Agent（见第2节）；真实项目编程用同文件的提示词二（同见第2节末尾）。
+工作流技能位于标准项目技能目录 `.agents/skills/plc-program-development/`：在本仓内启动Codex会自动发现（也可输入 `$plc-program-development` 显式调用），AGENTS.md/CLAUDE.md也要求其他Agent在任何PLC任务前先读取。全局安装可选（安装方法见第1节“安装工作流技能”）。tools/sync_plc_skill.py仅更新**已有旧技能**，不是通用新技能安装器。Hindsight/ZERO仅适用于已配置的公司工作区，开源用户不需要这些服务或凭据。只要“自动安装+跑演示”的话，直接把根目录 [PROMPT.md](PROMPT.md) 的提示词一交给Agent（见第2节）；真实项目编程用同文件的提示词二（同见第2节末尾）。
 
 ## 6. 可选PlatformIO与硬件
 

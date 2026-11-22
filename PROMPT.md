@@ -87,8 +87,8 @@ Agent 第一步就会读它们。
 控制逻辑：例如启动后水泵运行；停止或液位超限立即停机；故障报警并自锁
 保护/复位/验收要求：（补充你的验收要求）
 
-0. 准备：先读 AGENTS.md、skills/plc-program-development/SKILL.md 和
-   skills/plc-program-development/references/two-phase-workflow.md。环境没装就先按 README
+0. 准备：先读 AGENTS.md、.agents/skills/plc-program-development/SKILL.md 和
+   .agents/skills/plc-program-development/references/two-phase-workflow.md。环境没装就先按 README
    第 1 节装好：创建专用 .venv；先 python -m pip install ./vendor/gxwlib，再
    python -m pip install -e ".[test]"；导入与 --help 验证通过。不要动无关环境。项目默认建在
    仓库 project/<项目名>/ 下；我指定了外部目录就遵从；项目内目录与文件名一律用英文
@@ -133,8 +133,8 @@ Control logic: e.g. the pump runs after start; stops immediately on stop or high
 alarm on fault
 Protection / reset / acceptance: (add your acceptance requirements)
 
-0. Preparation: read AGENTS.md, skills/plc-program-development/SKILL.md and
-   skills/plc-program-development/references/two-phase-workflow.md first. If the environment is
+0. Preparation: read AGENTS.md, .agents/skills/plc-program-development/SKILL.md and
+   .agents/skills/plc-program-development/references/two-phase-workflow.md first. If the environment is
    not installed, follow README section 1: create a dedicated .venv; install ./vendor/gxwlib
    first, then -e ".[test]"; verify the import and --help. Never touch unrelated environments.
    Create the project under project/<name>/ in the repository unless I specify an external
