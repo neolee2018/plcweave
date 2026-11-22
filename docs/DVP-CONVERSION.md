@@ -41,7 +41,7 @@
 - 客户项目路径、程序版本及 HIL/正式版身份：优先使用我指定的项目；未指定时按 AGENTS.md 在 project/ 下选择未占用的新目录。两版分别处理，不混用。
 
 【先看已有模板与工具】
-1. 先阅读 AGENTS.md、docs/DVP-CONVERSION.md 和适用的 skills/plc-program-development/SKILL.md。定位仓库根目录；不可访问仓库时先说明并索取所需材料。
+1. 先阅读 AGENTS.md、docs/DVP-CONVERSION.md 和适用的 .agents/skills/plc-program-development/SKILL.md。定位仓库根目录；不可访问仓库时先说明并索取所需材料。
 2. 必须先实际查看项目中已经有的 DVP 程序模板（我口述的“PVP 模板”）：优先检查 project/delta-dvp60es200r-io-test/template/Dvp0.dvp 以及同目录 Dvp0.rcm、Dvp0.sym、Dvp0.csv。记录实际路径、文件 SHA256、目标型号与软件适用性。模板只读，不覆盖。
 3. 阅读 project/delta-dvp60es200r-io-test/hmi/prototype/converter-core.js、scripts/build_html.py、dvp-converter.html 及项目 delivery/V005-html-converter-v2/README.md、TEST-REPORT.md 和相关 evidence。先理解已有解析、模板哈希校验、程序区编码、容量、机型字段和配套文件，再复用已有实现。任何已有验证结论仅用于其明确覆盖的输入和版本。
 4. 上述路径是本机候选，公开克隆可能不含客户文件。不存在就搜索本仓其他已授权模板和工具，列出实际使用资源；仍缺少有效模板或格式依据时暂停原生 DVP 生成并向我索取材料，不编造模板或依赖不可访问的其他盘符。不得公开客户文件。

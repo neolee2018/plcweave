@@ -8,7 +8,7 @@ The [desktop test bench](hmi/README.md) can display existing Python tests' actua
 
 Markdown requirements and tests → supported FX instruction execution → independent verification → controlled hardware sampling → traceable delivery. The first execution subset targets FX3U/HBDTECH L01S. Start with the [quick demo](#2-quick-demo-one-prompt) if you just want to see it run, or jump to [one prompt to start real programming](#one-prompt-to-start-real-programming-two-phase-workflow) at the end of section 2 to develop your own controller. This is an engineering toolkit under development, not a complete PLC simulator or certified production controller.
 
-For customer engineering, use the [two-phase workflow](skills/plc-program-development/references/two-phase-workflow.md): users edit only requirements; the AI maintains design, a shared control core and (in phase 2) independent test cases. Phase 1 runs static syntax and logic checks, then delivers separate HIL and production instruction lists — no local simulation gate before delivery (`plcweave simulate` stays an optional debug tool). In phase 2, the user compiles/downloads the HIL program, the AI freezes test cases and runs hardware-in-the-loop sampling, comparing and iterating. The `workflow init/freeze/freeze-tests/build/deliver/confirm-download/test/status/revise` commands currently cover the supported FX subset and L01S steady-state sampling. Delta adapters are not implemented; vendor compilation and downloading remain manual.
+For customer engineering, use the [two-phase workflow](.agents/skills/plc-program-development/references/two-phase-workflow.md): users edit only requirements; the AI maintains design, a shared control core and (in phase 2) independent test cases. Phase 1 runs static syntax and logic checks, then delivers separate HIL and production instruction lists — no local simulation gate before delivery (`plcweave simulate` stays an optional debug tool). In phase 2, the user compiles/downloads the HIL program, the AI freezes test cases and runs hardware-in-the-loop sampling, comparing and iterating. The `workflow init/freeze/freeze-tests/build/deliver/confirm-download/test/status/revise` commands currently cover the supported FX subset and L01S steady-state sampling. Delta adapters are not implemented; vendor compilation and downloading remain manual.
 
 ### Convert an instruction list to a Delta DVP project
 
@@ -45,23 +45,23 @@ Run commands from the directory containing `pyproject.toml`. Do not fetch missin
 
 ### Install the workflow skill (recommended for AI agents)
 
-The workflow is the repository skill **`plc-program-development`** (`skills/plc-program-development/SKILL.md`) together with its `references/` folder. Reading it from this checkout is enough; a global install is optional, but install it when the agent should follow the workflow from project folders outside this repository.
+The workflow is the repository skill **`plc-program-development`** (`.agents/skills/plc-program-development/SKILL.md`) together with its `references/` folder. Reading it from this checkout is enough; a global install is optional, but install it when the agent should follow the workflow from project folders outside this repository.
 
-To install, copy or link the **whole** `skills/plc-program-development/` directory into your agent platform's skills directory and keep the directory name exactly `plc-program-development` (it must match the `name:` field in `SKILL.md`). Keep `SKILL.md` and `references/` together, and restore the directory after updating the checkout so the repository skill stays the single source. `tools/sync_plc_skill.py` only updates an existing legacy company skill; it is not a general-purpose installer.
+To install, copy or link the **whole** `.agents/skills/plc-program-development/` directory into your agent platform's skills directory and keep the directory name exactly `plc-program-development` (it must match the `name:` field in `SKILL.md`). Keep `SKILL.md` and `references/` together, and restore the directory after updating the checkout so the repository skill stays the single source. `tools/sync_plc_skill.py` only updates an existing legacy company skill; it is not a general-purpose installer.
 
 Examples (run from the repository root; adjust the target to your agent's skills directory):
 
 ```sh
 # Claude Code (user-level skills)
-mkdir -p ~/.claude/skills && cp -r skills/plc-program-development ~/.claude/skills/
+mkdir -p ~/.claude/skills && cp -r .agents/skills/plc-program-development ~/.claude/skills/
 # Or link instead of copy, so `git pull` updates the skill automatically:
-ln -s "$(pwd)/skills/plc-program-development" ~/.claude/skills/plc-program-development
+ln -s "$(pwd)/.agents/skills/plc-program-development" ~/.claude/.agents/skills/plc-program-development
 ```
 
 ```powershell
 # Windows / PowerShell
 New-Item -ItemType Directory -Force "$HOME/.claude/skills" | Out-Null
-Copy-Item -Recurse skills/plc-program-development "$HOME/.claude/skills/"
+Copy-Item -Recurse .agents/skills/plc-program-development "$HOME/.claude/skills/"
 ```
 
 Check: `<skills dir>/plc-program-development/SKILL.md` exists and its `name:` line reads `plc-program-development`.
@@ -89,6 +89,7 @@ py -3.13 -m venv .venv
 
 ./.venv/Scripts/python.exe -c "import gxwlib; from gxwlib import _core; print(_core.__file__)"
 ./.venv/Scripts/python.exe -m plcweave --help
+New-Item -ItemType Directory -Force local | Out-Null
 ./.venv/Scripts/python.exe -m pytest -q tests --basetemp=local/pytest-readme
 ```
 
@@ -121,6 +122,7 @@ rustup toolchain install 1.93.0 --profile minimal --component rustfmt --componen
 .venv/bin/python -m pip install -e '.[hil]'
 .venv/bin/python -c 'import gxwlib; from gxwlib import _core; print(_core.__file__)'
 .venv/bin/python -m plcweave --help
+mkdir -p local
 .venv/bin/python -m pytest -q tests --basetemp=local/pytest-readme
 # Headless host without a display: wrap the GUI tests in a virtual X server
 xvfb-run -a .venv/bin/python -m pytest -q tests --basetemp=local/pytest-readme
@@ -128,7 +130,7 @@ xvfb-run -a .venv/bin/python -m pytest -q tests --basetemp=local/pytest-readme
 
 On non-Windows hosts two pixel-layout tests in `tests/test_bench_app.py` are skipped by design (they are calibrated on Windows font metrics); expect `2 skipped`.
 
-This is a source-install route. Primary validation is on Windows; the steps above were also run end to end on Debian Linux (aarch64, CPython 3.13.5, Rust 1.93.0) with Tk and `xvfb-run`. On POSIX, replace the Windows CLI wrapper below with `.venv/bin/python -m plcweave` and create the shown UTF-8 files with an editor/agent file tool. The current PlatformIO adapter and offline development helper are Windows-specific.
+This is a source-install route. Primary validation is on Windows; the steps above were also run end to end on Debian Linux (aarch64, CPython 3.13.5, Rust 1.93.0) with Tk and `xvfb-run`. On Debian/Ubuntu install the C toolchain first (`sudo apt install build-essential`, otherwise cargo fails with ``linker `cc` not found``); if `python3.13 -m venv` reports that ensurepip is unavailable, install `python3.13-venv` or create the venv with `--without-pip` and bootstrap pip with `get-pip.py`. macOS has not been validated. On POSIX, replace the Windows CLI wrapper below with `.venv/bin/python -m plcweave` and create the shown UTF-8 files with an editor/agent file tool. The current PlatformIO adapter and offline development helper are Windows-specific.
 
 Public toolkit tests use synthetic fixtures and do not require customer `project/` contents. Customer-specific integration tests remain in their private project directories. Record actual passed/failed/skipped counts; do not copy a private workspace's counts.
 
@@ -193,8 +195,8 @@ Control logic: e.g. the pump runs after start; stops immediately on stop or high
 alarm on fault
 Protection / reset / acceptance: (add your acceptance requirements)
 
-0. Preparation: read AGENTS.md, skills/plc-program-development/SKILL.md and
-   skills/plc-program-development/references/two-phase-workflow.md first. If the environment is
+0. Preparation: read AGENTS.md, .agents/skills/plc-program-development/SKILL.md and
+   .agents/skills/plc-program-development/references/two-phase-workflow.md first. If the environment is
    not installed, follow README section 1: create a dedicated .venv; install ./vendor/gxwlib
    first, then -e ".[test]"; verify the import and --help. Never touch unrelated environments.
    Create the project under project/<name>/ in the repository unless I specify an external
@@ -288,7 +290,7 @@ R02: M0 stays within 0..1. No physical I/O is used.
 ./tools/plcweave.ps1 freeze project/quickstart
 ```
 
-`s1-freeze.md` binds both MD files' exact bytes. Draft/empty cases, unknown fields, ambiguous authoring sources, and an initial freeze attempted after source creation are rejected. The [MD format reference](skills/plc-program-development/references/markdown-cases.md) defines the tables. Tests are parsed in memory; no parallel test JSON/YAML authoring file is generated.
+`s1-freeze.md` binds both MD files' exact bytes. Draft/empty cases, unknown fields, ambiguous authoring sources, and an initial freeze attempted after source creation are rejected. The [MD format reference](.agents/skills/plc-program-development/references/markdown-cases.md) defines the tables. Tests are parsed in memory; no parallel test JSON/YAML authoring file is generated.
 
 ### B. Implement, then execute the frozen test
 
@@ -328,7 +330,7 @@ This is a **smoke evidence package**. Customer deliveries use `workflow`, includ
 | S2 | Write `source.fxil`, export formats and execute supported instructions. Unknown instructions/forms/addresses must block, never become silent NOPs. |
 | S3 | Compare actual execution traces/assertions; reviewers inspect evidence. Fix program defects or tooling defects separately. S2 cannot change frozen expectations. |
 | S4 | Prepare a reviewable candidate with its actual validation level. Keep drafts in MD; generate formal presentation documents when delivery is needed. |
-| S5/S6 | Follow the applicable authorized vendor/manual-download and bench route. Record what was actually tested; insufficient capture precision remains UNVERIFIED. S6 HIL method: [S6-HIL-V2](skills/plc-program-development/references/s6-hil-v2.md). |
+| S5/S6 | Follow the applicable authorized vendor/manual-download and bench route. Record what was actually tested; insufficient capture precision remains UNVERIFIED. S6 HIL method: [S6-HIL-V2](.agents/skills/plc-program-development/references/s6-hil-v2.md). |
 | S7 | Run affected regressions/dependencies, complete reviews, create a project-local delivery folder plus ZIP, verify hashes, and release task-owned resources. |
 
 **Four independent reviewers:** at S1 freeze, S3/major changes, S6 conclusions, and final-delivery review gates, use four distinct agents with fresh contexts. The main agent coordinates/fixes and does not count. Give each only relevant original artifacts, versions/hashes, acceptance criteria and resource boundaries—not the whole main conversation or a desired verdict.
@@ -354,13 +356,24 @@ Every customer gets an independent folder; explicit external directories are sup
 
 Folder and file names inside customer projects are English-only (`lab-tests/`, `delivery/`, `delivery-docs/`) so packages and scripts keep working on machines without CJK path support. When the customer confirms testing is complete and asks for the production program, first strip every simulation/injection register from the production build and its register tables/docs, then export the final document set into `delivery/<version>/` as a new ZIP without overwriting older versions.
 
+### Supported instruction subset (FX3U profile)
+
+| Area | Executes in simulation | Not supported (compilation blocks) |
+| --- | --- | --- |
+| Bit logic | LD, LDI, AND, ANI, OR, ORI, OUT, SET, RST, ANB, ORB, MPS, MRD, MPP, END | Pulse contacts/outputs, STL/SFC, jumps, subroutines, interrupts |
+| Timers/counters | T and C contacts, constant-preset OUT, RST | Variable presets, 32-bit and high-speed counters |
+| Words | MOV, ADD, SUB, MUL, DIV (nonzero literal divisor), AND=/</<=/>/>= on signed 16-bit | 32-bit arithmetic, arithmetic flags, PID, indexed/indirect addressing |
+| Devices | X/Y0–177 (octal), M0–7679, M8000–8511, T, C, D0–7999 (D8000–8511 as a plain word image) | Peripheral behaviour behind special registers (UART, ADC, DAC), power-cycle retention |
+
+Anything outside this table is rejected, never silently turned into a NOP. Details: [runtime boundaries](docs/RUNTIME-CHANGES.md).
+
 ## 5. AI-agent execution instructions
 
 Give an agent this repository and the following task:
 
-> Read AGENTS.md, skills/plc-program-development/SKILL.md and its MD reference first. Identify OS, Python ABI/version, Rust and native compiler. Install missing prerequisites within host permissions; create/use a dedicated .venv; install ./vendor/gxwlib before .[test]. Actually run imports, CLI help, tests and the no-hardware example. Record commands, versions, failures and results; dependency errors do not justify PLC logic changes. Public installation requires no company services, sibling repository, customer case or globally installed skill. Create a fresh project/ subfolder unless the user specifies an external folder. Author MD requirements/tests, arrange four independent fresh-context reviewers at required gates, freeze before source, then execute and compare real traces. Never change expectations to fit implementation. Separate simulation/protocol/hardware/unverified results. Do not access devices or change RUN/STOP without field authorization and known mappings. Preserve previous evidence. Build the final project-local delivery directory and ZIP, verify hashes, and clean only owned resources. If a reviewer, prerequisite, permission, instruction or capture capability is unavailable, report the exact blocked step; do not fabricate completion.
+> Read AGENTS.md, .agents/skills/plc-program-development/SKILL.md and its MD reference first. Identify OS, Python ABI/version, Rust and native compiler. Install missing prerequisites within host permissions; create/use a dedicated .venv; install ./vendor/gxwlib before .[test]. Actually run imports, CLI help, tests and the no-hardware example. Record commands, versions, failures and results; dependency errors do not justify PLC logic changes. Public installation requires no company services, sibling repository, customer case or globally installed skill. Create a fresh project/ subfolder unless the user specifies an external folder. Author MD requirements/tests, arrange four independent fresh-context reviewers at required gates, freeze before source, then execute and compare real traces. Never change expectations to fit implementation. Separate simulation/protocol/hardware/unverified results. Do not access devices or change RUN/STOP without field authorization and known mappings. Preserve previous evidence. Build the final project-local delivery directory and ZIP, verify hashes, and clean only owned resources. If a reviewer, prerequisite, permission, instruction or capture capability is unavailable, report the exact blocked step; do not fabricate completion.
 
-Read the repository skill directly; global installation is optional (see [Install the workflow skill](#install-the-workflow-skill-recommended-for-ai-agents)). `tools/sync_plc_skill.py` updates an **existing legacy skill**, not a fresh general-purpose skill install. Hindsight/ZERO references apply only in configured company workspaces; public users need neither those services nor credentials. For an automated install-plus-demo bootstrap, give the agent prompt 1 in [`PROMPT.md`](PROMPT.md) instead (section 2); for real programming projects use prompt 2 in the same file (end of section 2).
+The workflow skill lives in `.agents/skills/plc-program-development/`, the standard project-skill location: Codex discovers it automatically when started inside this repository (or invoke it with `$plc-program-development`), and AGENTS.md/CLAUDE.md tell other agents to read it before any PLC task. Global installation is optional (see [Install the workflow skill](#install-the-workflow-skill-recommended-for-ai-agents)). `tools/sync_plc_skill.py` updates an **existing legacy skill**, not a fresh general-purpose skill install. Hindsight/ZERO references apply only in configured company workspaces; public users need neither those services nor credentials. For an automated install-plus-demo bootstrap, give the agent prompt 1 in [`PROMPT.md`](PROMPT.md) instead (section 2); for real programming projects use prompt 2 in the same file (end of section 2).
 
 ## 6. Optional PlatformIO and hardware
 
